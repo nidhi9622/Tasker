@@ -19,7 +19,10 @@ class _NotePadState extends State<NotePad> {
     final deviceSize=MediaQuery.of(context).size;
     return Scaffold(//bottomNavigationBar: bottomNavigation(context, (int i){setState((){bottomIndex = i;});}, 3),
       appBar: AppBar(elevation:0,title:Text('notepad'.tr,style: TextStyle(color: Theme.of(context).primaryColorDark),),
-        automaticallyImplyLeading: false),
+        automaticallyImplyLeading: false,
+     /* actions:[ IconButton(onPressed: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Projects()));
+      },icon:const Icon(Icons.arrow_forward_ios_outlined,color: Colors.black,),),],*/),
       body: Container(width: deviceSize.width,height: deviceSize.height,
         padding: const EdgeInsets.all(12),
         child: TextField(controller: notesController,style:const TextStyle(fontSize: 20),onChanged: (value){

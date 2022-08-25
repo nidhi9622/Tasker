@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/newUserProfile.dart';
@@ -13,8 +12,9 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+final GlobalKey<_HomePageState> globalKey =  GlobalKey<_HomePageState>();
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   PageController pageController = PageController();
   List<Widget> screens = [
     const Dashboard(),
@@ -22,7 +22,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     const AddProject(),
     const NotePad()
   ];
+
   int selectIndex = 0;
+  int oldIndex=0;
 
   @override
   void dispose() {
@@ -46,21 +48,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   void onTap(int index) {
     setState(() {
-      selectIndex = index;
-      // pageController.animateToPage(selectIndex,
-      //     duration:const Duration(milliseconds: 300), curve: Curves.easeOut);
-    });
-   /* Navigator.of(context).push(
-        CustomRoute(child: screens[selectIndex], type: fadeTransition));*/
-     pageController.jumpToPage(index);
+      oldIndex=selectIndex;
+      selectIndex=index;
 
-     print(pageController);
+    });
+    // when using page view
+    /*pageController.animateToPage(index,
+          duration:const Duration(milliseconds: 300), curve: Curves.easeOut);*/
+    //  pageController.jumpToPage(index);
+    
   }
 
    void onPageChanged(int index){
     setState(() {
       selectIndex=index;
-
     });
   }
   late AnimationController controller;
@@ -69,18 +70,40 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   initState() {
     isProfileExist();
-    controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 400));
-    animation=CurvedAnimation(parent: controller, curve: Curves.easeIn);
-   //controller.repeat(reverse: true);
-
-     Timer(const Duration(seconds: 1), () {
-       if(controller.isCompleted)
-       controller.dispose();
-     });
     super.initState();
   }
-
+transition(){
+    double position=1.0;
+    if(oldIndex<selectIndex){
+      setState(() {
+        position=1.0;
+      });
+    }
+    else{
+      setState(() {
+        position=-1.0;
+      });
+    }
+      controller = AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 500));
+      animation = CurvedAnimation(
+          curve: Curves.easeIn,parent: controller);
+    return AnimatedSwitcher(
+      switchOutCurve: Curves.ease,
+      reverseDuration:const Duration(milliseconds: 0) ,
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(position, 0.0),
+            end:const Offset(0.0, 0.0),
+          ).animate(animation),
+          child: child,
+        );
+      },
+      child: screens[selectIndex],
+    );
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(bottomNavigationBar: BottomNavigationBar(
@@ -99,16 +122,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           const BottomNavigationBarItem(icon: Icon(Icons.note_add_sharp,),label: ''),
           const BottomNavigationBarItem(icon: Icon(Icons.person_outline,), label: ''),
         ]
-    ), body: /*SlideTransition(position:  Tween<Offset>(
-        begin: const Offset (0,-1),
-        end: Offset.zero
-    ).animate(animation),child: screens[selectIndex],) */PageView(
+    ),body: transition()
+   /* PageTransitionSwitcher(
+      duration: const Duration(seconds: 1),
+      child: screens[selectIndex],
+      transitionBuilder: (child,animation,secondaryAnimation)=>
+          SharedAxisTransition(animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal,child: child,),
+    ) */
+      /*PageView(
    //  physics:const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
       controller: pageController,
       onPageChanged: onPageChanged,
       //scrollDirection: Axis.horizontal,
       children: screens,
-    ),
+    ),*/
     );
   }
+
 }
+

@@ -1,9 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard.dart';
-import 'package:task_manager/splashScreen.dart';
+import 'package:task_manager/homePage.dart';
+import 'package:task_manager/projects.dart';
+import 'package:task_manager/userProfile.dart';
+import 'addProject.dart';
 import 'localString.dart';
+import 'newUserProfile.dart';
+import 'notepad.dart';
 
 Future main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,185 +39,101 @@ Future main()async {
         scaffoldBackgroundColor:const Color(0xff363535),
         appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
       ),
-      home: const SplashScreen())
+      home:const HomePage())
   );
 }
-class PageViewPage extends StatefulWidget {
-  @override
-  _PageViewPageState createState() => _PageViewPageState();
+List<PersistentBottomNavBarItem> _navBarsItems() {
+  return [
+    PersistentBottomNavBarItem(
+      icon:const Icon(CupertinoIcons.home),
+      title: ("Home"),
+      activeColorPrimary: const Color(0xFFEA9A9A),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+    PersistentBottomNavBarItem(
+      icon:const Icon(CupertinoIcons.doc),
+      title: ("Projects"),
+      activeColorPrimary:const Color(0xFFEA9A9A),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),PersistentBottomNavBarItem(
+      icon: const Icon(CupertinoIcons.add,color: Colors.white,),
+      title: ("Add"),
+      activeColorPrimary:const Color(0xFFEA9A9A),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),PersistentBottomNavBarItem(
+      icon:const Icon(CupertinoIcons.news),
+      title: ("Notepad"),
+      activeColorPrimary: const Color(0xFFEA9A9A),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),PersistentBottomNavBarItem(
+      icon:const Icon(CupertinoIcons.profile_circled),
+      title: ("Profile"),
+      activeColorPrimary:const Color(0xFFEA9A9A),
+      inactiveColorPrimary: CupertinoColors.systemGrey,
+    ),
+  ];
 }
-class _PageViewPageState extends State<PageViewPage> {
-  List<Widget> _pages = [];
-  final PageController _controller = PageController(initialPage: 0);
-  double? _currentPage = 0;
 
+
+class MyApp extends StatefulWidget {
   @override
-  void initState() {
-    _pages = [
-      Container(
-        color: Colors.red,
-        child: Center(
-            child: Text(
-              'Page 1',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
-            )),
-      ),
-      Container(
-        color: Colors.green,
-        child: Center(
-            child: Text(
-              'Page 2',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
-            )),
-      ),
-      Container(
-        color: Colors.blue,
-        child: Center(
-            child: Text(
-              'Page 3',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
-            )),
-      )
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool? isExist;
+  List<Widget> _buildScreens() {
+    return [
+      const Dashboard(),
+      const Projects(),
+      const AddProject(),
+      const NotePad(),
+      isExist==true?const Profile():const NewUserProfile()
     ];
-    //add
-    _controller.addListener(() {
+  }
+  final PersistentTabController _controller = PersistentTabController(initialIndex: 0);
+  void isProfileExist() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (preferences.containsKey('name')) {
       setState(() {
-        _currentPage = _controller.page;
+        isExist=true;
       });
-    });
-    super.initState();
+    }
+    else {
+      setState(() {
+        isExist=false;
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('PageView')),
-      body: SafeArea(
-        child: PageView.builder(
-          itemBuilder: (context, index) {
-            return Transform(
-              transform: Matrix4.identity()..rotateZ(_currentPage! - index),
-              child: _pages[index],
-            );
-          },
-          scrollDirection: Axis.horizontal,
-          controller: _controller,
-          itemCount: _pages.length,
-        ),
+    return PersistentTabView(
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: Colors.white,
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: true,
+      hideNavigationBarWhenKeyboardShows: true,
+      decoration: NavBarDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        colorBehindNavBar: Colors.white,
       ),
+      popAllScreensOnTapOfSelectedTab: true,
+      popActionScreens: PopActionScreensType.all,
+      itemAnimationProperties: const ItemAnimationProperties(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
+      ),
+      screenTransitionAnimation:const ScreenTransitionAnimation(
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle: NavBarStyle.style15,
     );
   }
-}
-
-class CustomRoute extends PageRouteBuilder{
-  dynamic child;
-  dynamic type;
-  CustomRoute({required this.child,required this.type}) : super( transitionDuration:const Duration(milliseconds: 700),
-      pageBuilder: (context, animation, anotherAnimation) {
-        return  child;
-      },
-      transitionsBuilder:(BuildContext context,Animation<double> animation,Animation<double> secondaryAnimation,Widget child
-          ){
-        return type(animation,child);
-      } );
-}
-Widget scaleTransition(Animation<double> animation,Widget child,){
-  return ScaleTransition(scale: animation,child: child,alignment: Alignment.topRight,);
-}
-Widget scaleTransition2(Animation<double> animation,Widget child,){
-  return ScaleTransition(scale: animation,child: child,alignment: Alignment.center,);
-}
-
-// Use of secondary animation
-Widget slideTransition(Animation<double> animation,Widget child,Widget exitChild, Animation<double> secondaryAnimation){
-  animation=CurvedAnimation(
-      curve: Curves.bounceIn,parent: animation
-  );
-  return Stack(
-    children: [
-      SlideTransition(
-        position: Tween<Offset>(
-            begin: const Offset (0,-1),
-            end: Offset.zero
-        ).animate(animation),
-        child: child,
-      ),
-      SlideTransition(
-        position: Tween<Offset>(
-            begin: const Offset (0,-1),
-            end: Offset.zero
-        ).animate(secondaryAnimation),
-        child: exitChild,
-      ),
-    ],
-  );
-}
-Widget slideTransition2(Animation<double> animation,Widget child){
-
-  animation=CurvedAnimation(
-      curve: Curves.bounceIn,parent: animation
-  );
-  return SlideTransition(
-    position: Tween<Offset>(
-        begin: const Offset (0,1),
-        end: Offset.zero
-    ).animate(animation),
-    child: child,
-  );
-}
-Widget fadeTransition(Animation<double> animation,Widget child){
-  return FadeTransition(
-    opacity: animation,
-    child: child,
-  );
-}
-
-Widget rotationTransition(Animation<double> animation,Widget child){
-  return RotationTransition(
-    turns: animation,
-    child: child,
-    alignment: Alignment.center,
-  );
-}
-
-Widget hero(){
-  return Hero(tag: "img", child: Image.asset("assets/ocean.jpg"),placeholderBuilder: (context,size, widget) {
-    return const SizedBox( width: 400.0, height: 400.0, child: CircularProgressIndicator(),); },
-    flightShuttleBuilder: (flightContext, animation, direction,
-        fromContext, toContext) {
-      //return const Icon(Icons.animation, size: 150.0,);
-      if(direction == HeroFlightDirection.push) {
-        return const Icon(
-          Icons.animation,
-          size: 250.0,
-        );
-      } else {
-        return const Icon(
-          Icons.animation,
-          size: 70.0,
-        );
-      }
-    },
-  );
-}
-
-Widget animationBuilder(Animation<double> animation){
-  return AnimatedBuilder(animation: animation, builder: (context,widget){
-    return Center(
-      child: AnimatedContainer(duration:const Duration(seconds: 2),width: 200,height: 100,
-        decoration:  BoxDecoration(gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: const [Colors.yellow,Colors.black],stops: [0,animation.value])),
-      ),
-    );
-  });
-}
-
-Widget sizeTransition(Animation<double> animation,Widget child){
-  return SizeTransition(
-    child: child,
-    axis: Axis.horizontal,
-    axisAlignment: -1,
-    sizeFactor: animation,
-  );
 }

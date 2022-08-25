@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -54,21 +53,22 @@ class _ProjectsState extends State<Projects> with SingleTickerProviderStateMixin
   void initState() {
     controller = AnimationController(
         vsync: this, duration: const Duration(seconds: 2));
+    controller.repeat();
    // animation=CurvedAnimation(parent: controller, curve: Curves.easeIn);
     animation=CurvedAnimation(
         curve: Curves.bounceIn,parent: controller);
     getProjectItem();
     super.initState();
   }
-
+@override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-     /* bottomNavigationBar: bottomNavigation(context, (int i) {
-        setState(() {
-          bottomIndex = i;
-        });}, 1),*/
       appBar:appBar(context, [IconButton(onPressed: () {
         showSearch(context: context, delegate: Search(text: ''));
       }, icon: Icon(Icons.search, color: Theme.of(context).primaryColorDark)),
@@ -77,12 +77,7 @@ class _ProjectsState extends State<Projects> with SingleTickerProviderStateMixin
         }, icon: Icon(Icons.sort, color: Theme
             .of(context)
             .primaryColorDark,))], 'projects'.tr, null),
-      body: /*SlideTransition(
-              position: Tween<Offset>(
-                  begin: const Offset (0,0),
-                  end: Offset.zero
-              ).animate(animation),
-              child: */SingleChildScrollView(
+      body:SingleChildScrollView(
                 child: Column(
                   children: [
                     Padding(

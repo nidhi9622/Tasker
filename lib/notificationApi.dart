@@ -7,16 +7,21 @@ class LocalNotificationService{
 
   static  FlutterLocalNotificationsPlugin notificationsPlugin =
   FlutterLocalNotificationsPlugin();
+
   static Future notificationDetails()async{
+    notificationsPlugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()!.requestPermission();
     return const NotificationDetails(
       android: AndroidNotificationDetails(
         'channelId',
         'channel name',
         //'channel description',
         importance: Importance.max
+
       ),
     );
   }
+
   static Future initialize({required Map object,required BuildContext context})async{
     const InitializationSettings initializationSettings =
     InitializationSettings(
@@ -36,6 +41,7 @@ class LocalNotificationService{
   String? body,
   required String? payload,
    })async {
+
     print(id);
     return await notificationsPlugin.show(
       id,
