@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:js';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/dashboard.dart';
 import 'package:task_manager/projectDetail.dart';
 import 'package:timezone/timezone.dart' as tz;
 class LocalNotificationService{
@@ -18,6 +20,7 @@ class LocalNotificationService{
         //'channel description',
         importance: Importance.max
       ),
+
     );
   }
 
@@ -25,6 +28,11 @@ class LocalNotificationService{
     const InitializationSettings initializationSettings =
     InitializationSettings(
       android: AndroidInitializationSettings("@mipmap/icon"),
+      iOS: IOSInitializationSettings(
+        requestSoundPermission: false,
+        requestBadgePermission: false,
+        requestAlertPermission: false,
+      )
     );
     notificationsPlugin.initialize(
       initializationSettings,
@@ -33,7 +41,7 @@ class LocalNotificationService{
       },
     );
   }
-  
+
   static Future showNotification({
   required int id,
   String? title,

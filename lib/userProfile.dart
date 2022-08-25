@@ -1,8 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/homePage.dart';
-import 'package:task_manager/projects.dart';
 import 'package:task_manager/search.dart';
 import 'package:task_manager/settings.dart';
 import 'package:task_manager/splashScreen.dart';
@@ -17,12 +17,16 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String? name;String? designation;String? map;
+  dynamic profileImage;
   getData()async{
     SharedPreferences preferences=await SharedPreferences.getInstance();
     setState((){
       name=preferences.getString('name');
       designation=preferences.getString('designation');
     });
+    if(preferences.containsKey('imageUrl')){
+      setState((){
+        profileImage=preferences.getString('imageUrl');  });}
   }
   @override
   void initState() {
@@ -55,9 +59,23 @@ class _ProfileState extends State<Profile> {
                           Text('allTask'.tr,style: TextStyle(color: Theme.of(context).primaryColorLight,fontSize: 10),)
                         ],),
                       ),
-                      SizedBox(width: deviceSize.width*0.05),
-                      SizedBox(width:deviceSize.width*0.43,child: CircleAvatar(backgroundColor: Colors.grey[200],radius: 80,
-                        child: const Icon(Icons.person,color: Colors.black,size: 70,),)),
+                      SizedBox(width: deviceSize.width*0.05),SizedBox(width: deviceSize.width*0.40,height: deviceSize.height*0.18,
+                          child:Container(
+                              height: deviceSize.height/7,
+                              width: deviceSize.height/7,
+                              decoration: profileImage==null? BoxDecoration(border: Border.all(width:2,color: Colors.black ),
+                                  shape: BoxShape.circle,
+                                  image: const DecorationImage(
+                                      image: AssetImage("assets/personImage.jpg") ,
+                                      fit: BoxFit.fill
+                                  )
+                              ):BoxDecoration(border: Border.all(width:2,color: Colors.black ),
+                                  shape: BoxShape.circle,
+                                  image:  DecorationImage(
+                                      image: FileImage(File(profileImage),scale: 10.0) ,
+                                      fit: BoxFit.fill
+                                  ))
+                          )),
                       SizedBox(width: deviceSize.width*0.05),
                       SizedBox(width:deviceSize.width*0.20,
                         child: Column(mainAxisAlignment:MainAxisAlignment.center,children: [

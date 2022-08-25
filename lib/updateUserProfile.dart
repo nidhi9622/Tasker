@@ -15,9 +15,9 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  late TextEditingController phoneController;
-  late TextEditingController nameController;
-  late TextEditingController designationController;
+   TextEditingController phoneController=TextEditingController();
+   TextEditingController nameController=TextEditingController();
+   TextEditingController designationController=TextEditingController();
   dynamic profileImage;  dynamic path;
   String? name;String? designation;
   String? phone;
@@ -28,7 +28,7 @@ class _UserProfileState extends State<UserProfile> {
     preferences.setString('number', phoneController.text);
     preferences.setString('designation', designationController.text);
     if(profileImage!=null){
-      preferences.setString('imageUrl', profileImage);}
+      preferences.setString('imageUrl', profileImage!);}
   }
   getData()async{
     SharedPreferences preferences=await SharedPreferences.getInstance();
@@ -37,12 +37,17 @@ class _UserProfileState extends State<UserProfile> {
        phone=preferences.getString('number');
        designation=preferences.getString('designation');
      });
+    if(preferences.containsKey('imageUrl')){
+      setState((){
+      profileImage=preferences.getString('imageUrl');  });}
      nameController=TextEditingController(text: name??'');
      phoneController=TextEditingController(text: phone??'');
      designationController=TextEditingController(text: designation??'');
   }
+  dynamic newImage;
   @override
   void initState(){
+    print('profile is $profileImage');
     getData();
     super.initState();
   }
@@ -57,6 +62,9 @@ class _UserProfileState extends State<UserProfile> {
           if(_formKey.currentState!.validate()){
           await _showDialogBox(context);
           await setData();
+          setState(() {
+            selectIndex=4;
+          });
           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const HomePage()));}
         }, child: Text('done'.tr,style: TextStyle(color: Theme.of(context).primaryColorDark),))],
         title: Text('profile'.tr,style: TextStyle(color: Theme.of(context).primaryColorDark),),automaticallyImplyLeading: false,
@@ -167,13 +175,13 @@ dynamic file;
   void getImage({required ImageSource source})async{
     file=await ImagePicker().pickImage(source:source);
     if(file?.path != null){
-      File? crop= ImageCropper().cropImage(
+      File? crop=await ImageCropper().cropImage(
           sourcePath: file!.path,
           androidUiSettings: const AndroidUiSettings(
               toolbarTitle: "Crop",
               toolbarColor: Colors.white10,
               statusBarColor: Colors.blueGrey
-          )) as File?;
+          ));
       setState(() {
         profileImage=crop!.path.toString();
       });

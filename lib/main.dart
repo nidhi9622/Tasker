@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,13 +12,24 @@ import 'addProject.dart';
 import 'localString.dart';
 import 'newUserProfile.dart';
 import 'notepad.dart';
-
+void requestIOSPermissions(
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+}
 Future main()async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   bool? status = true;
   status=preferences.getBool('theme') ;
   preferences.setInt('id', 0);
+  //requestIOSPermissions(FlutterLocalNotificationsPlugin());
   runApp(GetMaterialApp(
       themeMode: status==true?ThemeMode.dark:ThemeMode.light,
       translations: LocalString(),
