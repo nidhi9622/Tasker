@@ -5,13 +5,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/addProject.dart';
 import 'package:task_manager/editTask.dart';
 import 'package:task_manager/processDetail.dart';
 import 'package:task_manager/projectDetail.dart';
 import 'package:task_manager/reusables.dart';
 import 'package:task_manager/search.dart';
 import 'package:task_manager/updateUserProfile.dart';
+
+import 'homePage.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -125,15 +126,11 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                ),
                              ),
                            ),
-                         Container(width: deviceSize.width,height: deviceSize.height*0.32,
+                         Container(width: deviceSize.width,height: deviceSize.height*0.27,
                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(24),color:Theme.of(context).primaryColor ),
                               padding:const EdgeInsets.all(8),
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                     Padding(
-                                      padding:const EdgeInsets.all(8),
-                                      child: Text("day".tr,style:const TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                                    ),
                                     Row(
                                       children: [
                                         process(deviceSize,'Ongoing'.tr,const Color(0xffae74e3),const Color(0xffdbb9fa),Icons.access_time,ongoingProjects),
@@ -150,24 +147,27 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                                 ),
 
                     ),
-                    InkWell(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const AddProject()));
-                      },
-                      child: Padding(
+                    Padding(
                         padding:const EdgeInsets.only(left: 20,top: 15,right: 15),
                         child: Row(
                           children: [
-                            SizedBox(width: deviceSize.width*0.45,child: Row(children: [Text('addProject'.tr,style:const TextStyle(fontSize: 20),),
-                              SizedBox(width: deviceSize.width*0.02),
-                              CircleAvatar(backgroundColor:Colors.red[200],radius:13,child:const Icon(Icons.add,color: Colors.white,))],),),
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  selectIndex=2;
+                                });
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const HomePage()));
+                              },
+                              child: SizedBox(width: deviceSize.width*0.44,child: Row(children: [Text('addProject'.tr,style:const TextStyle(fontSize: 20),),
+                                SizedBox(width: deviceSize.width*0.02),
+                                CircleAvatar(backgroundColor:Colors.red[200],radius:13,child:const Icon(Icons.add,color: Colors.white,))],),),
+                            ),
                             SizedBox(width: deviceSize.width*0.45,child: Text('allProject'.tr,textAlign: TextAlign.end,
                               style:const TextStyle(color: Colors.grey),),)
                           ],
                         ),
-                      ),
                     ),
-                    Container(height: deviceSize.height*0.319,width:deviceSize.width,
+                    Container(height: deviceSize.height*0.37,width:deviceSize.width,
                       padding:const EdgeInsets.only(top: 10),
                       child: projectItem.isNotEmpty?ListView.builder(itemCount:projectItem.length,itemBuilder: (context,index){
                         DataModel dataModel=DataModel(projectItem[index]);
