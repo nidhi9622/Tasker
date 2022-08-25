@@ -33,7 +33,7 @@ class _ProcessDetailState extends State<ProcessDetail> {
       appBar: AppBar(title: Text(title,style: TextStyle(color: Theme.of(context).primaryColorDark),),
       elevation: 0,leading:IconButton(onPressed: (){
         Navigator.of(context).pop();
-        },icon: Icon(Icons.arrow_back,color: Theme.of(context).primaryColorDark,),),actions: [Padding(
+        },icon: Icon(Icons.arrow_back_ios,color: Theme.of(context).primaryColorDark,),),actions: [Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: IconButton(onPressed: (){
             showSearch(context: context, delegate: Search(text: ''));

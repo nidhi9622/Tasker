@@ -11,7 +11,6 @@ import 'package:task_manager/projectDetail.dart';
 import 'package:task_manager/reusables.dart';
 import 'package:task_manager/search.dart';
 import 'package:task_manager/updateUserProfile.dart';
-
 import 'homePage.dart';
 
 class Dashboard extends StatefulWidget {
@@ -20,7 +19,6 @@ class Dashboard extends StatefulWidget {
   @override
   State<Dashboard> createState() => _DashboardState();
 }
-int bottomIndex=0;
 String now = DateFormat("MMM dd, yyyy").format(DateTime.now());
 List canceledProjects=[]; List upcomingProjects=[];
 List completedProjects=[];List ongoingProjects=[];

@@ -100,8 +100,9 @@ class _ProfileState extends State<Profile> {
               exploreOptions(deviceSize, 'logOut'.tr, Icons.logout_outlined,()async{
                 projectItem.clear();upcomingProjects.clear();ongoingProjects.clear();
                 completedProjects.clear();canceledProjects.clear();
-                SharedPreferences pref=await SharedPreferences.getInstance();
-                pref.clear();
+                SharedPreferences preferences=await SharedPreferences.getInstance();
+                preferences.clear();
+                preferences.setInt('id', 0);
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const SplashScreen()));},context)
             ],),)],),
       ),

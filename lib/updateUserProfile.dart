@@ -51,7 +51,7 @@ class _UserProfileState extends State<UserProfile> {
     final deviceSize=MediaQuery.of(context).size;
     return Scaffold(
      // bottomNavigationBar: bottomNavigation(context, (int i){setState((){bottomIndex = i;});}, 4),
-      appBar: AppBar(elevation:0,leading: IconButton(icon: Icon(Icons.arrow_back,color: Theme.of(context).primaryColorDark,),
+      appBar: AppBar(elevation:0,leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Theme.of(context).primaryColorDark,),
         onPressed: (){Navigator.of(context).pop();},),
         actions: [TextButton(onPressed: ()async{
           if(_formKey.currentState!.validate()){

@@ -179,6 +179,9 @@ class _AddProjectState extends State<AddProject> {
       preferences.setInt('id', id+1);});}
     LocalNotificationService.initialize(context:context,object: map);
     await showDialogBox(context,'success'.tr);
+    setState(() {
+      selectIndex=0;
+    });
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));}
   }
   int dropDown1=0;

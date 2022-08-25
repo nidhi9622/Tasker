@@ -145,7 +145,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
       child: Scaffold(
           appBar: AppBar(elevation:0,leading: IconButton(onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const HomePage()));
-          },icon: Icon(Icons.arrow_back,color: Theme.of(context).primaryColorDark,),),actions: [
+          },icon: Icon(Icons.arrow_back_ios,color: Theme.of(context).primaryColorDark,),),actions: [
             IconButton(onPressed: (){
               showSearch(context: context, delegate: Search(text:''));
             }, icon: Icon(Icons.search,color: Theme.of(context).primaryColorDark,))],),
@@ -179,7 +179,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                               Padding(
                                 padding: const EdgeInsets.all(15),
                                 child: CircularPercentIndicator(radius: 44,
-                                  center:Text('$totalPercentage %'),
+                                  center:Text('$totalPercentage %',style:const TextStyle(fontSize: 17),),
                                   animation: true,
                                   animationDuration: 1000,
                                   percent:totalPercentage<101?totalPercentage/100:100/100,
@@ -327,9 +327,6 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                   barRadius: const Radius.circular(10),
                                   backgroundColor: Colors.grey[300],
                                 ),
-                               /* trailing: IconButton(icon:const Icon(Icons.arrow_forward_ios_outlined,),onPressed: (){
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectDetail(object:subTaskList[index])));
-                                }),*/
                               ),
                             ));},):Column(mainAxisAlignment: MainAxisAlignment.center,
                               children: [

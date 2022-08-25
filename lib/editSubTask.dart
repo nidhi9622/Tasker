@@ -154,7 +154,7 @@ class _EditSubTaskState extends State<EditSubTask> {
   Widget build(BuildContext context) {
     final deviceSize=MediaQuery.of(context).size;
     return Scaffold(appBar: AppBar(elevation:0,title: Text('editSubTask'.tr,style: TextStyle(color: Theme.of(context).primaryColorDark),
-    ),leading: IconButton(icon: Icon(Icons.arrow_back,color: Theme.of(context).primaryColorDark,),onPressed: (){
+    ),leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Theme.of(context).primaryColorDark,),onPressed: (){
       Navigator.of(context).pop();
     },),actions: [TextButton(onPressed: ()async{
       if(_formKey.currentState!.validate()){

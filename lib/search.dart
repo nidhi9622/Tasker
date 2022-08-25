@@ -20,7 +20,7 @@ class Search extends SearchDelegate<String> {
   Widget? buildLeading(BuildContext context) {
     return IconButton(onPressed: (){
       close(context, query);
-    }, icon: const Icon(Icons.arrow_back));
+    }, icon: const Icon(Icons.arrow_back_ios));
   }
 
   @override

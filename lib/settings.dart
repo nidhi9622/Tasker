@@ -19,7 +19,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     final deviceSize=MediaQuery.of(context).size;
     return Scaffold(appBar: AppBar(elevation:0,backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      leading: IconButton(icon: Icon(Icons.arrow_back,color: Theme.of(context).primaryColorDark,),
+      leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Theme.of(context).primaryColorDark,),
         onPressed: (){Navigator.of(context).pop();},),
       title: Text('setting'.tr,style: TextStyle(color: Theme.of(context).primaryColorDark),),),
       body: Padding(

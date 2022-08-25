@@ -14,7 +14,7 @@ class _ReminderSettingsState extends State<ReminderSettings> {
       title: Text('reminderSetting'.tr,style: TextStyle(color: Theme.of(context).primaryColorDark),
     ),leading: IconButton(onPressed: (){
       Navigator.of(context).pop();
-    },icon: Icon(Icons.arrow_back,color: Theme.of(context).primaryColorDark,),),),
+    },icon: Icon(Icons.arrow_back_ios,color: Theme.of(context).primaryColorDark,),),),
     body: Column(children: const [
 
     ],),));

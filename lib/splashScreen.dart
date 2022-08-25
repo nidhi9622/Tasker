@@ -11,10 +11,16 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 5), (){
+    setIndex();
+    Timer(const Duration(seconds: 4), (){
       Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));}
     );
     super.initState();
+  }
+  setIndex(){
+    setState(() {
+      selectIndex=0;
+    });
   }
   @override
   Widget build(BuildContext context) {
