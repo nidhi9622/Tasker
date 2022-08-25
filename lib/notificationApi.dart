@@ -17,7 +17,6 @@ class LocalNotificationService{
         'channel name',
         //'channel description',
         importance: Importance.max
-
       ),
     );
   }
@@ -68,42 +67,7 @@ class LocalNotificationService{
     uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
   );
 
- /* static void initialize( BuildContext context) {
-    const InitializationSettings initializationSettings =
-    InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/icon"),
-    );
-    notificationsPlugin.initialize(
-      initializationSettings,
-      onSelectNotification:(String? id ) async {
-        if (id!.isNotEmpty) {
-       //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewScreen(id: id)));
-        }
-        else{
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  const Notifications()));
-        }
-      },
-    );}
-  static void displayNotification( message) async {
 
-    final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-        "firebaseId",
-        "fireBaseChannel",
-        importance: Importance.max,
-        priority: Priority.high,
-        playSound: true,
-      ),
-    );
-    await notificationsPlugin.show(
-      id,
-      message.notification!.title,
-      message.notification!.body,
-      notificationDetails,
-      payload: message.data['_id'],
-    );
-  }*/
 
 }
 

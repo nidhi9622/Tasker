@@ -6,13 +6,13 @@ import 'package:task_manager/userProfile.dart';
 import 'addProject.dart';
 import 'dashboard.dart';
 import 'notepad.dart';
-
+//hello
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
-final GlobalKey<_HomePageState> globalKey =  GlobalKey<_HomePageState>();
+int selectIndex = 0;
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   PageController pageController = PageController();
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     const NotePad()
   ];
 
-  int selectIndex = 0;
+
   int oldIndex=0;
 
   @override
@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     /*pageController.animateToPage(index,
           duration:const Duration(milliseconds: 300), curve: Curves.easeOut);*/
     //  pageController.jumpToPage(index);
-    
   }
 
    void onPageChanged(int index){
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
   late AnimationController controller;
- late Animation<double> animation;
+  late Animation<double> animation;
 
   @override
   initState() {
@@ -89,9 +88,9 @@ transition(){
       animation = CurvedAnimation(
           curve: Curves.easeIn,parent: controller);
     return AnimatedSwitcher(
-      switchOutCurve: Curves.ease,
+      switchOutCurve: Curves.decelerate,
       reverseDuration:const Duration(milliseconds: 0) ,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 450),
       transitionBuilder: (Widget child, Animation<double> animation) {
         return SlideTransition(
           position: Tween(
@@ -123,6 +122,8 @@ transition(){
           const BottomNavigationBarItem(icon: Icon(Icons.person_outline,), label: ''),
         ]
     ),body: transition()
+
+        // From animation package
    /* PageTransitionSwitcher(
       duration: const Duration(seconds: 1),
       child: screens[selectIndex],

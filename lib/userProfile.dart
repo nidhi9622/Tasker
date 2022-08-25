@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/homePage.dart';
 import 'package:task_manager/projects.dart';
 import 'package:task_manager/search.dart';
 import 'package:task_manager/settings.dart';
@@ -91,7 +92,10 @@ class _ProfileState extends State<Profile> {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Settings()));},context),
               SizedBox(width: deviceSize.width*0.055),
               exploreOptions(deviceSize, 'allTask'.tr, Icons.table_rows_outlined,(){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Projects()));},context),
+                setState(() {
+                  selectIndex=1;
+                });
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const HomePage()));},context),
               SizedBox(width: deviceSize.width*0.055),
               exploreOptions(deviceSize, 'logOut'.tr, Icons.logout_outlined,()async{
                 projectItem.clear();upcomingProjects.clear();ongoingProjects.clear();

@@ -115,7 +115,7 @@ class _UserProfileState extends State<UserProfile> {
                         borderColor=Colors.black;
                       });
                     },Icons.person,false),
-                SizedBox(height: deviceSize.height*0.02,),
+               // SizedBox(height: deviceSize.height*0.02,),
                 profileOptions(context ,designation??'','designation'.tr,false, TextInputType.name,TextInputAction.next,
                     designationController,
                         (String? value) {
@@ -127,7 +127,7 @@ class _UserProfileState extends State<UserProfile> {
                         borderColor=Colors.black;
                       });
                     },Icons.work,false),
-                SizedBox(height: deviceSize.height*0.02,),
+                //SizedBox(height: deviceSize.height*0.02,),
                 profileOptions(context,phone??'','number'.tr,true, TextInputType.number,TextInputAction.done,
                     phoneController,
                         (String? value){
