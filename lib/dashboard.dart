@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -113,14 +114,14 @@ class _DashboardState extends State<Dashboard>
                     onPressed: () {
                       showSearch(context: context, delegate: Search(text: ''));
                     },
-                    icon: Icon(Icons.search,
+                    icon: Icon(CupertinoIcons.search,
                         color: Theme.of(context).primaryColorDark)),
                 IconButton(
                     onPressed: () async {
                       bottomSheet(deviceSize);
                     },
                     icon: Icon(
-                      Icons.sort,
+                      CupertinoIcons.sort_down,
                       color: Theme.of(context).primaryColorDark,
                     ))
               ],
@@ -200,7 +201,7 @@ class _DashboardState extends State<Dashboard>
                                   'Upcoming'.tr,
                                   const Color(0xfff7b17c),
                                   const Color(0xfffcdec7),
-                                  Icons.timeline_outlined,
+                                  CupertinoIcons.timer_fill,
                                   upcomingProjects),
                             ],
                           ),
@@ -211,14 +212,14 @@ class _DashboardState extends State<Dashboard>
                                   'Completed'.tr,
                                   const Color(0xff7cc76d),
                                   const Color(0xffb9faac),
-                                  Icons.check,
+                                  CupertinoIcons.check_mark,
                                   completedProjects),
                               process(
                                   deviceSize,
                                   'Canceled'.tr,
                                   const Color(0xffff7a92),
                                   const Color(0xfffaacba),
-                                  Icons.clear,
+                                  CupertinoIcons.clear,
                                   canceledProjects),
                             ],
                           ),
@@ -251,7 +252,7 @@ class _DashboardState extends State<Dashboard>
                                       backgroundColor: Colors.red[200],
                                       radius: 13,
                                       child: const Icon(
-                                        Icons.add,
+                                        CupertinoIcons.add,
                                         color: Colors.white,
                                       ))
                                 ],
@@ -314,7 +315,7 @@ class _DashboardState extends State<Dashboard>
                                                   borderRadius:
                                                       BorderRadius.circular(8)),
                                               child: Icon(
-                                                Icons.check,
+                                                CupertinoIcons.checkmark,
                                                 color:
                                                     dataModel.percentage! < 100
                                                         ? Colors.grey
@@ -422,7 +423,7 @@ class _DashboardState extends State<Dashboard>
 
   sheet(dynamic deviceSize, dynamic title, int index) {
     return PopupMenuButton<int>(
-      icon: const Icon(Icons.more_vert),
+      icon: const Icon(CupertinoIcons.ellipsis_vertical),
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 1,
@@ -434,7 +435,7 @@ class _DashboardState extends State<Dashboard>
             },
             child: Row(
               children: const [
-                Icon(Icons.edit),
+                Icon(CupertinoIcons.pen),
                 SizedBox(
                   width: 10,
                 ),
@@ -472,7 +473,7 @@ class _DashboardState extends State<Dashboard>
           },
           child: Row(
             children: const [
-              Icon(Icons.delete_forever_outlined),
+              Icon(CupertinoIcons.delete),
               SizedBox(
                 width: 10,
               ),
@@ -482,7 +483,7 @@ class _DashboardState extends State<Dashboard>
         ),
       ],
       offset: const Offset(0, 100),
-      color: Colors.grey[300],
+      color: Theme.of(context).scaffoldBackgroundColor,
       elevation: 2,
     );
   }

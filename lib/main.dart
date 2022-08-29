@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard.dart';
 import 'package:task_manager/homePage.dart';
 import 'package:task_manager/projects.dart';
+import 'package:task_manager/splashScreen.dart';
 import 'package:task_manager/userProfile.dart';
 import 'addProject.dart';
 import 'localString.dart';
@@ -56,7 +57,7 @@ Future main() async {
         scaffoldBackgroundColor: const Color(0xff363535),
         appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
       ),
-      home: const HomePage()));
+      home: const SplashScreen()));
 }
 
 List<PersistentBottomNavBarItem> _navBarsItems() {

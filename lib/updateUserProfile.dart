@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -148,7 +149,7 @@ class _UserProfileState extends State<UserProfile> {
                                     bottomSheet();
                                   },
                                   icon: const Icon(
-                                    Icons.add,
+                                    CupertinoIcons.add,
                                     color: Colors.black,
                                   ),
                                 )))
@@ -181,7 +182,7 @@ class _UserProfileState extends State<UserProfile> {
                       textColor = Colors.transparent;
                       borderColor = Colors.black;
                     });
-                  }, Icons.person, false),
+                  }, CupertinoIcons.person, false),
                   // SizedBox(height: deviceSize.height*0.02,),
                   profileOptions(
                       context,
@@ -223,7 +224,7 @@ class _UserProfileState extends State<UserProfile> {
                       textColor = Colors.transparent;
                       borderColor = Colors.black;
                     });
-                  }, Icons.phone_android_outlined, false),
+                  }, CupertinoIcons.device_phone_portrait, false),
                   SizedBox(
                     height: deviceSize.height * 0.02,
                   ),
@@ -304,7 +305,6 @@ class _UserProfileState extends State<UserProfile> {
 // }
 
   void permission() async {
-    AppSettings.openAppSettings();
     final status = await Permission.storage.request();
     if (status == PermissionStatus.granted) {
       getImage(source: ImageSource.gallery);
