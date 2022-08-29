@@ -6,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard.dart';
-import 'package:task_manager/homePage.dart';
 import 'package:task_manager/projects.dart';
 import 'package:task_manager/splashScreen.dart';
 import 'package:task_manager/userProfile.dart';

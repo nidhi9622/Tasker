@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -56,7 +55,6 @@ class _UserProfileState extends State<UserProfile> {
   dynamic newImage;
   @override
   void initState() {
-    print('profile is $profileImage');
     getData();
     super.initState();
   }

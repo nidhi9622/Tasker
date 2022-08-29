@@ -192,15 +192,19 @@ class _ProjectsState extends State<Projects>
         });
   }
 
-  ascendingSort() {
+  ascendingSort() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
+      preferences.setString('projects', jsonEncode(projectItem));
     });
   }
 
-  descendingSort() {
+  descendingSort() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
+      preferences.setString('projects', jsonEncode(projectItem));
     });
   }
 

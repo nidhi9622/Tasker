@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -81,7 +80,7 @@ class _AddProjectState extends State<AddProject> {
       }
     }
     if (preExist == true) {
-      print('already exist');
+      // ignore: use_build_context_synchronously
       titleErrorDialog(context);
     } else {
       if (preferences.containsKey('projects')) {
@@ -203,6 +202,7 @@ class _AddProjectState extends State<AddProject> {
         });
       }
       LocalNotificationService.initialize(context: context, object: map);
+      // ignore: use_build_context_synchronously
       await showDialogBox(context, 'success'.tr);
       setState(() {
         selectIndex = 0;

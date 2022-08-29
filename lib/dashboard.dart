@@ -555,17 +555,19 @@ class _DashboardState extends State<Dashboard>
     }
   }
 
-  ascendingSort() {
+  ascendingSort() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
+      preferences.setString('projects', jsonEncode(projectItem));
     });
   }
 
-  descendingSort() {
+  descendingSort() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
+      preferences.setString('projects', jsonEncode(projectItem));
     });
   }
 }
-//9602617742
-//479
