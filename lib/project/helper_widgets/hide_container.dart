@@ -14,7 +14,7 @@ class HideContainer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
         child: Container(
-          width: deviceSize.width,
+          width: double.infinity,
           height: 30,
           padding: const EdgeInsets.only(left: 10),
           decoration: BoxDecoration(

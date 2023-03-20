@@ -680,42 +680,4 @@ class _ProjectDetailState extends State<ProjectDetail> {
           )),
     );
   }
-
-/*  _showDialogBox(BuildContext context,dynamic list){
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('updatePercentage'.tr),
-          content: TextField(
-            keyboardType:TextInputType.number,
-            controller:percentageController,decoration: InputDecoration(hintText: 'percentage'.tr),),
-          actions: [
-            TextButton(
-              child: Center(child: Text('ok'.tr)),
-              onPressed: () async{
-                SharedPreferences preferences=await SharedPreferences.getInstance();
-                if(percentageController.text.isEmpty){
-                  setState(() {
-                    percentageController.text='0';
-                  });
-                }
-                int newPercentage =int.parse(percentageController.text);
-                Map map=list;
-                map['percentage']=newPercentage;
-                subTaskList[subTaskList.indexWhere((element) => element['title'] == list['title'])] = map;
-               /* subTaskList.removeWhere((element) => element['title'] == list['title']);
-                subTaskList.add(map);*/
-                setState(() {
-                  preferences.setString('${widget.object['title']}', jsonEncode(subTaskList));
-                });
-                 // Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectDetail(widget.object: widget.object)));
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }*/
 }

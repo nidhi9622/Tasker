@@ -1,13 +1,15 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/project/helper_widgets/date_time_widget.dart';
+import 'package:task_manager/project/helper_widgets/heading_text.dart';
 import 'package:task_manager/project/views/project_detail.dart';
 import '../../app_utils/helper_methods/project_text_field.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
+import '../helper_methods/select_date_time.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../../app_utils/local_notification_service.dart';
 
@@ -177,7 +179,7 @@ class _EditSubTaskState extends State<EditSubTask> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //SizedBox(height: deviceSize.height*0.02),
-                heading('taskDetail'.tr, deviceSize),
+                HeadingText(text: 'taskDetail'.tr),
                 ProjectTextField(controller: titleController, labelText: 'title'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
                   if (value!.isEmpty) {
                     return 'titleError'.tr;
@@ -191,227 +193,34 @@ class _EditSubTaskState extends State<EditSubTask> {
                   return null;
                 }, maxLines:1),
                 SizedBox(height: deviceSize.height * 0.02),
-                heading('startDate'.tr, deviceSize),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      await _selectDate(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 17),
-                      width: deviceSize.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).primaryColor),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.calendar,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(width: deviceSize.width * 0.02),
-                          Text(selectedDate)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                HeadingText(text: 'startDate'.tr),
+                DateTimeWidget(onTap: () async {
+                  final datePicked=await selectDate(context);
+                  if (datePicked != null && datePicked != selectedDate) {
+                    setState(() {
+                      stringDate = datePicked;
+                      selectedDate = DateFormat("MMM dd, yyyy").format(datePicked);
+                    });
+                  }
+                }, text: selectedDate, isDate: true),
                 SizedBox(height: deviceSize.height * 0.02),
-                heading('startTime'.tr, deviceSize),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      await _selectTime(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 17),
-                      width: deviceSize.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).primaryColor),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.time_solid,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(width: deviceSize.width * 0.025),
-                          Text('$selectedTime')
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                HeadingText(text: 'startTime'.tr),
+                DateTimeWidget(onTap:  () async {
+                  final timePicked=await selectTime(context);
+                  if (timePicked != null && timePicked != selectedTime) {
+                    setState(() {
+                      selectedTime = timePicked.format(context);
+                      stringTime = timePicked;
+                    });
+                  }
+                }, text: "$selectedTime", isDate: false,),
                 SizedBox(
                   height: deviceSize.height * 0.01,
                 ),
-                heading('additional'.tr, deviceSize),
+                HeadingText(text: 'additional'.tr),
                 ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
-                SizedBox(height: deviceSize.height * 0.02),
-                Container(
-                    color: Theme.of(context).primaryColor,
-                    width: deviceSize.width,
-                    height: deviceSize.height * 0.07,
-                    padding: const EdgeInsets.only(
-                      left: 14,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'status'.tr,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          width: deviceSize.width * 0.27,
-                          height: deviceSize.height * 0.06,
-                          child: Center(
-                            child: FormField(builder: (state) {
-                              return DropdownButtonFormField(
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none),
-                                hint: Text(status),
-                                items: [
-                                  for (int i = 0;
-                                      i < dropdownOptions.length;
-                                      i++)
-                                    DropdownMenuItem(
-                                      value: i,
-                                      child: Text(dropdownOptions[i]),
-                                    ),
-                                ],
-                                onChanged: (int? value) {
-                                  setState(() {
-                                    dropDown1 = value!;
-                                  });
-                                },
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
-                    )),
-                SizedBox(height: deviceSize.height * 0.03),
-                Container(
-                  color: Theme.of(context).primaryColor,
-                  width: deviceSize.width,
-                  height: 50,
-                  padding: const EdgeInsets.only(
-                    left: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      Transform.scale(
-                        scale: 1.3,
-                        child: Checkbox(
-                          value: reminder,
-                          onChanged: (value) {
-                            setState(() {
-                              reminder == true
-                                  ? reminder = false
-                                  : reminder = true;
-                            });
-                          },
-                          fillColor: MaterialStateProperty.all(Colors.red[200]),
-                        ),
-                      ),
-                      Text('reminder'.tr,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          )),
-                    ],
-                  ),
-                ),
-                SizedBox(height: deviceSize.height * 0.025),
-                heading('percentage'.tr, deviceSize),
-                ProjectTextField(controller: percentageController, labelText: 'percentage'.tr, inputType: TextInputType.number, inputAction: TextInputAction.done, maxLength: 3, validator: (String? value) {
-                  return null;
-                
-                  
-                }, maxLines:1),
-                SizedBox(height: deviceSize.height * 0.25),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _selectDate(BuildContext context) async {
-    datePicked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-
-    if (datePicked != null && datePicked != selectedDate) {
-      setState(() {
-        stringDate = datePicked;
-        selectedDate = DateFormat("MMM dd, yyyy").format(datePicked);
-      });
-    }
-  }
-
-  _selectTime(BuildContext context) async {
-    timePicked =
-        await showTimePicker(initialTime: TimeOfDay.now(), context: context);
-    if (timePicked != null && timePicked != selectedTime) {
-      setState(() {
-        selectedTime = timePicked.format(context);
-        stringTime = timePicked;
-      });
-    }
-  }
-
-  heading(String text, dynamic deviceSize) {
-    return Container(
-        color: Theme.of(context).primaryColor,
-        width: deviceSize.width,
-        height: 50,
-        padding: const EdgeInsets.only(
-          top: 13,
-          left: 14,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ));
-  }
-
-  hideContainer(String text, dynamic deviceSize, dynamic onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
-        child: Container(
-          width: deviceSize.width,
-          height: 30,
-          padding: const EdgeInsets.only(left: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(9),
-              color: Theme.of(context).primaryColor),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.red[200],
-                radius: 9,
-                child: Icon(
-                  CupertinoIcons.add,
-                  color: Theme.of(context).primaryColor,
-                  size: 17,
-                ),
-              ),
-              SizedBox(width: deviceSize.width * 0.015),
-              Text(
-                text,
-              ),
-            ],
           ),
         ),
       ),

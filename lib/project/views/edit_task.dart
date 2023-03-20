@@ -13,7 +13,7 @@ import '../helper_methods/select_date_time.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../../dashboard/views/dashboard.dart';
 import '../../app_utils/local_notification_service.dart';
-import '../helper_widgets/time_widget.dart';
+import '../helper_widgets/date_time_widget.dart';
 
 class EditTask extends StatefulWidget {
   final Map object;

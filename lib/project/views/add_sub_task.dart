@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/project/helper_widgets/time_widget.dart';
+import 'package:task_manager/project/helper_widgets/heading_text.dart';
+import 'package:task_manager/project/helper_widgets/hide_container.dart';
+import 'package:task_manager/project/helper_widgets/date_time_widget.dart';
 import 'package:task_manager/project/views/project_detail.dart';
 import '../../app_utils/helper_methods/project_text_field.dart';
 import '../../database/app_list.dart';
@@ -161,12 +162,12 @@ class _AddSubTaskState extends State<AddSubTask> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // SizedBox(height: deviceSize.height*0.02),
-                heading('taskDetail'.tr, deviceSize),
-                hideContainer('title'.tr, deviceSize, () {
+                HeadingText(text: 'taskDetail'.tr),
+                HideContainer(onTap: () {
                   setState(() {
                     titleHeight = 60;
                   });
-                }),
+                }, text: 'title'.tr),
                 if (titleHeight > 0)
                   SizedBox(
                       height: titleHeight,
@@ -183,11 +184,11 @@ class _AddSubTaskState extends State<AddSubTask> {
                             return null;
                           },
                           maxLines: 1)),
-                hideContainer('subTitle'.tr, deviceSize, () {
+                HideContainer(onTap: () {
                   setState(() {
                     subTitleHeight = 60;
                   });
-                }),
+                }, text: 'subTitle'.tr),
                 if (subTitleHeight > 0)
                   SizedBox(
                     height: subTitleHeight,
@@ -206,7 +207,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                         maxLines: 1),
                   ),
                 SizedBox(height: deviceSize.height * 0.02),
-                heading('startDate'.tr, deviceSize),
+                HeadingText(text: 'startDate'.tr),
                 DateTimeWidget(onTap:  () async {
                   final picked=await selectDate(context);
                   if (picked != null && picked != selectedDate) {
@@ -216,7 +217,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                   }
                 }, text: DateFormat("MMM dd, yyyy").format(selectedDate), isDate: true,),
                 SizedBox(height: deviceSize.height * 0.02),
-                heading('startTime'.tr, deviceSize),
+                HeadingText(text: 'startTime'.tr),
                 DateTimeWidget(onTap:  () async {
                   final picked=await selectTime(context);
                   if (picked != null && picked != selectedTime) {
@@ -228,12 +229,12 @@ class _AddSubTaskState extends State<AddSubTask> {
                 SizedBox(
                   height: deviceSize.height * 0.01,
                 ),
-                heading('additional'.tr, deviceSize),
-                hideContainer('description'.tr, deviceSize, () {
+                HeadingText(text: 'additional'.tr),
+                HideContainer(onTap: () {
                   setState(() {
                     descriptionHeight = 120;
                   });
-                }),
+                }, text: 'description'.tr),
                 if (descriptionHeight > 0)
                   ProjectTextField(
                       controller: descriptionController,
@@ -243,142 +244,11 @@ class _AddSubTaskState extends State<AddSubTask> {
                       maxLength: 100,
                       validator: (String? value) => null,
                       maxLines: 5),
-                SizedBox(height: deviceSize.height * 0.02),
-                Container(
-                    color: Theme.of(context).primaryColor,
-                    width: deviceSize.width,
-                    height: deviceSize.height * 0.07,
-                    padding: const EdgeInsets.only(
-                      left: 14,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'status'.tr,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          width: deviceSize.width * 0.27,
-                          height: deviceSize.height * 0.06,
-                          child: Center(
-                            child: FormField(builder: (state) {
-                              return DropdownButtonFormField(
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none),
-                                hint: Text(dropdownOptions[0]),
-                                items: [
-                                  for (int i = 0;
-                                      i < dropdownOptions.length;
-                                      i++)
-                                    DropdownMenuItem(
-                                      value: i,
-                                      child: Text(dropdownOptions[i]),
-                                    ),
-                                ],
-                                onChanged: (int? value) {
-                                  setState(() {
-                                    dropDown1 = value!;
-                                  });
-                                },
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
-                    )),
-                SizedBox(height: deviceSize.height * 0.03),
-                Container(
-                  color: Theme.of(context).primaryColor,
-                  width: deviceSize.width,
-                  height: 50,
-                  padding: const EdgeInsets.only(
-                    left: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      Transform.scale(
-                        scale: 1.3,
-                        child: Checkbox(
-                          value: reminder,
-                          onChanged: (value) {
-                            setState(() {
-                              reminder ? reminder = false : reminder = true;
-                            });
-                          },
-                          fillColor: MaterialStateProperty.all(Colors.red[200]),
-                        ),
-                      ),
-                      Text('reminder'.tr,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          )),
-                    ],
-                  ),
-                ),
-                SizedBox(height: deviceSize.height * 0.025),
-                heading('percentage'.tr, deviceSize),
-                ProjectTextField(
-                    controller: percentageController,
-                    labelText: 'percentage'.tr,
-                    inputType: TextInputType.name,
-                    inputAction: TextInputAction.next,
-                    maxLength: 3,
-                    validator: (String? value) => null,
-                    maxLines: 1),
-                SizedBox(height: deviceSize.height * 0.25),
+
+
+                ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  heading(String text, dynamic deviceSize) {
-    return Container(
-        color: Theme.of(context).primaryColor,
-        width: deviceSize.width,
-        height: 50,
-        padding: const EdgeInsets.only(
-          top: 13,
-          left: 14,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ));
-  }
-
-  hideContainer(String text, dynamic deviceSize, dynamic onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
-        child: Container(
-          width: deviceSize.width,
-          height: 30,
-          padding: const EdgeInsets.only(left: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(9),
-              color: Theme.of(context).primaryColor),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.red[200],
-                radius: 9,
-                child: Icon(
-                  CupertinoIcons.add,
-                  color: Theme.of(context).primaryColor,
-                  size: 17,
-                ),
-              ),
-              SizedBox(width: deviceSize.width * 0.015),
-              Text(
-                text,
-              ),
-            ],
           ),
         ),
       ),
