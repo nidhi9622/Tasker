@@ -4,102 +4,138 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/projectDetail.dart';
-import 'package:task_manager/reusables.dart';
-import 'addProject.dart';
-import 'notificationApi.dart';
+import 'package:task_manager/project/views/project_detail.dart';
+import '../../app_utils/helper_methods/project_text_field.dart';
+import '../../database/app_list.dart';
+import '../../models/data_model.dart';
+import '../helper_methods/title_error_dialog.dart';
+import '../../app_utils/local_notification_service.dart';
 
-class AddSubTask extends StatefulWidget {
-  Map object;
-  AddSubTask({Key? key, required this.object}) : super(key: key);
+class EditSubTask extends StatefulWidget {
+  final Map object;
+  final String title;
+  final Map homeObject;
+  const EditSubTask(
+      {Key? key,
+      required this.object,
+      required this.title,
+      required this.homeObject})
+      : super(key: key);
 
   @override
-  State<AddSubTask> createState() => _AddSubTaskState(object: object);
+  State<EditSubTask> createState() =>
+      _EditSubTaskState();
 }
 
-class _AddSubTaskState extends State<AddSubTask> {
-  Map object;
-  _AddSubTaskState({required this.object});
-  final TextEditingController title = TextEditingController();
-  final TextEditingController subTitle = TextEditingController();
-  final TextEditingController description = TextEditingController();
-  final TextEditingController percentage = TextEditingController();
+class _EditSubTaskState extends State<EditSubTask> {
+  late TextEditingController titleController;
+  late TextEditingController subTitleController;
+  late TextEditingController percentageController;
+  late TextEditingController descriptionController;
+  @override
+  dispose() {
+    super.dispose();
+    titleController.dispose();
+    subTitleController.dispose();
+    descriptionController.dispose();
+    percentageController.dispose();
+  }
+  int dropDown1 = 0;
+  List tasks = [];
+  List ongoingTask = [];
+  List completedTasks = [];
+  List upcomingTasks = [];
+  List canceledTasks = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  DateTime selectedDate = DateTime.now();
+  dynamic selectedDate;
+  bool? reminder;
+  dynamic selectedTime;
+  List optionList = [];
+  dynamic status;
+  bool preExist = false;
+  DateTime stringDate = DateTime.now();
+  TimeOfDay stringTime = TimeOfDay.now();
+  late DataModel dataModel;
+  dynamic timePicked;
+  dynamic datePicked;
+  String? subTask;
+  List subTaskProjects = [];
   Map map = {};
-  List projectList = [];
-  Map? newObject;
-  bool reminder = true;
-  dynamic selectedTime = TimeOfDay.now();
-  double titleHeight = 0;
-  double subTitleHeight = 0;
-  double descriptionHeight = 0;
-  double percentageHeight = 0;
-  setData() async {
-    List subTask = [];
+  setTaskData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (percentage.text.isEmpty) {
+    if (preferences.containsKey(widget.title)) {
+      subTask = preferences.getString(widget.title);
       setState(() {
-        percentage.text = '0';
+        subTaskProjects = jsonDecode(subTask!);
       });
     }
-    int newPercentage = int.parse(percentage.text);
-    String date = DateFormat("MMM dd, yyyy").format(selectedDate);
-    String time = selectedTime.format(context);
+    if (percentageController.text.isEmpty) {
+      setState(() {
+        percentageController.text = '0';
+      });
+    }
+    int newPercentage = int.parse(percentageController.text);
     setState(() {
       map = {
-        'title': title.text,
-        'subTitle': subTitle.text,
-        'description': description.text,
+        'title': titleController.text,
+        'subTitle': subTitleController.text,
+        'description': descriptionController.text,
         'percentage': newPercentage,
-        'date': date,
+        'date': selectedDate,
         'reminder': reminder,
-        'time': time,
+        'time': selectedTime,
         'status': dropdownOptions[dropDown1],
       };
     });
-    if (preferences.containsKey('${object['title']}')) {
-      setState(() {
-        String? mapString = preferences.getString('${object['title']}');
-        List newMap = jsonDecode(mapString!);
-        for (int i = 0; i < newMap.length; i++) {
-          subTask.add(newMap[i]);
-        }
-        if (dropDown1 == 1) {
-          map['percentage'] = 100;
-          subTask.add(map);
-        } else {
-          subTask.add(map);
-        }
-      });
+    if (dropDown1 == 1) {
+      map['percentage'] = 100;
+      subTaskProjects[subTaskProjects
+          .indexWhere((element) => element['title'] == dataModel.title)] = map;
     } else {
-      if (dropDown1 == 1) {
-        map['percentage'] = 100;
-        subTask.add(map);
-      } else {
-        subTask.add(map);
-      }
+      subTaskProjects[subTaskProjects
+          .indexWhere((element) => element['title'] == dataModel.title)] = map;
     }
     setState(() {
-      preferences.setString('${object['title']}', jsonEncode(subTask));
+      preferences.setString(widget.title, jsonEncode(subTaskProjects));
     });
     if (reminder == true) {
       int? id = preferences.getInt('id');
       LocalNotificationService.showScheduleNotification(
           id: id!,
-          title: '${object['title']} project',
-          body: 'Start your ${title.text} task now',
-          payload: jsonEncode(object),
-          scheduleTime: DateTime(selectedDate.year, selectedDate.month,
-              selectedDate.day, selectedTime.hour, selectedTime.minute));
+          title: 'Reminder',
+          body: 'Start your ${titleController.text} task now',
+          payload: jsonEncode(widget.homeObject),
+          scheduleTime: DateTime(stringDate.year, stringDate.month,
+              stringDate.day, stringTime.hour, stringTime.minute));
       setState(() {
         preferences.setInt('id', id + 1);
       });
     }
-    LocalNotificationService.initialize(context: context, object: object);
+    LocalNotificationService.initialize(context: context, object: widget.homeObject);
+    await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProjectDetail(object: widget.homeObject)));
   }
 
-  int dropDown1 = 0;
+  setData() {
+    dataModel = DataModel(widget.object);
+    titleController = TextEditingController(text: dataModel.title);
+    subTitleController = TextEditingController(text: dataModel.subtitle);
+    percentageController =
+        TextEditingController(text: dataModel.percentage.toString());
+    descriptionController = TextEditingController(text: dataModel.description);
+    selectedDate = dataModel.date;
+    selectedTime = dataModel.time;
+    status = dataModel.status;
+    reminder = dataModel.reminder;
+  }
+
+  @override
+  initState() {
+    setData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -107,7 +143,7 @@ class _AddSubTaskState extends State<AddSubTask> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'addTask'.tr,
+          'editSubTask'.tr,
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         leading: IconButton(
@@ -123,20 +159,13 @@ class _AddSubTaskState extends State<AddSubTask> {
           TextButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  if (title.text.isEmpty || subTitle.text.isEmpty) {
-                    await showDialogBox(context, 'error'.tr);
-                  } else {
-                    await showDialogBox(context, 'success'.tr);
-                    await setData();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProjectDetail(object: object)));
-                  }
+                  await setTaskData();
                 }
               },
               child: Text(
                 'done'.tr,
                 style: TextStyle(color: Theme.of(context).primaryColorDark),
-              )),
+              ))
         ],
       ),
       body: SingleChildScrollView(
@@ -147,48 +176,20 @@ class _AddSubTaskState extends State<AddSubTask> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // SizedBox(height: deviceSize.height*0.02),
+                //SizedBox(height: deviceSize.height*0.02),
                 heading('taskDetail'.tr, deviceSize),
-                hideContainer('title'.tr, deviceSize, () {
-                  setState(() {
-                    titleHeight = 60;
-                  });
-                }),
-                if (titleHeight > 0)
-                  SizedBox(
-                      height: titleHeight,
-                      child: addProjectFields(
-                          context,
-                          title,
-                          'title'.tr,
-                          TextInputType.name,
-                          TextInputAction.next,
-                          30, (String? value) {
-                        if (value!.isEmpty) {
-                          return 'titleError'.tr;
-                        }
-                        return null;
-                      }, 1)),
-                hideContainer('subTitle'.tr, deviceSize, () {
-                  setState(() {
-                    subTitleHeight = 60;
-                  });
-                }),
-                if (subTitleHeight > 0)
-                  SizedBox(
-                      height: subTitleHeight,
-                      child: addProjectFields(
-                          context,
-                          subTitle,
-                          'subTitle'.tr,
-                          TextInputType.name,
-                          TextInputAction.next,
-                          30, (String? value) {
-                        if (value!.isEmpty) {
-                          return 'subTitleError'.tr;
-                        }
-                        return null;
-                      }, 1)),
+                ProjectTextField(controller: titleController, labelText: 'title'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return 'titleError'.tr;
+                  }
+                  return null;
+                }, maxLines:1),
+                ProjectTextField(controller: subTitleController, labelText: 'subTitle'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return 'subTitleError'.tr;
+                  }
+                  return null;
+                }, maxLines:1),
                 SizedBox(height: deviceSize.height * 0.02),
                 heading('startDate'.tr, deviceSize),
                 Padding(
@@ -211,7 +212,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                             color: Theme.of(context).primaryColorDark,
                           ),
                           SizedBox(width: deviceSize.width * 0.02),
-                          Text(DateFormat("MMM dd, yyyy").format(selectedDate))
+                          Text(selectedDate)
                         ],
                       ),
                     ),
@@ -239,7 +240,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                             color: Theme.of(context).primaryColorDark,
                           ),
                           SizedBox(width: deviceSize.width * 0.025),
-                          Text('${selectedTime.format(context)}')
+                          Text('$selectedTime')
                         ],
                       ),
                     ),
@@ -249,23 +250,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                   height: deviceSize.height * 0.01,
                 ),
                 heading('additional'.tr, deviceSize),
-                hideContainer('description'.tr, deviceSize, () {
-                  setState(() {
-                    descriptionHeight = 120;
-                  });
-                }),
-                if (descriptionHeight > 0)
-                  SizedBox(
-                      height: descriptionHeight,
-                      child: addProjectFields(
-                          context,
-                          description,
-                          'description'.tr,
-                          TextInputType.name,
-                          TextInputAction.next,
-                          100,
-                          (String? value) {},
-                          5)),
+                ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
                 SizedBox(height: deviceSize.height * 0.02),
                 Container(
                     color: Theme.of(context).primaryColor,
@@ -288,7 +273,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                               return DropdownButtonFormField(
                                 decoration: const InputDecoration(
                                     border: InputBorder.none),
-                                hint: Text(dropdownOptions[0]),
+                                hint: Text(status),
                                 items: [
                                   for (int i = 0;
                                       i < dropdownOptions.length;
@@ -325,7 +310,9 @@ class _AddSubTaskState extends State<AddSubTask> {
                           value: reminder,
                           onChanged: (value) {
                             setState(() {
-                              reminder ? reminder = false : reminder = true;
+                              reminder == true
+                                  ? reminder = false
+                                  : reminder = true;
                             });
                           },
                           fillColor: MaterialStateProperty.all(Colors.red[200]),
@@ -340,16 +327,11 @@ class _AddSubTaskState extends State<AddSubTask> {
                 ),
                 SizedBox(height: deviceSize.height * 0.025),
                 heading('percentage'.tr, deviceSize),
-                SizedBox(
-                    child: addProjectFields(
-                        context,
-                        percentage,
-                        'percentage'.tr,
-                        TextInputType.number,
-                        TextInputAction.done,
-                        3,
-                        (String? value) {},
-                        1)),
+                ProjectTextField(controller: percentageController, labelText: 'percentage'.tr, inputType: TextInputType.number, inputAction: TextInputAction.done, maxLength: 3, validator: (String? value) {
+                  return null;
+                
+                  
+                }, maxLines:1),
                 SizedBox(height: deviceSize.height * 0.25),
               ],
             ),
@@ -360,24 +342,27 @@ class _AddSubTaskState extends State<AddSubTask> {
   }
 
   _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    datePicked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
+
+    if (datePicked != null && datePicked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        stringDate = datePicked;
+        selectedDate = DateFormat("MMM dd, yyyy").format(datePicked);
       });
     }
   }
 
   _selectTime(BuildContext context) async {
-    final dynamic picked =
+    timePicked =
         await showTimePicker(initialTime: TimeOfDay.now(), context: context);
-    if (picked != null && picked != selectedTime) {
+    if (timePicked != null && timePicked != selectedTime) {
       setState(() {
-        selectedTime = picked;
+        selectedTime = timePicked.format(context);
+        stringTime = timePicked;
       });
     }
   }

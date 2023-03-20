@@ -5,14 +5,14 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/dashboard.dart';
-import 'package:task_manager/projects.dart';
+import 'package:task_manager/dashboard/views/dashboard.dart';
+import 'package:task_manager/project/views/projects.dart';
 import 'package:task_manager/splashScreen.dart';
-import 'package:task_manager/userProfile.dart';
-import 'addProject.dart';
-import 'localString.dart';
-import 'newUserProfile.dart';
-import 'notepad.dart';
+import 'package:task_manager/user/views/userProfile.dart';
+import 'project/views/add_project.dart';
+import 'app_utils/local_string.dart';
+import 'user/views/newUserProfile.dart';
+import 'notepad/views/notepad.dart';
 
 void requestIOSPermissions(
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {

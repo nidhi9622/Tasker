@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/projectDetail.dart';
-import 'dashboard.dart';
+import 'package:task_manager/project/views/project_detail.dart';
+import '../views/dashboard.dart';
 
 class Search extends SearchDelegate<String> {
   String text;

@@ -1,95 +1,81 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:task_manager/projectDetail.dart';
-import 'package:task_manager/reusables.dart';
-import 'package:task_manager/search.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/ui_utils/no_task_widget.dart';
+import '../../dashboard/views/dashboard.dart';
+import '../../models/data_model.dart';
+import '../helper_methods/delete_bottom_sheet.dart';
+import '../views/edit_task.dart';
+import '../views/project_detail.dart';
 
-class ProcessDetail extends StatefulWidget {
-  String title;
-  List object;
-  ProcessDetail({Key? key, required this.title, required this.object})
-      : super(key: key);
+class ProjectTabView extends StatefulWidget {
+  final List tabList;
+
+  const ProjectTabView({Key? key, required this.tabList}) : super(key: key);
 
   @override
-  State<ProcessDetail> createState() =>
-      _ProcessDetailState(title: title, object: object);
+  State<ProjectTabView> createState() => _ProjectTabViewState();
 }
 
-class _ProcessDetailState extends State<ProcessDetail> {
-  String title;
-  List object; //int list;
-  @override
-  initState() {
-    /* switch(list){
-      case 0:{object=ongoingProjects;}break;
-      case 1:{object=upcomingProjects;}break;
-      case 2:{object=completedProjects;}break;
-      case 3:{object=canceledProjects;}break;
-    }*/
-    super.initState();
-  }
-
-  _ProcessDetailState({required this.title, required this.object});
+class _ProjectTabViewState extends State<ProjectTabView> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          title,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).primaryColorDark,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: Search(text: ''));
-              },
-              icon: Icon(
-                CupertinoIcons.search,
-                color: Theme.of(context).primaryColorDark,
-              ),
-            ),
-          ),
-        ],
-        automaticallyImplyLeading: false,
-      ),
-      body: taskView(deviceSize, object, title),
-    );
-  }
-
-  taskView(dynamic deviceSize, List tabList, String text) {
     return Padding(
-      padding: const EdgeInsets.only(top: 18),
-      child: Container(
-        height: deviceSize.height,
-        width: deviceSize.width,
-        padding: const EdgeInsets.only(left: 14, right: 14),
-        child: tabList.isNotEmpty
+      padding: const EdgeInsets.only(left: 14, right: 14),
+      child: SizedBox(
+        height: deviceSize.height * 0.69,
+        child: widget.tabList.isNotEmpty
             ? ListView.builder(
-                itemCount: tabList.length,
+                itemCount: widget.tabList.length,
                 itemBuilder: (context, index) {
-                  DataModel dataModel = DataModel(tabList[index]);
+                  DataModel dataModel = DataModel(widget.tabList[index]);
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                ProjectDetail(object: tabList[index])));
+                                ProjectDetail(object: widget.tabList[index])));
+                      },
+                      onLongPress: () {
+                        deleteBottomSheet(
+                            context: context,
+                            deviceSize: deviceSize,
+                            title: dataModel.title ?? "",
+                            index: index, onTapEdit: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  EditTask(object: projectItem[index])));
+                        }, onTapDelete:() async {
+                          SharedPreferences preferences =
+                          await SharedPreferences.getInstance();
+                          preferences.remove('${dataModel.title}');
+                          projectItem.removeWhere(
+                                  (element) => element['title'] == dataModel.title);
+                          upcomingProjects.removeWhere(
+                                  (element) => element['title'] == dataModel.title);
+                          canceledProjects.removeWhere(
+                                  (element) => element['title'] == dataModel.title);
+                          ongoingProjects.removeWhere(
+                                  (element) => element['title'] == dataModel.title);
+                          completedProjects.removeWhere(
+                                  (element) => element['title'] == dataModel.title);
+                          setState(() {
+                          preferences.setString(
+                              'projects', jsonEncode(projectItem));
+                          preferences.setString('canceledProjects',
+                              jsonEncode(canceledProjects));
+                          preferences.setString('upcomingProjects',
+                              jsonEncode(upcomingProjects));
+                          preferences.setString('completedProjects',
+                              jsonEncode(completedProjects));
+                          preferences.setString('ongoingProjects',
+                              jsonEncode(ongoingProjects));
+                          });
+                          Navigator.of(context).pop();
+                        },);
                       },
                       child: Container(
                         padding: const EdgeInsets.only(
@@ -120,7 +106,7 @@ class _ProcessDetailState extends State<ProcessDetail> {
                                   Row(
                                     children: [
                                       const Icon(
-                                        CupertinoIcons.calendar,
+                                        Icons.calendar_month_outlined,
                                         color: Colors.grey,
                                       ),
                                       SizedBox(
@@ -160,23 +146,7 @@ class _ProcessDetailState extends State<ProcessDetail> {
                     ),
                   );
                 })
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'noTask'.tr,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                        color: Color(0xfffc7474)),
-                  ),
-                  SizedBox(height: deviceSize.height * 0.01),
-                  Text(
-                    'noTaskText'.tr,
-                    style: TextStyle(color: Colors.red[200], fontSize: 17),
-                  )
-                ],
-              ),
+            : const NoTaskWidget(),
       ),
     );
   }

@@ -4,33 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/projectDetail.dart';
-import 'package:task_manager/reusables.dart';
-import 'addProject.dart';
-import 'notificationApi.dart';
+import 'package:task_manager/dashboard/views/homePage.dart';
+import '../../app_utils/helper_methods/project_text_field.dart';
+import '../../database/app_list.dart';
+import '../../models/data_model.dart';
+import '../helper_methods/title_error_dialog.dart';
+import '../../dashboard/views/dashboard.dart';
+import '../../app_utils/local_notification_service.dart';
 
-class EditSubTask extends StatefulWidget {
-  Map object;
-  String title;
-  Map homeObject;
-  EditSubTask(
-      {Key? key,
-      required this.object,
-      required this.title,
-      required this.homeObject})
-      : super(key: key);
+class EditTask extends StatefulWidget {
+  final Map object;
+  const EditTask({Key? key, required this.object}) : super(key: key);
 
   @override
-  State<EditSubTask> createState() =>
-      _EditSubTaskState(object: object, title: title, homeObject: homeObject);
+  State<EditTask> createState() => _EditTaskState();
 }
 
-class _EditSubTaskState extends State<EditSubTask> {
-  _EditSubTaskState(
-      {required this.object, required this.title, required this.homeObject});
+int newId = 0;
+
+class _EditTaskState extends State<EditTask> {
   late TextEditingController titleController;
-  String title;
-  Map homeObject;
   late TextEditingController subTitleController;
   late TextEditingController percentageController;
   int dropDown1 = 0;
@@ -45,25 +38,48 @@ class _EditSubTaskState extends State<EditSubTask> {
   bool? reminder;
   dynamic selectedTime;
   List optionList = [];
-  Map object;
   dynamic status;
   bool preExist = false;
+  Map map = {};
   DateTime stringDate = DateTime.now();
   TimeOfDay stringTime = TimeOfDay.now();
   late DataModel dataModel;
   dynamic timePicked;
   dynamic datePicked;
-  String? subTask;
-  List subTaskProjects = [];
-  Map map = {};
   setTaskData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey(title)) {
-      subTask = preferences.getString(title);
+    String? projectName = preferences.getString('projects');
+    optionList = jsonDecode(projectName!);
+
+    String? upcoming;
+    String? canceled;
+    String? ongoing;
+    String? completed;
+    if (preferences.containsKey('upcomingProjects')) {
       setState(() {
-        subTaskProjects = jsonDecode(subTask!);
+        upcoming = preferences.getString('upcomingProjects');
+        upcomingProjects = jsonDecode(upcoming!);
       });
     }
+    if (preferences.containsKey('canceledProjects')) {
+      setState(() {
+        canceled = preferences.getString('canceledProjects');
+        canceledProjects = jsonDecode(canceled!);
+      });
+    }
+    if (preferences.containsKey('ongoingProjects')) {
+      setState(() {
+        ongoing = preferences.getString('ongoingProjects');
+        ongoingProjects = jsonDecode(ongoing!);
+      });
+    }
+    if (preferences.containsKey('completedProjects')) {
+      setState(() {
+        completed = preferences.getString('completedProjects');
+        completedProjects = jsonDecode(completed!);
+      });
+    }
+
     if (percentageController.text.isEmpty) {
       setState(() {
         percentageController.text = '0';
@@ -82,94 +98,163 @@ class _EditSubTaskState extends State<EditSubTask> {
         'status': dropdownOptions[dropDown1],
       };
     });
-    if (dropDown1 == 1) {
-      map['percentage'] = 100;
-      subTaskProjects[subTaskProjects
-          .indexWhere((element) => element['title'] == dataModel.title)] = map;
-    } else {
-      subTaskProjects[subTaskProjects
-          .indexWhere((element) => element['title'] == dataModel.title)] = map;
+
+    /* if(preferences.containsKey('projects')){
+      for(int i=0;i<optionList.length;i++){
+        if(titleController.text.removeAllWhitespace==optionList[i]['title']){
+          setState(() {
+            preExist=true;
+          });
+        }
+        else{
+          setState(() {
+            preExist=false;
+          });
+        }
+      }
     }
+    if(preExist==true){
+      titleErrorDialog(context);
+    }
+    else{*/
+    optionList[optionList
+        .indexWhere((element) => element['title'] == dataModel.title)] = map;
+
+    //optionList.removeWhere((element) => element['title'] == dataModel.title);
+    //optionList.add(map);
     setState(() {
-      preferences.setString(title, jsonEncode(subTaskProjects));
+      preferences.setString('projects', jsonEncode(optionList));
     });
 
-    /* switch(dropDown1){
-        case 0:{
-          upcomingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          ongoingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          canceledProjects.removeWhere((element) => element['title'] == dataModel.title);
-          completedProjects.removeWhere((element) => element['title'] == dataModel.title);
+    switch (dropDown1) {
+      case 0:
+        {
+          upcomingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          ongoingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          canceledProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          completedProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
           ongoingProjects.add(map);
           setState(() {
-            preferences.setString('canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString('upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString('completedProjects', jsonEncode(completedProjects));
-            preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
+            preferences.setString(
+                'canceledProjects', jsonEncode(canceledProjects));
+            preferences.setString(
+                'upcomingProjects', jsonEncode(upcomingProjects));
+            preferences.setString(
+                'completedProjects', jsonEncode(completedProjects));
+            preferences.setString(
+                'ongoingProjects', jsonEncode(ongoingProjects));
           });
-
         }
         break;
-        case 1:{
-          upcomingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          ongoingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          canceledProjects.removeWhere((element) => element['title'] == dataModel.title);
-          completedProjects.removeWhere((element) => element['title'] == dataModel.title);
+      case 1:
+        {
+          List list = [];
+          upcomingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          ongoingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          canceledProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          completedProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          if (preferences.containsKey('${widget.object['title']}')) {
+            String? string = preferences.getString('${widget.object['title']}');
+            list = jsonDecode(string!);
+            for (int i = 0; i < list.length; i++) {
+              list[i]['percentage'] = 100;
+            }
+          } else {
+            map['percentage'] = 100;
+            optionList[optionList.indexWhere(
+                (element) => element['title'] == dataModel.title)] = map;
+          }
           completedProjects.add(map);
           setState(() {
-            preferences.setString('canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString('upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString('completedProjects', jsonEncode(completedProjects));
-            preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
-          });}break;
-        case 2:{
-          upcomingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          ongoingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          canceledProjects.removeWhere((element) => element['title'] == dataModel.title);
-          completedProjects.removeWhere((element) => element['title'] == dataModel.title);
+            preferences.setString(
+                'canceledProjects', jsonEncode(canceledProjects));
+            preferences.setString(
+                'upcomingProjects', jsonEncode(upcomingProjects));
+            preferences.setString(
+                'completedProjects', jsonEncode(completedProjects));
+            preferences.setString(
+                'ongoingProjects', jsonEncode(ongoingProjects));
+            preferences.setString('${widget.object['title']}', jsonEncode(list));
+            preferences.setString('projects', jsonEncode(optionList));
+          });
+        }
+        break;
+      case 2:
+        {
+          upcomingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          ongoingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          canceledProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          completedProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
           upcomingProjects.add(map);
           setState(() {
-            preferences.setString('canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString('upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString('completedProjects', jsonEncode(completedProjects));
-            preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
+            preferences.setString(
+                'canceledProjects', jsonEncode(canceledProjects));
+            preferences.setString(
+                'upcomingProjects', jsonEncode(upcomingProjects));
+            preferences.setString(
+                'completedProjects', jsonEncode(completedProjects));
+            preferences.setString(
+                'ongoingProjects', jsonEncode(ongoingProjects));
           });
-        }break;
-        case 3:{
-          upcomingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          ongoingProjects.removeWhere((element) => element['title'] == dataModel.title);
-          canceledProjects.removeWhere((element) => element['title'] == dataModel.title);
-          completedProjects.removeWhere((element) => element['title'] == dataModel.title);
+        }
+        break;
+      case 3:
+        {
+          upcomingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          ongoingProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          canceledProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
+          completedProjects
+              .removeWhere((element) => element['title'] == dataModel.title);
           canceledProjects.add(map);
           setState(() {
-            preferences.setString('canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString('upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString('completedProjects', jsonEncode(completedProjects));
-            preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
+            preferences.setString(
+                'canceledProjects', jsonEncode(canceledProjects));
+            preferences.setString(
+                'upcomingProjects', jsonEncode(upcomingProjects));
+            preferences.setString(
+                'completedProjects', jsonEncode(completedProjects));
+            preferences.setString(
+                'ongoingProjects', jsonEncode(ongoingProjects));
           });
-        }break;
-      }*/
+        }
+        break;
+    }
     if (reminder == true) {
       int? id = preferences.getInt('id');
       LocalNotificationService.showScheduleNotification(
           id: id!,
           title: 'Reminder',
           body: 'Start your ${titleController.text} task now',
-          payload: jsonEncode(homeObject),
+          payload: jsonEncode(map),
           scheduleTime: DateTime(stringDate.year, stringDate.month,
               stringDate.day, stringTime.hour, stringTime.minute));
       setState(() {
         preferences.setInt('id', id + 1);
       });
+      LocalNotificationService.initialize(context: context, object: map);
     }
-    LocalNotificationService.initialize(context: context, object: homeObject);
-    await showDialogBox(context, 'success'.tr);
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ProjectDetail(object: homeObject)));
+    await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   setData() {
-    dataModel = DataModel(object);
+    dataModel = DataModel(widget.object);
     titleController = TextEditingController(text: dataModel.title);
     subTitleController = TextEditingController(text: dataModel.subtitle);
     percentageController =
@@ -186,7 +271,14 @@ class _EditSubTaskState extends State<EditSubTask> {
     setData();
     super.initState();
   }
-
+  @override
+  dispose() {
+    super.dispose();
+    titleController.dispose();
+    subTitleController.dispose();
+    descriptionController.dispose();
+    percentageController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -194,7 +286,7 @@ class _EditSubTaskState extends State<EditSubTask> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'editSubTask'.tr,
+          'editTask'.tr,
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         leading: IconButton(
@@ -227,35 +319,19 @@ class _EditSubTaskState extends State<EditSubTask> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //SizedBox(height: deviceSize.height*0.02),
                 heading('taskDetail'.tr, deviceSize),
-                SizedBox(
-                    child: addProjectFields(
-                        context,
-                        titleController,
-                        'title'.tr,
-                        TextInputType.name,
-                        TextInputAction.next,
-                        30, (String? value) {
+                ProjectTextField(controller: titleController, labelText: 'title'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
                   if (value!.isEmpty) {
                     return 'titleError'.tr;
                   }
                   return null;
-                }, 1)),
-
-                SizedBox(
-                    child: addProjectFields(
-                        context,
-                        subTitleController,
-                        'subTitle'.tr,
-                        TextInputType.name,
-                        TextInputAction.next,
-                        30, (String? value) {
+                }, maxLines:1),
+                ProjectTextField(controller: subTitleController, labelText: 'subTitle'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
                   if (value!.isEmpty) {
                     return 'subTitleError'.tr;
                   }
                   return null;
-                }, 1)),
+                }, maxLines:1),
                 SizedBox(height: deviceSize.height * 0.02),
                 heading('startDate'.tr, deviceSize),
                 Padding(
@@ -316,16 +392,7 @@ class _EditSubTaskState extends State<EditSubTask> {
                   height: deviceSize.height * 0.01,
                 ),
                 heading('additional'.tr, deviceSize),
-                SizedBox(
-                    child: addProjectFields(
-                        context,
-                        descriptionController,
-                        'description'.tr,
-                        TextInputType.name,
-                        TextInputAction.next,
-                        100,
-                        (String? value) {},
-                        5)),
+                ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
                 SizedBox(height: deviceSize.height * 0.02),
                 Container(
                     color: Theme.of(context).primaryColor,
@@ -402,17 +469,7 @@ class _EditSubTaskState extends State<EditSubTask> {
                 ),
                 SizedBox(height: deviceSize.height * 0.025),
                 heading('percentage'.tr, deviceSize),
-
-                SizedBox(
-                    child: addProjectFields(
-                        context,
-                        percentageController,
-                        'percentage'.tr,
-                        TextInputType.number,
-                        TextInputAction.done,
-                        3,
-                        (String? value) {},
-                        1)),
+                ProjectTextField(controller: percentageController, labelText: 'percentage'.tr, inputType: TextInputType.number, inputAction: TextInputAction.done, maxLength: 3, validator: (String? value) => null, maxLines:1),
                 SizedBox(height: deviceSize.height * 0.25),
               ],
             ),

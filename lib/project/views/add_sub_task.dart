@@ -4,54 +4,60 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/homePage.dart';
-import 'package:task_manager/reusables.dart';
-import 'dashboard.dart';
-import 'notificationApi.dart';
+import 'package:task_manager/project/views/project_detail.dart';
+import '../../app_utils/helper_methods/project_text_field.dart';
+import '../../database/app_list.dart';
+import '../helper_methods/title_error_dialog.dart';
+import '../../app_utils/local_notification_service.dart';
 
-class AddProject extends StatefulWidget {
-  const AddProject({Key? key}) : super(key: key);
+class AddSubTask extends StatefulWidget {
+  final Map object;
+
+  const AddSubTask({Key? key, required this.object}) : super(key: key);
 
   @override
-  State<AddProject> createState() => _AddProjectState();
+  State<AddSubTask> createState() => _AddSubTaskState();
 }
 
-class _AddProjectState extends State<AddProject> {
-  final TextEditingController title = TextEditingController();
-  final TextEditingController subTitle = TextEditingController();
-  final TextEditingController description = TextEditingController();
-  final TextEditingController percentage = TextEditingController();
-  List tasks = [];
-  List ongoingTask = [];
-  List completedTasks = [];
-  List upcomingTasks = [];
-  List canceledTasks = [];
+class _AddSubTaskState extends State<AddSubTask> {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController subTitleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController percentageController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   Map map = {};
-  List projectList = [];
   bool reminder = true;
   dynamic selectedTime = TimeOfDay.now();
   double titleHeight = 0;
   double subTitleHeight = 0;
   double descriptionHeight = 0;
-  double percentageHeight = 0;
-  bool preExist = false;
+
+  @override
+  dispose() {
+    super.dispose();
+    titleController.dispose();
+    subTitleController.dispose();
+    descriptionController.dispose();
+    percentageController.dispose();
+  }
+
   setData() async {
-    if (percentage.text.isEmpty) {
+    List subTask = [];
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (percentageController.text.isEmpty) {
       setState(() {
-        percentage.text = '0';
+        percentageController.text = '0';
       });
     }
-    int newPercentage = int.parse(percentage.text);
+    int newPercentage = int.parse(percentageController.text);
     String date = DateFormat("MMM dd, yyyy").format(selectedDate);
     String time = selectedTime.format(context);
-    for (int i = 0; i < projectItem.length; i++) {}
     setState(() {
       map = {
-        'title': title.text,
-        'subTitle': subTitle.text,
-        'description': description.text,
+        'title': titleController.text,
+        'subTitle': subTitleController.text,
+        'description': descriptionController.text,
         'percentage': newPercentage,
         'date': date,
         'reminder': reminder,
@@ -59,180 +65,82 @@ class _AddProjectState extends State<AddProject> {
         'status': dropdownOptions[dropDown1],
       };
     });
-
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String? mapString;
-    List projectList = [];
-    List newMap;
-    if (preferences.containsKey('projects')) {
-      mapString = preferences.getString('projects');
-      newMap = jsonDecode(mapString!);
-      for (int i = 0; i < newMap.length; i++) {
-        if (title.text.removeAllWhitespace == newMap[i]['title']) {
-          setState(() {
-            preExist = true;
-          });
-        } else {
-          setState(() {
-            preExist = false;
-          });
+    if (preferences.containsKey('${widget.object['title']}')) {
+      setState(() {
+        String? mapString = preferences.getString('${widget.object['title']}');
+        List newMap = jsonDecode(mapString!);
+        for (int i = 0; i < newMap.length; i++) {
+          subTask.add(newMap[i]);
         }
-      }
-    }
-    if (preExist == true) {
-      // ignore: use_build_context_synchronously
-      titleErrorDialog(context);
+        if (dropDown1 == 1) {
+          map['percentage'] = 100;
+          subTask.add(map);
+        } else {
+          subTask.add(map);
+        }
+      });
     } else {
-      if (preferences.containsKey('projects')) {
-        setState(() {
-          mapString = preferences.getString('projects');
-          newMap = jsonDecode(mapString!);
-          for (int i = 0; i < newMap.length; i++) {
-            //print('title is : ${newMap[i]['title']}');
-            projectList.add(newMap[i]);
-          }
-          projectList.add(map);
-        });
+      if (dropDown1 == 1) {
+        map['percentage'] = 100;
+        subTask.add(map);
       } else {
-        setState(() {
-          projectList.add(map);
-        });
+        subTask.add(map);
       }
-      setState(() {
-        preferences.setString('projects', jsonEncode(projectList));
-      });
-      switch (dropDown1) {
-        case 0:
-          {
-            String? mapStringOnGoing;
-            List newMapOngoing;
-            if (preferences.containsKey('ongoingProjects')) {
-              mapStringOnGoing = preferences.getString('ongoingProjects');
-              newMapOngoing = jsonDecode(mapStringOnGoing!);
-              for (int i = 0; i < newMapOngoing.length; i++) {
-                ongoingTask.add(newMapOngoing[i]);
-              }
-              ongoingTask.add(map);
-            } else {
-              ongoingTask.add(map);
-            }
-            String totalProjects = jsonEncode(ongoingTask);
-            setState(() {
-              preferences.setString('ongoingProjects', totalProjects);
-            });
-          }
-          break;
-        case 1:
-          {
-            String? mapStringCompleted;
-            List newMapCompleted;
-            if (preferences.containsKey('completedProjects')) {
-              mapStringCompleted = preferences.getString('completedProjects');
-              newMapCompleted = jsonDecode(mapStringCompleted!);
-              for (int i = 0; i < newMapCompleted.length; i++) {
-                completedTasks.add(newMapCompleted[i]);
-              }
-              map['percentage'] = 100;
-              completedTasks.add(map);
-            } else {
-              map['percentage'] = 100;
-              completedTasks.add(map);
-              projectList[projectList.indexWhere(
-                  (element) => element['title'] == title.text)] = map;
-            }
-            setState(() {
-              preferences.setString(
-                  'completedProjects', jsonEncode(completedTasks));
-              preferences.setString('projects', jsonEncode(projectList));
-            });
-          }
-          break;
-        case 2:
-          {
-            String? mapStringUpcoming;
-            List newMapUpcoming;
-            if (preferences.containsKey('upcomingProjects')) {
-              mapStringUpcoming = preferences.getString('upcomingProjects');
-              newMapUpcoming = jsonDecode(mapStringUpcoming!);
-              for (int i = 0; i < newMapUpcoming.length; i++) {
-                upcomingTasks.add(newMapUpcoming[i]);
-              }
-              upcomingTasks.add(map);
-            } else {
-              upcomingTasks.add(map);
-            }
-            String totalProjects = jsonEncode(upcomingTasks);
-            setState(() {
-              preferences.setString('upcomingProjects', totalProjects);
-            });
-          }
-          break;
-        case 3:
-          {
-            String? mapStringCanceled;
-            List newMapCanceled;
-            if (preferences.containsKey('canceledProjects')) {
-              mapStringCanceled = preferences.getString('canceledProjects');
-              newMapCanceled = jsonDecode(mapStringCanceled!);
-              for (int i = 0; i < newMapCanceled.length; i++) {
-                canceledTasks.add(newMapCanceled[i]);
-              }
-              canceledTasks.add(map);
-            } else {
-              canceledTasks.add(map);
-            }
-            String totalProjects = jsonEncode(canceledTasks);
-            setState(() {
-              preferences.setString('canceledProjects', totalProjects);
-            });
-          }
-          break;
-      }
-      if (reminder) {
-        int? id = preferences.getInt('id');
-        LocalNotificationService.showScheduleNotification(
-            id: id!,
-            title: 'Reminder',
-            body: 'Start your ${title.text} task now',
-            payload: jsonEncode(map),
-            scheduleTime: DateTime(selectedDate.year, selectedDate.month,
-                selectedDate.day, selectedTime.hour, selectedTime.minute));
-        setState(() {
-          preferences.setInt('id', id + 1);
-        });
-      }
-      LocalNotificationService.initialize(context: context, object: map);
-      // ignore: use_build_context_synchronously
-      await showDialogBox(context, 'success'.tr);
-      setState(() {
-        selectIndex = 0;
-      });
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HomePage()));
     }
+    setState(() {
+      preferences.setString('${widget.object['title']}', jsonEncode(subTask));
+    });
+    if (reminder == true) {
+      int? id = preferences.getInt('id');
+      LocalNotificationService.showScheduleNotification(
+          id: id!,
+          title: '${widget.object['title']} project',
+          body: 'Start your ${titleController.text} task now',
+          payload: jsonEncode(widget.object),
+          scheduleTime: DateTime(selectedDate.year, selectedDate.month,
+              selectedDate.day, selectedTime.hour, selectedTime.minute));
+      setState(() {
+        preferences.setInt('id', id + 1);
+      });
+    }
+    LocalNotificationService.initialize(
+        context: context, object: widget.object);
   }
 
   int dropDown1 = 0;
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      //bottomNavigationBar: bottomNavigation(context, (int i){setState((){bottomIndex = i;});}, 2),
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'newProject'.tr,
+          'addTask'.tr,
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         actions: [
           TextButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  if (title.text.isEmpty || subTitle.text.isEmpty) {
-                    await showDialogBox(context, 'error'.tr);
+                  if (titleController.text.isEmpty ||
+                      subTitleController.text.isEmpty) {
+                    await titleErrorDialog(context: context, content: 'error'.tr, isTitle: true);
                   } else {
+                    await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
                     await setData();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ProjectDetail(object: widget.object)));
                   }
                 }
               },
@@ -250,7 +158,8 @@ class _AddProjectState extends State<AddProject> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                heading('projectDetail'.tr, deviceSize),
+                // SizedBox(height: deviceSize.height*0.02),
+                heading('taskDetail'.tr, deviceSize),
                 hideContainer('title'.tr, deviceSize, () {
                   setState(() {
                     titleHeight = 60;
@@ -259,18 +168,19 @@ class _AddProjectState extends State<AddProject> {
                 if (titleHeight > 0)
                   SizedBox(
                       height: titleHeight,
-                      child: addProjectFields(
-                          context,
-                          title,
-                          'title'.tr,
-                          TextInputType.name,
-                          TextInputAction.next,
-                          30, (String? value) {
-                        if (value!.isEmpty) {
-                          return 'titleError'.tr;
-                        }
-                        return null;
-                      }, 1)),
+                      child: ProjectTextField(
+                          controller: titleController,
+                          labelText: 'title'.tr,
+                          inputType: TextInputType.name,
+                          inputAction: TextInputAction.next,
+                          maxLength: 30,
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return 'titleError'.tr;
+                            }
+                            return null;
+                          },
+                          maxLines: 1)),
                 hideContainer('subTitle'.tr, deviceSize, () {
                   setState(() {
                     subTitleHeight = 60;
@@ -278,19 +188,21 @@ class _AddProjectState extends State<AddProject> {
                 }),
                 if (subTitleHeight > 0)
                   SizedBox(
-                      height: subTitleHeight,
-                      child: addProjectFields(
-                          context,
-                          subTitle,
-                          'subTitle'.tr,
-                          TextInputType.name,
-                          TextInputAction.next,
-                          30, (String? value) {
-                        if (value!.isEmpty) {
-                          return 'subTitleError'.tr;
-                        }
-                        return null;
-                      }, 1)),
+                    height: subTitleHeight,
+                    child: ProjectTextField(
+                        controller: subTitleController,
+                        labelText: 'subTitle'.tr,
+                        inputType: TextInputType.name,
+                        inputAction: TextInputAction.next,
+                        maxLength: 30,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return 'subTitleError'.tr;
+                          }
+                          return null;
+                        },
+                        maxLines: 1),
+                  ),
                 SizedBox(height: deviceSize.height * 0.02),
                 heading('startDate'.tr, deviceSize),
                 Padding(
@@ -357,17 +269,14 @@ class _AddProjectState extends State<AddProject> {
                   });
                 }),
                 if (descriptionHeight > 0)
-                  SizedBox(
-                      height: descriptionHeight,
-                      child: addProjectFields(
-                          context,
-                          description,
-                          'description'.tr,
-                          TextInputType.name,
-                          TextInputAction.next,
-                          100,
-                          (String? value) {},
-                          5)),
+                  ProjectTextField(
+                      controller: descriptionController,
+                      labelText: 'description'.tr,
+                      inputType: TextInputType.name,
+                      inputAction: TextInputAction.next,
+                      maxLength: 100,
+                      validator: (String? value) => null,
+                      maxLines: 5),
                 SizedBox(height: deviceSize.height * 0.02),
                 Container(
                     color: Theme.of(context).primaryColor,
@@ -442,16 +351,14 @@ class _AddProjectState extends State<AddProject> {
                 ),
                 SizedBox(height: deviceSize.height * 0.025),
                 heading('percentage'.tr, deviceSize),
-                SizedBox(
-                    child: addProjectFields(
-                        context,
-                        percentage,
-                        'percentage'.tr,
-                        TextInputType.number,
-                        TextInputAction.done,
-                        3,
-                        (String? value) {},
-                        1)),
+                ProjectTextField(
+                    controller: percentageController,
+                    labelText: 'percentage'.tr,
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                    maxLength: 3,
+                    validator: (String? value) => null,
+                    maxLines: 1),
                 SizedBox(height: deviceSize.height * 0.25),
               ],
             ),
@@ -534,45 +441,4 @@ class _AddProjectState extends State<AddProject> {
       ),
     );
   }
-}
-
-showDialogBox(BuildContext context, String text) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Update'.tr),
-        content: Text(text),
-        actions: [
-          TextButton(
-            child: Center(child: Text('ok'.tr)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
-titleErrorDialog(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        //title: Text('Update'.tr),
-        content: const Text(
-            'Project with this title already exist.\nPlease try with another title.'),
-        actions: [
-          TextButton(
-            child: Center(child: Text('ok'.tr)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }

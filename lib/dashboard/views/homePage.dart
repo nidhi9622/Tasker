@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/newUserProfile.dart';
-import 'package:task_manager/projects.dart';
-import 'package:task_manager/userProfile.dart';
-import 'addProject.dart';
+import 'package:task_manager/user/views/newUserProfile.dart';
+import 'package:task_manager/project/views/projects.dart';
+import 'package:task_manager/user/views/userProfile.dart';
+import '../../project/views/add_project.dart';
 import 'dashboard.dart';
-import 'notepad.dart';
+import '../../notepad/views/notepad.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

@@ -6,23 +6,24 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/dashboard.dart';
-import 'package:task_manager/editTask.dart';
-import 'package:task_manager/homePage.dart';
-import 'package:task_manager/reusables.dart';
-import 'package:task_manager/search.dart';
-import 'addSubTask.dart';
-import 'editSubTask.dart';
+import 'package:task_manager/dashboard/views/dashboard.dart';
+import 'package:task_manager/project/views/edit_task.dart';
+import 'package:task_manager/dashboard/views/homePage.dart';
+import 'package:task_manager/dashboard/helper_methods/search.dart';
+import '../../database/app_list.dart';
+import '../../models/data_model.dart';
+import 'add_sub_task.dart';
+import 'edit_sub_task.dart';
 
 class ProjectDetail extends StatefulWidget {
-  Map object;
-  ProjectDetail({Key? key, required this.object}) : super(key: key);
+  final Map object;
+  const ProjectDetail({Key? key, required this.object}) : super(key: key);
   @override
-  State<ProjectDetail> createState() => _ProjectDetailState(object: object);
+  State<ProjectDetail> createState() => _ProjectDetailState();
 }
 
 class _ProjectDetailState extends State<ProjectDetail> {
-  Map object;
+
   List subTaskList = [];
   late DataModel dataModel;
   String? notes = '';
@@ -47,20 +48,20 @@ class _ProjectDetailState extends State<ProjectDetail> {
   String? searchString;
   getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey('${object['title']} notes')) {
+    if (preferences.containsKey('${widget.object['title']} notes')) {
       setState(() {
-        notes = preferences.getString('${object['title']} notes');
+        notes = preferences.getString('${widget.object['title']} notes');
       });
       notesController = TextEditingController(text: notes);
     }
-    if (preferences.containsKey('${object['title']} searchShortcut')) {
-      searchString = preferences.getString('${object['title']} searchShortcut');
+    if (preferences.containsKey('${widget.object['title']} searchShortcut')) {
+      searchString = preferences.getString('${widget.object['title']} searchShortcut');
       setState(() {
         searchShortcut = jsonDecode(searchString!);
       });
     }
-    if (preferences.containsKey('${object['title']}')) {
-      subTask = preferences.getString('${object['title']}');
+    if (preferences.containsKey('${widget.object['title']}')) {
+      subTask = preferences.getString('${widget.object['title']}');
       setState(() {
         subTaskProjects = jsonDecode(subTask!);
       });
@@ -90,15 +91,15 @@ class _ProjectDetailState extends State<ProjectDetail> {
       });
     }
 
-    if (preferences.containsKey('${object['title']}')) {
-      String? subtask = preferences.getString('${object['title']}');
+    if (preferences.containsKey('${widget.object['title']}')) {
+      String? subtask = preferences.getString('${widget.object['title']}');
       setState(() {
         subTaskList = jsonDecode(subtask!);
       });
       for (int i = 0; i < subTaskList.length; i++) {
         totalPercentage += subTaskList[i]['percentage'];
       }
-      // print('percentage is ${object['percentage']}');
+      // print('percentage is ${widget.object['percentage']}');
       setState(() {
         totalPercentage = (totalPercentage / subTaskList.length).round();
       });
@@ -157,7 +158,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
       }
     } else {
       setState(() {
-        totalPercentage = object['percentage'];
+        totalPercentage = widget.object['percentage'];
       });
     }
   }
@@ -166,14 +167,11 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
   @override
   initState() {
-    dataModel = DataModel(object);
+    dataModel = DataModel(widget.object);
     notesController = TextEditingController(text: notes);
-
     getData();
     super.initState();
   }
-
-  _ProjectDetailState({required this.object});
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -246,7 +244,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                               builder: (context) => EditTask(
-                                                    object: object,
+                                                    object: widget.object,
                                                   )));
                                     },
                                     icon: const Icon(CupertinoIcons.pen))
@@ -406,13 +404,13 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                       searchShortcut
                                           .add(shortcutController.text);
                                       preferences.setString(
-                                          '${object['title']} searchShortcut',
+                                          '${widget.object['title']} searchShortcut',
                                           jsonEncode(searchShortcut));
                                     }
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                ProjectDetail(object: object)));
+                                                ProjectDetail(object: widget.object)));
                                   },
                                   child: Container(
                                     constraints:
@@ -444,7 +442,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                     length: detailedPageTab.length,
                     child: Builder(builder: (context) {
                       final TabController tabController =
-                          DefaultTabController.of(context)!;
+                          DefaultTabController.of(context);
                       tabController.addListener(() {
                         setState(() {
                           displayIndex = tabController.index;
@@ -478,7 +476,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      AddSubTask(object: object)));
+                                      AddSubTask(object: widget.object)));
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -542,13 +540,13 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                                                 object:
                                                                     subTaskProjects[
                                                                         index],
-                                                                title: object[
+                                                                title: widget.object[
                                                                     'title'],
                                                                 homeObject:
-                                                                    object,
+                                                                    widget.object,
                                                               )));
                                                   // await _showDialogBox(context,subTaskList[index]);
-                                                  //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectDetail(object:subTaskList[index])));
+                                                  //Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectDetail(widget.object:subTaskList[index])));
                                                 },
                                                 trailing: IconButton(
                                                   icon: const Icon(
@@ -559,7 +557,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                                         deviceSize,
                                                         dataModel.title,
                                                         index,
-                                                        object);
+                                                        widget.object);
                                                   },
                                                 ),
                                                 leading: Container(
@@ -642,7 +640,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                             await SharedPreferences.getInstance();
                         setState(() {
                           preferences.setString(
-                              '${object['title']} notes', notesController.text);
+                              '${widget.object['title']} notes', notesController.text);
                         });
                       },
                       maxLength: null,
@@ -686,10 +684,10 @@ class _ProjectDetailState extends State<ProjectDetail> {
                /* subTaskList.removeWhere((element) => element['title'] == list['title']);
                 subTaskList.add(map);*/
                 setState(() {
-                  preferences.setString('${object['title']}', jsonEncode(subTaskList));
+                  preferences.setString('${widget.object['title']}', jsonEncode(subTaskList));
                 });
                  // Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectDetail(object: object)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectDetail(widget.object: widget.object)));
               },
             ),
           ],
@@ -717,7 +715,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => EditSubTask(
                                   object: subTaskProjects[index],
-                                  title: object['title'],
+                                  title: widget.object['title'],
                                   homeObject: homeObject,
                                 )));
                       },
@@ -737,13 +735,13 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           setState(() {
                             subTaskProjects.removeWhere(
                                 (element) => element['title'] == title);
-                            preferences.setString('${object['title']}',
+                            preferences.setString('${widget.object['title']}',
                                 jsonEncode(subTaskProjects));
                           });
                           Navigator.of(context).pop();
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  ProjectDetail(object: object)));
+                                  ProjectDetail(object: widget.object)));
                         },
                         child: ListTile(
                           title: const Text('Delete'),
@@ -756,16 +754,3 @@ class _ProjectDetailState extends State<ProjectDetail> {
         });
   }
 }
-/*void main() {
-  List noList = [
-    {'title':'hello','subTitle':'sub'},
-    {"id": 2, "name": "Alex"},
-  ];
-  List list=[1,2,3,4];
-  noList[noList.indexWhere((element) => element['title'] == 'hello')] = {'title':'bye','subTitle':'sub'};
-  print(noList);
-  Map map={'title':'123','subTitle':'456'};
-  noList.removeWhere((element) => element['title'] == 'hello');
-  noList.add(map);
-//  print(noList);
-}*/

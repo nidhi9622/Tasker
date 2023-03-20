@@ -6,12 +6,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/editTask.dart';
-import 'package:task_manager/processDetail.dart';
-import 'package:task_manager/projectDetail.dart';
-import 'package:task_manager/reusables.dart';
-import 'package:task_manager/search.dart';
-import 'package:task_manager/updateUserProfile.dart';
+import 'package:task_manager/app_utils/default_app_bar.dart';
+import 'package:task_manager/project/views/edit_task.dart';
+import 'package:task_manager/project/views/process_detail.dart';
+import 'package:task_manager/project/views/project_detail.dart';
+import 'package:task_manager/dashboard/helper_methods/search.dart';
+import 'package:task_manager/user/views/updateUserProfile.dart';
+import '../../models/data_model.dart';
 import 'homePage.dart';
 
 class Dashboard extends StatefulWidget {
@@ -107,26 +108,22 @@ class _DashboardState extends State<Dashboard>
           return true;
         },
         child: Scaffold(
-          appBar: appBar(
-              context,
-              [
-                IconButton(
-                    onPressed: () {
-                      showSearch(context: context, delegate: Search(text: ''));
-                    },
-                    icon: Icon(CupertinoIcons.search,
-                        color: Theme.of(context).primaryColorDark)),
-                IconButton(
-                    onPressed: () async {
-                      bottomSheet(deviceSize);
-                    },
-                    icon: Icon(
-                      CupertinoIcons.sort_down,
-                      color: Theme.of(context).primaryColorDark,
-                    ))
-              ],
-              now,
-              null),
+          appBar: DefaultAppBar(isLeading: false, actions: [IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: Search(text: ''));
+              },
+              icon: Icon(CupertinoIcons.search,
+                  color: Theme.of(context).primaryColorDark)),
+            IconButton(
+                onPressed: () async {
+                  bottomSheet(deviceSize);
+                },
+                icon: Icon(
+                  CupertinoIcons.sort_down,
+                  color: Theme.of(context).primaryColorDark,
+                ))], text: now,
+
+          ),
           body: SafeArea(
             top: true,
             child: SizedBox(

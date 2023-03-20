@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/projectDetail.dart';
+import 'package:task_manager/project/views/project_detail.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationService {
@@ -34,22 +34,6 @@ class LocalNotificationService {
       },
     );
   }
-
-  // static Future showNotification({
-  //   required int id,
-  //   String? title,
-  //   String? body,
-  //   required String? payload,
-  // }) async {
-  //   print(id);
-  //   return await notificationsPlugin.show(
-  //     id,
-  //     title,
-  //     body,
-  //     await notificationDetails(),
-  //     payload: payload,
-  //   );
-  // }
 
   static Future showScheduleNotification(
           {required int id,

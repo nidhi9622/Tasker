@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/homePage.dart';
-import 'package:task_manager/search.dart';
-import 'package:task_manager/settings.dart';
+import 'package:task_manager/dashboard/views/homePage.dart';
+import 'package:task_manager/dashboard/helper_methods/search.dart';
+import 'package:task_manager/user/views/settings.dart';
 import 'package:task_manager/splashScreen.dart';
-import 'package:task_manager/updateUserProfile.dart';
-import 'dashboard.dart';
+import 'package:task_manager/user/views/updateUserProfile.dart';
+import '../../dashboard/views/dashboard.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);

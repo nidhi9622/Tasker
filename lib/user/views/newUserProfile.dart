@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_manager/projects.dart';
-import 'package:task_manager/search.dart';
-import 'package:task_manager/settings.dart';
-import 'package:task_manager/updateUserProfile.dart';
-import 'package:task_manager/userProfile.dart';
+import 'package:task_manager/project/views/projects.dart';
+import 'package:task_manager/dashboard/helper_methods/search.dart';
+import 'package:task_manager/user/views/settings.dart';
+import 'package:task_manager/user/views/updateUserProfile.dart';
+import 'package:task_manager/user/views/userProfile.dart';
 
 class NewUserProfile extends StatefulWidget {
   const NewUserProfile({Key? key}) : super(key: key);
