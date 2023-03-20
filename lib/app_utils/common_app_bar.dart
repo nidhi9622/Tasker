@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
-
+  final bool isLeading;
   final String text;
   final VoidCallback onTap;
 
   CommonAppBar(
       {Key? key,
-      required this.text, required this.onTap})
+      required this.text, required this.onTap, required this.isLeading})
       : super(key: key);
   final AppBar appBar = AppBar(
     title: const Text('Demo'),
@@ -17,11 +17,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   AppBar build(BuildContext context) => AppBar(
         elevation: 0,
-        title: Text(
-          text,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
+        title: Padding(
+          padding: EdgeInsets.only(left: isLeading?8.0:0),
+          child: Text(
+            text,
+            style: TextStyle(color: Theme.of(context).primaryColorDark),
+          ),
         ),
-        leading: IconButton(
+        leading:isLeading? IconButton(
                 icon: Icon(
                   Icons.arrow_back_ios,
                   color: Theme.of(context).primaryColorDark,
@@ -29,7 +32,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-              ),
+              ):null,
         automaticallyImplyLeading: false,
       actions: [
         TextButton(
