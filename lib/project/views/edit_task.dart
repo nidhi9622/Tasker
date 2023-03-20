@@ -5,15 +5,19 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard/views/homePage.dart';
+import 'package:task_manager/project/helper_widgets/heading_text.dart';
 import '../../app_utils/helper_methods/project_text_field.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
+import '../helper_methods/select_date_time.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../../dashboard/views/dashboard.dart';
 import '../../app_utils/local_notification_service.dart';
+import '../helper_widgets/time_widget.dart';
 
 class EditTask extends StatefulWidget {
   final Map object;
+
   const EditTask({Key? key, required this.object}) : super(key: key);
 
   @override
@@ -45,7 +49,7 @@ class _EditTaskState extends State<EditTask> {
   TimeOfDay stringTime = TimeOfDay.now();
   late DataModel dataModel;
   dynamic timePicked;
-  dynamic datePicked;
+
   setTaskData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? projectName = preferences.getString('projects');
@@ -182,7 +186,8 @@ class _EditTaskState extends State<EditTask> {
                 'completedProjects', jsonEncode(completedProjects));
             preferences.setString(
                 'ongoingProjects', jsonEncode(ongoingProjects));
-            preferences.setString('${widget.object['title']}', jsonEncode(list));
+            preferences.setString(
+                '${widget.object['title']}', jsonEncode(list));
             preferences.setString('projects', jsonEncode(optionList));
           });
         }
@@ -248,7 +253,8 @@ class _EditTaskState extends State<EditTask> {
       });
       LocalNotificationService.initialize(context: context, object: map);
     }
-    await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
+    await titleErrorDialog(
+        context: context, content: 'success'.tr, isTitle: true);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const HomePage()));
   }
@@ -271,6 +277,7 @@ class _EditTaskState extends State<EditTask> {
     setData();
     super.initState();
   }
+
   @override
   dispose() {
     super.dispose();
@@ -279,6 +286,7 @@ class _EditTaskState extends State<EditTask> {
     descriptionController.dispose();
     percentageController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -319,80 +327,68 @@ class _EditTaskState extends State<EditTask> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                heading('taskDetail'.tr, deviceSize),
-                ProjectTextField(controller: titleController, labelText: 'title'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'titleError'.tr;
-                  }
-                  return null;
-                }, maxLines:1),
-                ProjectTextField(controller: subTitleController, labelText: 'subTitle'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'subTitleError'.tr;
-                  }
-                  return null;
-                }, maxLines:1),
-                SizedBox(height: deviceSize.height * 0.02),
-                heading('startDate'.tr, deviceSize),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      await _selectDate(context);
+                HeadingText(text: 'taskDetail'.tr),
+                ProjectTextField(
+                    controller: titleController,
+                    labelText: 'title'.tr,
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                    maxLength: 30,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'titleError'.tr;
+                      }
+                      return null;
                     },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 17),
-                      width: deviceSize.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).primaryColor),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.calendar,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(width: deviceSize.width * 0.02),
-                          Text(selectedDate)
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: deviceSize.height * 0.02),
-                heading('startTime'.tr, deviceSize),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      await _selectTime(context);
+                    maxLines: 1),
+                ProjectTextField(
+                    controller: subTitleController,
+                    labelText: 'subTitle'.tr,
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                    maxLength: 30,
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'subTitleError'.tr;
+                      }
+                      return null;
                     },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 17),
-                      width: deviceSize.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).primaryColor),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.time_solid,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(width: deviceSize.width * 0.025),
-                          Text('$selectedTime')
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                    maxLines: 1),
+                SizedBox(height: deviceSize.height * 0.02),
+                HeadingText(text: 'startDate'.tr),
+                DateTimeWidget(onTap:  () async {
+                  DateTime? datePicked = await selectDate(context);
+                  if (datePicked != null && datePicked != selectedDate) {
+                    setState(() {
+                      stringDate = datePicked;
+                      selectedDate =
+                          DateFormat("MMM dd, yyyy").format(datePicked);
+                    });
+                  }
+                }, text: '$selectedDate', isDate: true,),
+                SizedBox(height: deviceSize.height * 0.02),
+                HeadingText(text: 'startTime'.tr),
+                DateTimeWidget(onTap:  () async {
+                  TimeOfDay? timePicked=await selectTime(context);
+                  if (timePicked != null && timePicked != selectedTime) {
+                    setState(() {
+                      selectedTime = timePicked.format(context);
+                      stringTime = timePicked;
+                    });
+                  }
+                }, text: '$selectedTime', isDate: false,),
                 SizedBox(
                   height: deviceSize.height * 0.01,
                 ),
-                heading('additional'.tr, deviceSize),
-                ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
+                HeadingText(text: 'additional'.tr),
+                ProjectTextField(
+                    controller: descriptionController,
+                    labelText: 'description'.tr,
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                    maxLength: 100,
+                    validator: (String? value) => null,
+                    maxLines: 5),
                 SizedBox(height: deviceSize.height * 0.02),
                 Container(
                     color: Theme.of(context).primaryColor,
@@ -468,8 +464,15 @@ class _EditTaskState extends State<EditTask> {
                   ),
                 ),
                 SizedBox(height: deviceSize.height * 0.025),
-                heading('percentage'.tr, deviceSize),
-                ProjectTextField(controller: percentageController, labelText: 'percentage'.tr, inputType: TextInputType.number, inputAction: TextInputAction.done, maxLength: 3, validator: (String? value) => null, maxLines:1),
+                HeadingText(text: 'percentage'.tr),
+                ProjectTextField(
+                    controller: percentageController,
+                    labelText: 'percentage'.tr,
+                    inputType: TextInputType.number,
+                    inputAction: TextInputAction.done,
+                    maxLength: 3,
+                    validator: (String? value) => null,
+                    maxLines: 1),
                 SizedBox(height: deviceSize.height * 0.25),
               ],
             ),
@@ -479,80 +482,4 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  _selectDate(BuildContext context) async {
-    datePicked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-
-    if (datePicked != null && datePicked != selectedDate) {
-      setState(() {
-        stringDate = datePicked;
-        selectedDate = DateFormat("MMM dd, yyyy").format(datePicked);
-      });
-    }
-  }
-
-  _selectTime(BuildContext context) async {
-    timePicked =
-        await showTimePicker(initialTime: TimeOfDay.now(), context: context);
-    if (timePicked != null && timePicked != selectedTime) {
-      setState(() {
-        selectedTime = timePicked.format(context);
-        stringTime = timePicked;
-      });
-    }
-  }
-
-  heading(String text, dynamic deviceSize) {
-    return Container(
-        color: Theme.of(context).primaryColor,
-        width: deviceSize.width,
-        height: 50,
-        padding: const EdgeInsets.only(
-          top: 13,
-          left: 14,
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ));
-  }
-
-  hideContainer(String text, dynamic deviceSize, dynamic onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
-        child: Container(
-          width: deviceSize.width,
-          height: 30,
-          padding: const EdgeInsets.only(left: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(9),
-              color: Theme.of(context).primaryColor),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.red[200],
-                radius: 9,
-                child: Icon(
-                  CupertinoIcons.add,
-                  color: Theme.of(context).primaryColor,
-                  size: 17,
-                ),
-              ),
-              SizedBox(width: deviceSize.width * 0.015),
-              Text(
-                text,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

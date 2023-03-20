@@ -7,6 +7,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard/views/dashboard.dart';
+import 'package:task_manager/project/helper_methods/delete_bottom_sheet.dart';
 import 'package:task_manager/project/views/edit_task.dart';
 import 'package:task_manager/dashboard/views/homePage.dart';
 import 'package:task_manager/dashboard/helper_methods/search.dart';
@@ -553,11 +554,33 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                                       CupertinoIcons
                                                           .ellipsis_vertical),
                                                   onPressed: () {
-                                                    deleteBottomSheet(
-                                                        deviceSize,
-                                                        dataModel.title,
-                                                        index,
-                                                        widget.object);
+                                                    deleteBottomSheet(context: context, deviceSize: deviceSize, title: dataModel.title??"", index: index, onTapEdit: (){
+                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context).push(MaterialPageRoute(
+                                                          builder: (context) => EditSubTask(
+                                                            object: subTaskProjects[index],
+                                                            title: widget.object['title'],
+                                                            homeObject: widget.object,
+                                                          )));
+                                                    }, onTapDelete: () async {
+                                                      SharedPreferences preferences =
+                                                      await SharedPreferences.getInstance();
+                                                      setState(() {
+                                                        subTaskProjects.removeWhere(
+                                                                (element) => element['title'] == dataModel.title);
+                                                        preferences.setString('${widget.object['title']}',
+                                                            jsonEncode(subTaskProjects));
+                                                      });
+                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context).push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ProjectDetail(object: widget.object)));
+                                                    },);
+                                                    // deleteBottomSheet(
+                                                    //     deviceSize,
+                                                    //     dataModel.title,
+                                                    //     index,
+                                                    //     widget.object);
                                                   },
                                                 ),
                                                 leading: Container(
@@ -695,62 +718,4 @@ class _ProjectDetailState extends State<ProjectDetail> {
       },
     );
   }*/
-  void deleteBottomSheet(
-      dynamic deviceSize, dynamic title, int index, Map homeObject) {
-    showModalBottomSheet(
-        elevation: 3,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 25.0, right: 25, top: 10),
-            child: SizedBox(
-                height: deviceSize.height * 0.20,
-                width: 100,
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => EditSubTask(
-                                  object: subTaskProjects[index],
-                                  title: widget.object['title'],
-                                  homeObject: homeObject,
-                                )));
-                      },
-                      child: ListTile(
-                        title: const Text('Edit'),
-                        trailing: const Icon(CupertinoIcons.pen),
-                        tileColor: Colors.grey[350],
-                      ),
-                    ),
-                    SizedBox(
-                      height: deviceSize.height * 0.01,
-                    ),
-                    InkWell(
-                        onTap: () async {
-                          SharedPreferences preferences =
-                              await SharedPreferences.getInstance();
-                          setState(() {
-                            subTaskProjects.removeWhere(
-                                (element) => element['title'] == title);
-                            preferences.setString('${widget.object['title']}',
-                                jsonEncode(subTaskProjects));
-                          });
-                          Navigator.of(context).pop();
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  ProjectDetail(object: widget.object)));
-                        },
-                        child: ListTile(
-                          title: const Text('Delete'),
-                          trailing: const Icon(CupertinoIcons.delete),
-                          tileColor: Colors.grey[350],
-                        )),
-                  ],
-                )),
-          );
-        });
-  }
 }

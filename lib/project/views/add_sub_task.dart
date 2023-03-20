@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/project/helper_widgets/time_widget.dart';
 import 'package:task_manager/project/views/project_detail.dart';
 import '../../app_utils/helper_methods/project_text_field.dart';
 import '../../database/app_list.dart';
+import '../helper_methods/select_date_time.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../../app_utils/local_notification_service.dart';
 
@@ -205,60 +207,24 @@ class _AddSubTaskState extends State<AddSubTask> {
                   ),
                 SizedBox(height: deviceSize.height * 0.02),
                 heading('startDate'.tr, deviceSize),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      await _selectDate(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 17),
-                      width: deviceSize.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).primaryColor),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.calendar,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(width: deviceSize.width * 0.02),
-                          Text(DateFormat("MMM dd, yyyy").format(selectedDate))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                DateTimeWidget(onTap:  () async {
+                  final picked=await selectDate(context);
+                  if (picked != null && picked != selectedDate) {
+                    setState(() {
+                      selectedDate = picked;
+                    });
+                  }
+                }, text: DateFormat("MMM dd, yyyy").format(selectedDate), isDate: true,),
                 SizedBox(height: deviceSize.height * 0.02),
                 heading('startTime'.tr, deviceSize),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: InkWell(
-                    onTap: () async {
-                      await _selectTime(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 17),
-                      width: deviceSize.width,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Theme.of(context).primaryColor),
-                      child: Row(
-                        children: [
-                          Icon(
-                            CupertinoIcons.time_solid,
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                          SizedBox(width: deviceSize.width * 0.025),
-                          Text('${selectedTime.format(context)}')
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                DateTimeWidget(onTap:  () async {
+                  final picked=await selectTime(context);
+                  if (picked != null && picked != selectedTime) {
+                    setState(() {
+                      selectedTime = picked;
+                    });
+                  }
+                }, text: '${selectedTime.format(context)}', isDate: false,),
                 SizedBox(
                   height: deviceSize.height * 0.01,
                 ),
@@ -366,29 +332,6 @@ class _AddSubTaskState extends State<AddSubTask> {
         ),
       ),
     );
-  }
-
-  _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
-
-  _selectTime(BuildContext context) async {
-    final dynamic picked =
-        await showTimePicker(initialTime: TimeOfDay.now(), context: context);
-    if (picked != null && picked != selectedTime) {
-      setState(() {
-        selectedTime = picked;
-      });
-    }
   }
 
   heading(String text, dynamic deviceSize) {
