@@ -1,12 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/user/views/newUserProfile.dart';
-import 'package:task_manager/project/views/projects.dart';
 import 'package:task_manager/user/views/userProfile.dart';
-import '../../project/views/add_project.dart';
-import 'dashboard.dart';
-import '../../notepad/views/notepad.dart';
+import '../../database/app_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,18 +14,12 @@ int selectIndex = 0;
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   PageController pageController = PageController();
-  List<Widget> screens = [
-    const Dashboard(),
-    const Projects(),
-    const AddProject(),
-    const NotePad()
-  ];
-
   int oldIndex = 0;
 
   @override
   void dispose() {
     pageController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -37,11 +27,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('name')) {
       setState(() {
-        screens.insert(4, const Profile());
+        screens.insert(4, const Profile(isOldUser: true,));
       });
     } else {
       setState(() {
-        screens.insert(4, const NewUserProfile());
+        screens.insert(4, const Profile(isOldUser: false,));
       });
     }
   }

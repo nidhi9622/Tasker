@@ -11,7 +11,6 @@ import 'package:task_manager/splashScreen.dart';
 import 'package:task_manager/user/views/userProfile.dart';
 import 'project/views/add_project.dart';
 import 'app_utils/local_string.dart';
-import 'user/views/newUserProfile.dart';
 import 'notepad/views/notepad.dart';
 
 void requestIOSPermissions(
@@ -98,6 +97,8 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -110,7 +111,7 @@ class _MyAppState extends State<MyApp> {
       const Projects(),
       const AddProject(),
       const NotePad(),
-      isExist == true ? const Profile() : const NewUserProfile()
+      Profile(isOldUser: isExist==true?true:false,)
     ];
   }
 

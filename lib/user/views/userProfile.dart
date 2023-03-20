@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard/views/homePage.dart';
-import 'package:task_manager/dashboard/helper_methods/search.dart';
+import 'package:task_manager/user/helper_widgets/explore_options.dart';
 import 'package:task_manager/user/views/settings.dart';
 import 'package:task_manager/splashScreen.dart';
 import 'package:task_manager/user/views/updateUserProfile.dart';
 import '../../dashboard/views/dashboard.dart';
+import '../../project/views/projects.dart';
+import '../helper_widgets/profile_app_bar.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  final bool isOldUser;
+  const Profile({Key? key, required this.isOldUser}) : super(key: key);
   @override
   State<Profile> createState() => _ProfileState();
 }
@@ -19,7 +22,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String? name;
   String? designation;
-  String? map;
   dynamic profileImage;
   getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -44,30 +46,12 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      //bottomNavigationBar: bottomNavigation(context,(int i){setState((){bottomIndex = i;});}, 4),
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: Search(text: ''));
-              },
-              icon: Icon(
-                CupertinoIcons.search,
-                color: Theme.of(context).primaryColorDark,
-              ))
-        ],
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'profile'.tr,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
-      ),
+      appBar:ProfileAppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
+            widget.isOldUser?Stack(
               children: [
                 Container(
                   height: 200,
@@ -179,47 +163,56 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ],
-            ),
-            Padding(
+            ):const SizedBox.shrink(),
+            widget.isOldUser?Padding(
               padding: const EdgeInsets.only(top: 18, left: 15),
               child: Text(
                 'Explore'.tr,
                 style: const TextStyle(fontSize: 19),
               ),
-            ),
+            ):const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 15),
               child: Row(
                 children: [
-                  exploreOptions(
-                      deviceSize, 'setting'.tr, CupertinoIcons.settings, () {
+                  ExploreOptions(onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const Settings()));
-                  }, context),
+                  }, iconData: CupertinoIcons.settings, text: 'setting'.tr),
                   SizedBox(width: deviceSize.width * 0.055),
-                  exploreOptions(deviceSize, 'allTask'.tr, CupertinoIcons.doc,
-                      () {
-                    setState(() {
-                      selectIndex = 1;
-                    });
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const HomePage()));
-                  }, context),
+                  ExploreOptions(onTap: () {
+                    if(widget.isOldUser){
+                      setState(() {
+                        selectIndex = 1;
+                      });
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const HomePage()));
+                    }
+                    else{
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const Projects()));
+                    }
+                  }, iconData: CupertinoIcons.doc, text: 'allTask'.tr,),
                   SizedBox(width: deviceSize.width * 0.055),
-                  exploreOptions(deviceSize, 'logOut'.tr, Icons.logout_outlined,
-                      () async {
-                    projectItem.clear();
-                    upcomingProjects.clear();
-                    ongoingProjects.clear();
-                    completedProjects.clear();
-                    canceledProjects.clear();
-                    SharedPreferences preferences =
-                        await SharedPreferences.getInstance();
-                    preferences.clear();
-                    preferences.setInt('id', 0);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SplashScreen()));
-                  }, context)
+                  ExploreOptions(onTap: () async {
+                    if(widget.isOldUser){
+                      projectItem.clear();
+                      upcomingProjects.clear();
+                      ongoingProjects.clear();
+                      completedProjects.clear();
+                      canceledProjects.clear();
+                      SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                      preferences.clear();
+                      preferences.setInt('id', 0);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const SplashScreen()));
+                    }
+                    else{
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const UserProfile()));
+                    }
+                  }, iconData:widget.isOldUser? Icons.logout_outlined:Icons.login_outlined, text: widget.isOldUser?'logOut'.tr:'login'.tr),
                 ],
               ),
             )
@@ -228,31 +221,4 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-}
-
-exploreOptions(dynamic deviceSize, String text, IconData iconData,
-    dynamic onTap, BuildContext context) {
-  return InkWell(
-    onTap: onTap,
-    child: Container(
-      width: deviceSize.width * 0.26,
-      height: deviceSize.height * 0.11,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).primaryColor),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            iconData,
-            color: Colors.red[200],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(text)
-        ],
-      ),
-    ),
-  );
 }

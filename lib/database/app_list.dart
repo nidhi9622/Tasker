@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../dashboard/views/dashboard.dart';
+import '../notepad/views/notepad.dart';
+import '../project/views/add_project.dart';
+import '../project/views/projects.dart';
+
 List<Tab> tabs = [
   Tab(text: 'all'.tr),
   Tab(text: 'Ongoing'.tr),
@@ -16,4 +21,10 @@ List dropdownOptions = [
   'Complete'.tr,
   'Upcoming'.tr,
   'Canceled'.tr
+];
+List<Widget> screens = [
+  const Dashboard(),
+  const Projects(),
+  const AddProject(),
+  const NotePad()
 ];
