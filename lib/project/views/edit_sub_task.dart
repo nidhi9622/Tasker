@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/project/helper_widgets/date_time_widget.dart';
-import 'package:task_manager/project/helper_widgets/heading_text.dart';
+import 'package:task_manager/app_utils/common_app_bar.dart';
+import 'package:task_manager/project/helper_widgets/edit_task_widget.dart';
 import 'package:task_manager/project/views/project_detail.dart';
-import '../../app_utils/helper_methods/project_text_field.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
-import '../helper_methods/select_date_time.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../../app_utils/local_notification_service.dart';
 
@@ -17,6 +14,7 @@ class EditSubTask extends StatefulWidget {
   final Map object;
   final String title;
   final Map homeObject;
+
   const EditSubTask(
       {Key? key,
       required this.object,
@@ -25,8 +23,7 @@ class EditSubTask extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<EditSubTask> createState() =>
-      _EditSubTaskState();
+  State<EditSubTask> createState() => _EditSubTaskState();
 }
 
 class _EditSubTaskState extends State<EditSubTask> {
@@ -34,6 +31,7 @@ class _EditSubTaskState extends State<EditSubTask> {
   late TextEditingController subTitleController;
   late TextEditingController percentageController;
   late TextEditingController descriptionController;
+
   @override
   dispose() {
     super.dispose();
@@ -42,6 +40,7 @@ class _EditSubTaskState extends State<EditSubTask> {
     descriptionController.dispose();
     percentageController.dispose();
   }
+
   int dropDown1 = 0;
   List tasks = [];
   List ongoingTask = [];
@@ -49,20 +48,21 @@ class _EditSubTaskState extends State<EditSubTask> {
   List upcomingTasks = [];
   List canceledTasks = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  dynamic selectedDate;
   bool? reminder;
-  dynamic selectedTime;
   List optionList = [];
   dynamic status;
   bool preExist = false;
-  DateTime stringDate = DateTime.now();
-  TimeOfDay stringTime = TimeOfDay.now();
+  ValueNotifier selectedDate = ValueNotifier(dynamic);
+  ValueNotifier selectedTime = ValueNotifier(dynamic);
+  ValueNotifier<DateTime> stringDate = ValueNotifier(DateTime.now());
+  ValueNotifier<TimeOfDay> stringTime = ValueNotifier(TimeOfDay.now());
   late DataModel dataModel;
   dynamic timePicked;
   dynamic datePicked;
   String? subTask;
   List subTaskProjects = [];
   Map map = {};
+
   setTaskData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey(widget.title)) {
@@ -83,7 +83,7 @@ class _EditSubTaskState extends State<EditSubTask> {
         'subTitle': subTitleController.text,
         'description': descriptionController.text,
         'percentage': newPercentage,
-        'date': selectedDate,
+        'date': selectedDate.value,
         'reminder': reminder,
         'time': selectedTime,
         'status': dropdownOptions[dropDown1],
@@ -107,14 +107,20 @@ class _EditSubTaskState extends State<EditSubTask> {
           title: 'Reminder',
           body: 'Start your ${titleController.text} task now',
           payload: jsonEncode(widget.homeObject),
-          scheduleTime: DateTime(stringDate.year, stringDate.month,
-              stringDate.day, stringTime.hour, stringTime.minute));
+          scheduleTime: DateTime(
+              stringDate.value.year,
+              stringDate.value.month,
+              stringDate.value.day,
+              stringTime.value.hour,
+              stringTime.value.minute));
       setState(() {
         preferences.setInt('id', id + 1);
       });
     }
-    LocalNotificationService.initialize(context: context, object: widget.homeObject);
-    await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
+    LocalNotificationService.initialize(
+        context: context, object: widget.homeObject);
+    await titleErrorDialog(
+        context: context, content: 'success'.tr, isTitle: true);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ProjectDetail(object: widget.homeObject)));
   }
@@ -126,7 +132,7 @@ class _EditSubTaskState extends State<EditSubTask> {
     percentageController =
         TextEditingController(text: dataModel.percentage.toString());
     descriptionController = TextEditingController(text: dataModel.description);
-    selectedDate = dataModel.date;
+    selectedDate.value = dataModel.date;
     selectedTime = dataModel.time;
     status = dataModel.status;
     reminder = dataModel.reminder;
@@ -140,90 +146,46 @@ class _EditSubTaskState extends State<EditSubTask> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          'editSubTask'.tr,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        actions: [
-          TextButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  await setTaskData();
-                }
-              },
-              child: Text(
-                'done'.tr,
-                style: TextStyle(color: Theme.of(context).primaryColorDark),
-              ))
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //SizedBox(height: deviceSize.height*0.02),
-                HeadingText(text: 'taskDetail'.tr),
-                ProjectTextField(controller: titleController, labelText: 'title'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'titleError'.tr;
-                  }
-                  return null;
-                }, maxLines:1),
-                ProjectTextField(controller: subTitleController, labelText: 'subTitle'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 30, validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'subTitleError'.tr;
-                  }
-                  return null;
-                }, maxLines:1),
-                SizedBox(height: deviceSize.height * 0.02),
-                HeadingText(text: 'startDate'.tr),
-                DateTimeWidget(onTap: () async {
-                  final datePicked=await selectDate(context);
-                  if (datePicked != null && datePicked != selectedDate) {
-                    setState(() {
-                      stringDate = datePicked;
-                      selectedDate = DateFormat("MMM dd, yyyy").format(datePicked);
+    return ValueListenableBuilder(
+        valueListenable: stringDate,
+        builder: (context, value, child) {
+          return ValueListenableBuilder(
+              valueListenable: selectedDate,
+              builder: (context, value, child) {
+                return ValueListenableBuilder(
+                    valueListenable: selectedTime,
+                    builder: (context, value, child) {
+                      return ValueListenableBuilder(
+                          valueListenable: stringTime,
+                          builder: (context, value, child) {
+                            return Scaffold(
+                              appBar: CommonAppBar(
+                                text: 'editSubTask'.tr,
+                                onTap: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    await setTaskData();
+                                  }
+                                },
+                              ),
+                              body: SingleChildScrollView(
+                                child: Form(
+                                  key: _formKey,
+                                  child: EditTaskWidget(
+                                    titleController: titleController,
+                                    selectedDate: selectedDate,
+                                    stringDate: stringDate,
+                                    subTitleController: subTitleController,
+                                    descriptionController:
+                                        descriptionController,
+                                    stringTime: stringTime,
+                                    selectedTime: selectedTime,
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
                     });
-                  }
-                }, text: selectedDate, isDate: true),
-                SizedBox(height: deviceSize.height * 0.02),
-                HeadingText(text: 'startTime'.tr),
-                DateTimeWidget(onTap:  () async {
-                  final timePicked=await selectTime(context);
-                  if (timePicked != null && timePicked != selectedTime) {
-                    setState(() {
-                      selectedTime = timePicked.format(context);
-                      stringTime = timePicked;
-                    });
-                  }
-                }, text: "$selectedTime", isDate: false,),
-                SizedBox(
-                  height: deviceSize.height * 0.01,
-                ),
-                HeadingText(text: 'additional'.tr),
-                ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+              });
+        });
   }
 }

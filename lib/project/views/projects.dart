@@ -16,9 +16,8 @@ class Projects extends StatefulWidget {
   @override
   State<Projects> createState() => _ProjectsState();
 }
-
 class _ProjectsState extends State<Projects>{
-  int displayIndex = 0;
+  ValueNotifier<int> displayIndex=ValueNotifier(0);
   List completedProjects = [];
   List ongoingProjects = [];
   List projectItem = [];
@@ -75,29 +74,17 @@ class _ProjectsState extends State<Projects>{
             ))
       ], text: 'projects'.tr,) ,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 14, right: 14, top: 17, bottom: 17),
-              child: DefaultTabController(
-                length: tabs.length,
-                child: Builder(builder: (context) {
-                  final TabController tabController =
-                      DefaultTabController.of(context);
-                  tabController.addListener(() {
-                    setState(() {
-                      displayIndex = tabController.index;
-                    });
-                  });
-                  return const CustomTabBar();
-                }),
-              ),
-            ),
-            if (displayIndex == 0) ProjectTabView(tabList: projectItem,),
-            if (displayIndex == 1) ProjectTabView(tabList:ongoingProjects),
-            if (displayIndex == 2) ProjectTabView(tabList: completedProjects)
-          ],
+        child: ValueListenableBuilder(
+          builder: (context,value,child) {
+            return Column(
+              children: [
+                CustomTabBar(tabList: tabs, displayIndex: displayIndex,),
+                if (displayIndex.value == 0) ProjectTabView(tabList: projectItem,),
+                if (displayIndex.value == 1) ProjectTabView(tabList:ongoingProjects),
+                if (displayIndex.value == 2) ProjectTabView(tabList: completedProjects)
+              ],
+            );
+          }, valueListenable: displayIndex,
         ),
       ),
     );

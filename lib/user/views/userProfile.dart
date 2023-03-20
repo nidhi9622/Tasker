@@ -169,8 +169,7 @@ class _ProfileState extends State<Profile> {
                                 builder: (context) => const UserProfile()));
                           },
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.only(left: 34, right: 34),
-                            primary: Colors.red[200],
+                            padding: const EdgeInsets.only(left: 34, right: 34), backgroundColor: Colors.red[200],
                           ),
                           child: Text(
                             'editProfile'.tr,

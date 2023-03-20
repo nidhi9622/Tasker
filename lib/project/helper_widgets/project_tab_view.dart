@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/project/helper_widgets/indicator_widget.dart';
 import 'package:task_manager/ui_utils/no_task_widget.dart';
 import '../../dashboard/views/dashboard.dart';
 import '../../models/data_model.dart';
@@ -122,24 +122,7 @@ class _ProjectTabViewState extends State<ProjectTabView> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              width: deviceSize.width * 0.25,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CircularPercentIndicator(
-                                    radius: 35,
-                                    center: Text('${dataModel.percentage!}%'),
-                                    animation: true,
-                                    animationDuration: 1000,
-                                    percent: dataModel.percentage! / 100,
-                                    progressColor: Colors.green,
-                                    backgroundColor: Colors.grey[300]!,
-                                  )
-                                ],
-                              ),
-                            )
+                            IndicatorWidget(dataModel: dataModel)
                           ],
                         ),
                       ),
