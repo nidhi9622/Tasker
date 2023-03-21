@@ -68,9 +68,7 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: CommonAppBar(
           text: 'profile'.tr,
           onTap: () async {
@@ -93,59 +91,52 @@ class _UserProfileState extends State<UserProfile> {
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
+              padding: const EdgeInsets.all(20),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: deviceSize.height * 0.09,
+                  const SizedBox(
+                    height: 40,
                   ),
-                  SizedBox(
-                    width: deviceSize.width * 0.40,
-                    height: deviceSize.height * 0.20,
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        SizedBox(
-                            width: deviceSize.width * 0.40,
-                            height: deviceSize.height * 0.18,
-                            child: Container(
-                                height: deviceSize.height / 7,
-                                width: deviceSize.height / 7,
-                                decoration: profileImage == null ||profileImage==""
-                                    ? BoxDecoration(
-                                        border: Border.all(
-                                            width: 2, color: Colors.black),
-                                        shape: BoxShape.circle,
-                                        image: const DecorationImage(
-                                            image: AssetImage(
-                                                "assets/personImage.jpg"),
-                                            fit: BoxFit.fill))
-                                    : BoxDecoration(
-                                        border: Border.all(
-                                            width: 2, color: Colors.black),
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: FileImage(File(profileImage),
-                                                scale: 10.0),
-                                            fit: BoxFit.fill)))),
-                        Padding(
-                            padding: EdgeInsets.all(deviceSize.width * 0.01),
-                            child: CircleAvatar(
-                                backgroundColor: Colors.grey,
-                                child: IconButton(
-                                  onPressed: () {
-                                    bottomSheet();
-                                  },
-                                  icon: const Icon(
-                                    CupertinoIcons.add,
-                                    color: Colors.black,
-                                  ),
-                                )))
-                      ],
-                    ),
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      Container(
+                          height: 150,
+                          width: 150,
+                          decoration: profileImage == null ||profileImage==""
+                              ? BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: Colors.black),
+                                  shape: BoxShape.circle,
+                                  image: const DecorationImage(
+                                      image: AssetImage(
+                                          "assets/personImage.jpg"),
+                                      fit: BoxFit.fill))
+                              : BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: Colors.black),
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: FileImage(File(profileImage),
+                                          scale: 10.0),
+                                      fit: BoxFit.fill))),
+                      Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              child: IconButton(
+                                onPressed: () {
+                                  bottomSheet();
+                                },
+                                icon: const Icon(
+                                  CupertinoIcons.add,
+                                  color: Colors.black,
+                                ),
+                              )))
+                    ],
                   ),
-                  SizedBox(
-                    height: deviceSize.height * 0.09,
+                  const SizedBox(
+                    height: 80,
                   ),
                   ProfileTextField(
                       context: context,
@@ -175,7 +166,6 @@ class _UserProfileState extends State<UserProfile> {
                       },
                       icon: CupertinoIcons.person,
                       isPassword: false),
-                  // SizedBox(height: deviceSize.height*0.02,),
                   ProfileTextField(
                     context: context,
                     hintText: designation ?? '',
@@ -199,7 +189,6 @@ class _UserProfileState extends State<UserProfile> {
                     },
                     isPassword: false,
                   ),
-                  //SizedBox(height: deviceSize.height*0.02,),
                   ProfileTextField(
                       context: context,
                       hintText: phone ?? '',
@@ -226,15 +215,11 @@ class _UserProfileState extends State<UserProfile> {
                       },
                       icon: CupertinoIcons.device_phone_portrait,
                       isPassword: false),
-                  SizedBox(
-                    height: deviceSize.height * 0.02,
-                  ),
                 ],
               ),
             ),
           ),
         ));
-  }
 
   void bottomSheet() {
     showModalBottomSheet(

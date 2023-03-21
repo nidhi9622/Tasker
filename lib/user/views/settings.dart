@@ -17,9 +17,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   @override
-  Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: CommonAppBar(
         text: 'setting'.tr,
         onTap: () {},
@@ -32,7 +30,6 @@ class _SettingsState extends State<Settings> {
           children: [
             Container(
               width: double.infinity,
-              height: deviceSize.height * 0.40,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(20),
@@ -42,14 +39,13 @@ class _SettingsState extends State<Settings> {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(top: 14, bottom: 5, left: 20),
+                        const EdgeInsets.only(top: 18, bottom: 8, left: 20),
                     child: Text(
                       'customize'.tr,
                       textAlign: TextAlign.start,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
                     ),
                   ),
-                  //SizedBox(height: deviceSize.height*0.01,),
                   SettingListTile(
                     title: 'Appearance'.tr,
                     onTap: () async {
@@ -105,13 +101,13 @@ class _SettingsState extends State<Settings> {
                       },
                       leadingIcon: CupertinoIcons.calendar,
                       subTitle: 'customizeReminder'.tr),
+                  const SizedBox(height: 12,)
                 ],
               ),
             ),
-            SizedBox(height: deviceSize.height * 0.04),
+            const SizedBox(height: 25),
             Container(
               width: double.infinity,
-              height: deviceSize.height * 0.25,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(20),
@@ -132,15 +128,13 @@ class _SettingsState extends State<Settings> {
                     leadingIcon: Icons.privacy_tip_outlined,
                     subTitle: '',
                   ),
-                  SizedBox(
-                    height: deviceSize.height * 0.01,
-                  ),
                   SettingListTile(
                     title: 'policy'.tr,
                     onTap: customLaunchUrl,
                     leadingIcon: Icons.security,
                     subTitle: '',
                   ),
+                  const SizedBox(height: 12,)
                 ],
               ),
             )
@@ -148,5 +142,4 @@ class _SettingsState extends State<Settings> {
         ),
       ),
     );
-  }
 }

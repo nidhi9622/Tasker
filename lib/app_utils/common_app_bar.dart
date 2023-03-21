@@ -36,14 +36,14 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
               ):null,
         automaticallyImplyLeading: false,
       actions: [
-        TextButton(
+        isAction?TextButton(
             onPressed: onTap,
             child: Text(
               'done'.tr,
               style: TextStyle(
                   color: Theme.of(context)
                       .primaryColorDark),
-            ))
+            )):const SizedBox.shrink()
       ]
       );
 
