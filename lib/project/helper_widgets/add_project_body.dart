@@ -42,7 +42,6 @@ class _AddProjectBodyState extends State<AddProjectBody> {
 
   @override
   Widget build(BuildContext context) {
-    final Size deviceSize = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Column(
@@ -96,7 +95,7 @@ class _AddProjectBodyState extends State<AddProjectBody> {
                   },
                   maxLines: 1),
             ),
-          SizedBox(height: deviceSize.height * 0.02),
+          const SizedBox(height: 12),
           HeadingText(text: 'startDate'.tr),
           DateTimeWidget(
               onTap: () async {
@@ -109,7 +108,6 @@ class _AddProjectBodyState extends State<AddProjectBody> {
               },
               text: DateFormat("MMM dd, yyyy").format(widget.selectedDate),
               isDate: true),
-          SizedBox(height: deviceSize.height * 0.02),
           HeadingText(text: 'startTime'.tr),
           DateTimeWidget(
               onTap: () async {
@@ -122,9 +120,6 @@ class _AddProjectBodyState extends State<AddProjectBody> {
               },
               text: widget.selectedTime.format(context),
               isDate: false),
-          SizedBox(
-            height: deviceSize.height * 0.01,
-          ),
           HeadingText(text: 'additional'.tr),
           HideContainer(
               onTap: () {

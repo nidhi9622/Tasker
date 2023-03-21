@@ -7,25 +7,19 @@ class IndicatorWidget extends StatelessWidget {
   const IndicatorWidget({Key? key, required this.dataModel}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final Size deviceSize=MediaQuery.of(context).size;
-    return SizedBox(
-      width: deviceSize.width * 0.25,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircularPercentIndicator(
-            radius: 35,
-            center: Text('${dataModel.percentage!}%'),
-            animation: true,
-            animationDuration: 1000,
-            percent: dataModel.percentage! / 100,
-            progressColor: Colors.green,
-            backgroundColor: Colors.grey[300]!,
-          )
-        ],
-      ),
+  Widget build(BuildContext context) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CircularPercentIndicator(
+          radius: 35,
+          center: Text('${dataModel.percentage!}%'),
+          animation: true,
+          animationDuration: 1000,
+          percent: dataModel.percentage! / 100,
+          progressColor: Colors.green,
+          backgroundColor: Colors.grey[300]!,
+        )
+      ],
     );
-  }
 }

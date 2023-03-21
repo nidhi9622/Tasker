@@ -32,9 +32,7 @@ class EditTaskWidget extends StatefulWidget {
 
 class _EditTaskWidgetState extends State<EditTaskWidget> {
   @override
-  Widget build(BuildContext context) {
-    final Size deviceSize = MediaQuery.of(context).size;
-    return ValueListenableBuilder(
+  Widget build(BuildContext context) => ValueListenableBuilder(
         valueListenable: widget.selectedDate,
         builder: (context, value, child) {
           return ValueListenableBuilder(
@@ -70,7 +68,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                           return null;
                         },
                         maxLines: 1),
-                    SizedBox(height: deviceSize.height * 0.02),
+                    const SizedBox(height: 12),
                     HeadingText(text: 'startDate'.tr),
                     DateTimeWidget(
                       onTap: () async {
@@ -85,7 +83,6 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                       text: '${widget.selectedDate.value}',
                       isDate: true,
                     ),
-                    SizedBox(height: deviceSize.height * 0.02),
                     HeadingText(text: 'startTime'.tr),
                     DateTimeWidget(
                       onTap: () async {
@@ -102,9 +99,6 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                       text: '${widget.selectedTime.value}',
                       isDate: false,
                     ),
-                    SizedBox(
-                      height: deviceSize.height * 0.01,
-                    ),
                     HeadingText(text: 'additional'.tr),
                     ProjectTextField(
                         controller: widget.descriptionController,
@@ -118,5 +112,4 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                 );
               });
         });
-  }
 }

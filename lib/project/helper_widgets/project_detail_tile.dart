@@ -27,9 +27,7 @@ class ProjectDetailTile extends StatefulWidget {
 
 class _ProjectDetailTileState extends State<ProjectDetailTile> {
   @override
-  Widget build(BuildContext context) {
-    final Size deviceSize = MediaQuery.of(context).size;
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       onTap: () async {
         AppRoutes.go(AppRouteName.editSubTask,arguments: {
           'object': widget.subTaskProjects[widget.index],
@@ -42,7 +40,6 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
         onPressed: () {
           deleteBottomSheet(
             context: context,
-            deviceSize: deviceSize,
             title: widget.dataModel.title ?? "",
             index: widget.index,
             onTapEdit: () {
@@ -95,5 +92,4 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
         backgroundColor: Colors.grey[300],
       ),
     );
-  }
 }

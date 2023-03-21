@@ -6,10 +6,9 @@ class HeadingText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size deviceSize=MediaQuery.of(context).size;
     return Container(
         color: Theme.of(context).primaryColor,
-        width: deviceSize.width,
+        width: double.infinity,
         height: 50,
         padding: const EdgeInsets.only(
           top: 13,

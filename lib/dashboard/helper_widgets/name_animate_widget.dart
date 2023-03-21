@@ -55,7 +55,6 @@ class _NameAnimateWidgetState extends State<NameAnimateWidget>
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold))),
                   SizedBox(
-                      //width: deviceSize.width * 0.22,
                       child: Text(
                         textAlign: TextAlign.end,
                         'tap'.tr,

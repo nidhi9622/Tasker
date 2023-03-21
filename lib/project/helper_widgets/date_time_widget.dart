@@ -8,9 +8,7 @@ class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({Key? key, required this.onTap, required this.text, required this.isDate}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final Size deviceSize=MediaQuery.of(context).size;
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.all(10),
       child: InkWell(
         onTap: onTap,
@@ -27,12 +25,11 @@ class DateTimeWidget extends StatelessWidget {
                 isDate?CupertinoIcons.calendar:CupertinoIcons.time_solid,
                 color: Theme.of(context).primaryColorDark,
               ),
-              SizedBox(width: deviceSize.width * 0.025),
+              const SizedBox(width: 8),
               Text(text)
             ],
           ),
         ),
       ),
     );
-  }
 }

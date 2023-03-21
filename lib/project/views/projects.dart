@@ -71,19 +71,15 @@ class _ProjectsState extends State<Projects>{
               color: Theme.of(context).primaryColorDark,
             ))
       ], text: 'projects'.tr,) ,
-      body: SingleChildScrollView(
-        child: ValueListenableBuilder(
-          builder: (context,value,child) {
-            return Column(
-              children: [
-                CustomTabBar(tabList: tabs, displayIndex: displayIndex,),
-                if (displayIndex.value == 0) ProjectTabView(tabList: projectItem,),
-                if (displayIndex.value == 1) ProjectTabView(tabList:ongoingProjects),
-                if (displayIndex.value == 2) ProjectTabView(tabList: completedProjects)
-              ],
-            );
-          }, valueListenable: displayIndex,
-        ),
+      body: ValueListenableBuilder(
+        builder: (context,value,child) => Column(
+            children: [
+              Expanded(flex:2,child: CustomTabBar(tabList: tabs, displayIndex: displayIndex,)),
+              if (displayIndex.value == 0) Expanded(flex:12,child: ProjectTabView(tabList: projectItem,)),
+              if (displayIndex.value == 1) Expanded(flex:12,child:ProjectTabView(tabList:ongoingProjects)),
+              if (displayIndex.value == 2) Expanded(flex:12,child:ProjectTabView(tabList: completedProjects))
+            ],
+          ), valueListenable: displayIndex,
       ),
     );
 

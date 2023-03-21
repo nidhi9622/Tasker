@@ -8,15 +8,14 @@ class HideContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size deviceSize=MediaQuery.of(context).size;
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
         child: Container(
           width: double.infinity,
-          height: 30,
-          padding: const EdgeInsets.only(left: 10),
+          //height: 30,
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(9),
               color: Theme.of(context).primaryColor),
@@ -31,7 +30,7 @@ class HideContainer extends StatelessWidget {
                   size: 17,
                 ),
               ),
-              SizedBox(width: deviceSize.width * 0.015),
+              const SizedBox(width: 8),
               Text(
                 text,
               ),

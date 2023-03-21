@@ -23,16 +23,14 @@ class TaskBodyBottom extends StatefulWidget {
 class _TaskBodyBottomState extends State<TaskBodyBottom> {
   @override
   Widget build(BuildContext context) {
-    final Size deviceSize = MediaQuery.of(context).size;
     return Column(
       children: [
-        SizedBox(height: deviceSize.height * 0.02),
+        const SizedBox(height: 12),
         Container(
             color: Theme.of(context).primaryColor,
             width: double.infinity,
-            height: deviceSize.height * 0.07,
-            padding: const EdgeInsets.only(
-              left: 14,
+            padding: const EdgeInsets.all(
+              14,
             ),
             child: Row(
               children: [
@@ -41,33 +39,30 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
                   style: const TextStyle(fontSize: 18),
                 ),
                 SizedBox(
-                  width: deviceSize.width * 0.27,
-                  height: deviceSize.height * 0.06,
-                  child: Center(
-                    child: FormField(builder: (state) {
-                      return DropdownButtonFormField(
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                        hint: Text(dropdownOptions[0]),
-                        items: [
-                          for (int i = 0; i < dropdownOptions.length; i++)
-                            DropdownMenuItem(
-                              value: i,
-                              child: Text(dropdownOptions[i]),
-                            ),
-                        ],
-                        onChanged: (int? value) {
-                          setState(() {
-                            widget.dropDownValue = value!;
-                          });
-                        },
-                      );
-                    }),
-                  ),
+                   width: 100,
+                  child: FormField(builder: (state) {
+                    return DropdownButtonFormField(
+                      decoration:
+                          const InputDecoration(border: InputBorder.none),
+                      hint: Text(dropdownOptions[0]),
+                      items: [
+                        for (int i = 0; i < dropdownOptions.length; i++)
+                          DropdownMenuItem(
+                            value: i,
+                            child: Text(dropdownOptions[i]),
+                          ),
+                      ],
+                      onChanged: (int? value) {
+                        setState(() {
+                          widget.dropDownValue = value!;
+                        });
+                      },
+                    );
+                  }),
                 ),
               ],
             )),
-        SizedBox(height: deviceSize.height * 0.03),
+        const SizedBox(height: 15),
         Container(
           color: Theme.of(context).primaryColor,
           width: double.infinity,
@@ -98,7 +93,7 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
             ],
           ),
         ),
-        SizedBox(height: deviceSize.height * 0.025),
+        const SizedBox(height: 15),
         HeadingText(text: 'percentage'.tr),
         ProjectTextField(
             controller: widget.percentageController,
@@ -108,7 +103,7 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
             maxLength: 3,
             validator: (String? value) => null,
             maxLines: 1),
-        SizedBox(height: deviceSize.height * 0.25),
+        const SizedBox(height: 25),
       ],
     );
   }

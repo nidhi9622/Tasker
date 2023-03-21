@@ -25,70 +25,62 @@ class ProjectDetailLeft extends StatefulWidget {
 class _ProjectDetailLeftState extends State<ProjectDetailLeft> {
   @override
   Widget build(BuildContext context) {
-    final Size deviceSize = MediaQuery.of(context).size;
-    return SizedBox(
-        height: deviceSize.height * 0.39,
-        child: Column(
-          children: [
-            InkWell(
-              onTap: () => AppRoutes.go(AppRouteName.addSubTask,
-                  arguments: {"object": widget.object}),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 4, right: 15),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: deviceSize.width * 0.45,
-                      child: Row(
-                        children: [
-                          Text(
-                            'addTask'.tr,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(width: deviceSize.width * 0.02),
-                          CircleAvatar(
-                              backgroundColor: Colors.red[200],
-                              radius: 13,
-                              child: const Icon(
-                                CupertinoIcons.add,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 4, right: 15),
+          child: InkWell(
+            onTap: () => AppRoutes.go(AppRouteName.addSubTask,
+                arguments: {"object": widget.object}),
+            child: Row(
+              //mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'addTask'.tr,
+                  style: const TextStyle(fontSize: 20),
                 ),
-              ),
+                const SizedBox(width: 8),
+                CircleAvatar(
+                    backgroundColor: Colors.red[200],
+                    radius: 13,
+                    child: const Icon(
+                      CupertinoIcons.add,
+                      color: Colors.white,
+                    ))
+              ],
             ),
-            Container(
-                height: deviceSize.height * 0.336,
-                padding: const EdgeInsets.only(top: 10),
-                child: widget.subTaskList.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: widget.subTaskList.length,
-                        itemBuilder: (context, index) {
-                          DataModel dataModel =
-                              DataModel(widget.subTaskList[index]);
-                          return Container(
-                              width: deviceSize.width,
-                              padding: const EdgeInsets.only(
-                                  left: 22, right: 22, bottom: 12, top: 6),
-                              child: Container(
-                                height: 70,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(12)),
-                                child: ProjectDetailTile(
-                                  dataModel: dataModel,
-                                  subTaskProjects: widget.subTaskProjects,
-                                  index: index,
-                                  object: widget.object,
-                                ),
-                              ));
-                        },
-                      )
-                    : const NoTaskWidget())
-          ],
-        ));
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: widget.subTaskList.isNotEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.subTaskList.length,
+                    itemBuilder: (context, index) {
+                      DataModel dataModel =
+                          DataModel(widget.subTaskList[index]);
+                      return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 22, right: 22, bottom: 12, top: 6),
+                          child: Container(
+                            // height: 70,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: ProjectDetailTile(
+                              dataModel: dataModel,
+                              subTaskProjects: widget.subTaskProjects,
+                              index: index,
+                              object: widget.object,
+                            ),
+                          ));
+                    },
+                  )
+                : const NoTaskWidget())
+      ],
+    );
   }
 }

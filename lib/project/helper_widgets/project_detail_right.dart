@@ -22,6 +22,7 @@ class _ProjectDetailRightState extends State<ProjectDetailRight> {
       width: double.infinity,
       color: Theme.of(context).primaryColor,
       padding: const EdgeInsets.all(12),
+      //height: double.infinity,
       constraints: BoxConstraints(maxHeight: deviceSize.height * 0.378),
       child: TextField(
         controller: widget.notesController,
@@ -35,7 +36,7 @@ class _ProjectDetailRightState extends State<ProjectDetailRight> {
         },
         maxLength: null,
         maxLines: null,
-        expands: true,
+         expands: true,
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'addNotes'.tr,
