@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard/views/home_page.dart';
 import 'package:task_manager/user/helper_widgets/explore_options.dart';
 import '../../app_utils/app_routes.dart';
-import '../../dashboard/views/dashboard.dart';
+import '../../app_utils/global_data.dart';
 import '../helper_widgets/profile_app_bar.dart';
 
 class Profile extends StatefulWidget {

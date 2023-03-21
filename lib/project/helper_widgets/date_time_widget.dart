@@ -16,7 +16,7 @@ class DateTimeWidget extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.only(left: 17),
-          width: deviceSize.width,
+          width: double.infinity,
           height: 50,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app_utils/app_routes.dart';
-import '../../dashboard/views/dashboard.dart';
+import '../../app_utils/global_data.dart';
 
 void deleteBottomSheet(
     {required BuildContext context, required Size deviceSize, required String title, required int index,required VoidCallback onTapEdit,required VoidCallback onTapDelete,}) =>

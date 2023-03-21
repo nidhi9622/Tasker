@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app_utils/app_routes.dart';
+import '../../app_utils/global_data.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
 import '../helper_methods/title_error_dialog.dart';
-import '../../dashboard/views/dashboard.dart';
 import '../../app_utils/local_notification_service.dart';
 import '../helper_widgets/edit_task_body.dart';
 

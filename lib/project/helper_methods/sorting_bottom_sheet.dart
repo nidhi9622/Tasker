@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../app_utils/app_routes.dart';
 
-void sortingBottomSheet(
+Future<void> sortingBottomSheet(
     {required BuildContext context,
     required VoidCallback ascendingSort,
-    required VoidCallback descendingSort}) {
-  showModalBottomSheet(
+    required VoidCallback descendingSort}) async {
+  await showModalBottomSheet(
       elevation: 5,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))),
       context: context,

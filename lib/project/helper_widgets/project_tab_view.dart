@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/project/helper_widgets/indicator_widget.dart';
 import 'package:task_manager/ui_utils/no_task_widget.dart';
 import '../../app_utils/app_routes.dart';
-import '../../dashboard/views/dashboard.dart';
+import '../../app_utils/global_data.dart';
 import '../../models/data_model.dart';
 import '../helper_methods/delete_bottom_sheet.dart';
 

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import 'package:task_manager/dashboard/views/home_page.dart';
 import '../../app_utils/app_routes.dart';
-import '../../dashboard/views/dashboard.dart';
+import '../../app_utils/global_data.dart';
 import '../../app_utils/local_notification_service.dart';
 import '../../database/app_list.dart';
 import '../helper_methods/title_error_dialog.dart';
