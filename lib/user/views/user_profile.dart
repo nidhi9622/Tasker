@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/user/controller/user_controller.dart';
 import 'package:task_manager/user/helper_widgets/explore_options.dart';
 import '../../app_utils/app_routes.dart';
 import '../../app_utils/global_data.dart';
@@ -21,6 +22,7 @@ class _ProfileState extends State<Profile> {
   String? name;
   String? designation;
   dynamic profileImage;
+  UserController controller = Get.put(UserController());
 
   getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -82,7 +84,7 @@ class _ProfileState extends State<Profile> {
                               Expanded(
                                 child: SizedBox(
                                     child: Container(
-                                        height: 200,
+                                        height: 180,
                                         width: 220,
                                         decoration: profileImage == null
                                             ? BoxDecoration(
@@ -125,7 +127,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 22),
+                          const SizedBox(height: 8),
                           Text(
                             name ?? 'name'.tr,
                             style: const TextStyle(
@@ -152,7 +154,7 @@ class _ProfileState extends State<Profile> {
                                 style: const TextStyle(color: Colors.white),
                               )),
                           const SizedBox(
-                            height: 55,
+                            height: 32,
                           )
                         ],
                       ),

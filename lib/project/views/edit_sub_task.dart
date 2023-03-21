@@ -133,7 +133,7 @@ class _EditSubTaskState extends State<EditSubTask> {
         TextEditingController(text: dataModel.percentage.toString());
     descriptionController = TextEditingController(text: dataModel.description);
     selectedDate.value = dataModel.date;
-    selectedTime = dataModel.time;
+    selectedTime.value = dataModel.time;
     status = dataModel.status;
     reminder = dataModel.reminder;
   }
@@ -146,38 +146,39 @@ class _EditSubTaskState extends State<EditSubTask> {
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
-        valueListenable: stringDate,
-        builder: (context, value, child) => ValueListenableBuilder(
-              valueListenable: selectedDate,
+      valueListenable: stringDate,
+      builder: (context, value, child) => ValueListenableBuilder(
+          valueListenable: selectedDate,
+          builder: (context, value, child) => ValueListenableBuilder(
+              valueListenable: selectedTime,
               builder: (context, value, child) => ValueListenableBuilder(
-                    valueListenable: selectedTime,
-                    builder: (context, value, child) => ValueListenableBuilder(
-                          valueListenable: stringTime,
-                          builder: (context, value, child) {
-                            return Scaffold(
-                              appBar: CommonAppBar(
-                                text: 'editSubTask'.tr,
-                                onTap: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    await setTaskData();
-                                  }
-                                }, isLeading: true, isAction: true,
-                              ),
-                              body: SingleChildScrollView(
-                                child: Form(
-                                  key: _formKey,
-                                  child: EditTaskWidget(
-                                    titleController: titleController,
-                                    selectedDate: selectedDate,
-                                    stringDate: stringDate,
-                                    subTitleController: subTitleController,
-                                    descriptionController:
-                                        descriptionController,
-                                    stringTime: stringTime,
-                                    selectedTime: selectedTime,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }))));
+                  valueListenable: stringTime,
+                  builder: (context, value, child) {
+                    return Scaffold(
+                      appBar: CommonAppBar(
+                        text: 'editSubTask'.tr,
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await setTaskData();
+                          }
+                        },
+                        isLeading: true,
+                        isAction: true,
+                      ),
+                      body: SingleChildScrollView(
+                        child: Form(
+                          key: _formKey,
+                          child: EditTaskWidget(
+                            titleController: titleController,
+                            selectedDate: selectedDate,
+                            stringDate: stringDate,
+                            subTitleController: subTitleController,
+                            descriptionController: descriptionController,
+                            stringTime: stringTime,
+                            selectedTime: selectedTime,
+                          ),
+                        ),
+                      ),
+                    );
+                  }))));
 }

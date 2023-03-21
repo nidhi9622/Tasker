@@ -6,4 +6,6 @@ class UserController extends GetxController{
   Rx<TextEditingController> nameController = Rx(TextEditingController());
   Rx<TextEditingController> designationController = Rx(TextEditingController());
   RxString profileImage=RxString('');
+  RxString name=RxString('');
+  RxString designation=RxString('');
 }

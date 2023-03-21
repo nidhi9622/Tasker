@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/project/helper_widgets/project_detail_container.dart';
 import 'package:task_manager/project/helper_widgets/project_detail_left.dart';
 import 'package:task_manager/project/helper_widgets/project_detail_right.dart';
-import '../../app_utils/app_routes.dart';
 import '../../app_utils/global_data.dart';
-import '../../dashboard/helper_methods/search.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
 import 'custom_tab_bar.dart';
@@ -27,32 +23,11 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
   List subTaskList = [];
   late DataModel dataModel;
   String? notes = '';
-  TextEditingController shortcutController = TextEditingController();
-  double containerWidth = 0.67;
-  int maxLength = 20;
   ValueNotifier<int> displayIndex = ValueNotifier(0);
-  int dropDown1 = -1;
   dynamic totalPercentage = 0;
   List optionList = [];
-  TextEditingController percentageController =
-      TextEditingController(text: '100');
-  String? ongoing;
-  String? completed;
   Map map = {};
-  String? subTask;
-  String? cancel;
-  String? upcoming;
   List subTaskProjects = [];
-  List searchShortcut = [];
-  String? searchString;
-  bool isAdded = false;
-
-  @override
-  dispose() {
-    super.dispose();
-    shortcutController.dispose();
-    notesController.dispose();
-  }
 
   getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -62,39 +37,32 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
       });
       notesController = TextEditingController(text: notes);
     }
-    if (preferences.containsKey('${widget.object['title']} searchShortcut')) {
-      searchString =
-          preferences.getString('${widget.object['title']} searchShortcut');
-      setState(() {
-        searchShortcut = jsonDecode(searchString!);
-      });
-    }
     if (preferences.containsKey('${widget.object['title']}')) {
-      subTask = preferences.getString('${widget.object['title']}');
+      String? subTask = preferences.getString('${widget.object['title']}');
       setState(() {
         subTaskProjects = jsonDecode(subTask!);
       });
     }
     if (preferences.containsKey('ongoingProjects')) {
-      ongoing = preferences.getString('ongoingProjects');
+      String? ongoing = preferences.getString('ongoingProjects');
       setState(() {
         ongoingProjects = jsonDecode(ongoing!);
       });
     }
     if (preferences.containsKey('upcomingProjects')) {
-      upcoming = preferences.getString('upcomingProjects');
+      String? upcoming = preferences.getString('upcomingProjects');
       setState(() {
         upcomingProjects = jsonDecode(upcoming!);
       });
     }
     if (preferences.containsKey('canceledProjects')) {
-      cancel = preferences.getString('canceledProjects');
+      String? cancel = preferences.getString('canceledProjects');
       setState(() {
         canceledProjects = jsonDecode(cancel!);
       });
     }
     if (preferences.containsKey('completedProjects')) {
-      completed = preferences.getString('completedProjects');
+      String? completed = preferences.getString('completedProjects');
       setState(() {
         completedProjects = jsonDecode(completed!);
       });
@@ -189,218 +157,11 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
           builder: (context, _, child) {
             return Column(
               children: [
-                Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(top: 8, left: 10, right: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(25),
-                          bottomLeft: Radius.circular(25),
-                        ),
-                        color: Theme.of(context).primaryColor),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '${dataModel.title}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 22),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 7,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  AppRoutes.go(AppRouteName.editTask,
-                                      arguments: {
-                                        'object': widget.object,
-                                      });
-                                },
-                                icon: const Icon(CupertinoIcons.pen))
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            '${dataModel.subtitle}',
-                            style: const TextStyle(
-                                fontSize: 12, color: Colors.grey),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: CircularPercentIndicator(
-                                radius: 44,
-                                center: Text(
-                                  '$totalPercentage %',
-                                  style: const TextStyle(fontSize: 17),
-                                ),
-                                animation: true,
-                                animationDuration: 1000,
-                                percent: totalPercentage < 101
-                                    ? totalPercentage / 100
-                                    : 100 / 100,
-                                progressColor: Colors.green,
-                                backgroundColor: Colors.grey[300]!,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'status'.tr,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(dataModel.status!,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                const SizedBox(width: 10),
-                              ],
-                            )
-                          ],
-                        ),
-                        Row(
-                          //mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                  height: 40,
-                                  child: searchShortcut.isNotEmpty
-                                      ? ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: searchShortcut.length,
-                                          itemBuilder: (context, index) {
-                                            return InkWell(
-                                              onTap: () {
-                                                showSearch(
-                                                    context: context,
-                                                    delegate: Search(
-                                                        text:
-                                                            '${searchShortcut[index]}'));
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 8.0),
-                                                child: Container(
-                                                  width: 80,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.green[50],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20)),
-                                                  child: Center(
-                                                      child: Text(
-                                                    searchShortcut[index],
-                                                    style: const TextStyle(
-                                                        color: Colors.green),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.center,
-                                                  )),
-                                                ),
-                                              ),
-                                            );
-                                          })
-                                      : Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text(
-                                            'shortSearch'.tr,
-                                            textAlign: TextAlign.end,
-                                          ),
-                                        )),
-                            ),
-                            const SizedBox(width: 6),
-                            InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    containerWidth = 0.58;
-                                    isAdded = true;
-                                  });
-                                },
-                                child: isAdded
-                                    ? Container(
-                                        width: 70,
-                                        constraints:
-                                            const BoxConstraints(maxHeight: 50),
-                                        decoration: BoxDecoration(
-                                            color: Colors.green[50],
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 5,
-                                            right: 3,
-                                          ),
-                                          child: TextField(
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                            inputFormatters: [
-                                              LengthLimitingTextInputFormatter(
-                                                  maxLength),
-                                            ],
-                                            decoration: const InputDecoration(
-                                                border: InputBorder.none),
-                                            controller: shortcutController,
-                                          ),
-                                        ),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 17,
-                                        backgroundColor: Colors.green,
-                                        child: Icon(
-                                          CupertinoIcons.add,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      )),
-                            const SizedBox(width: 6),
-                            InkWell(
-                              onTap: () async {
-                                if (shortcutController.text.isNotEmpty) {
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  searchShortcut.add(shortcutController.text);
-                                  preferences.setString(
-                                      '${widget.object['title']} searchShortcut',
-                                      jsonEncode(searchShortcut));
-                                }
-                                setState(() {
-                                  isAdded = false;
-                                });
-                                // AppRoutes.go(AppRouteName.projectDetail,
-                                //     arguments: {'object': widget.object});
-                              },
-                              child: Container(
-                                constraints:
-                                    const BoxConstraints(maxHeight: 80),
-                                decoration: BoxDecoration(
-                                    color: Colors.green[50],
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Text(
-                                    'done'.tr,
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        )
-                      ],
-                    )),
+                ProjectDetailContainer(
+                  object: widget.object,
+                  totalPercentage: totalPercentage,
+                  dataModel: dataModel,
+                ),
                 CustomTabBar(
                   tabList: detailedPageTab,
                   displayIndex: displayIndex,
