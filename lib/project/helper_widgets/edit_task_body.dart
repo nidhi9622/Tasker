@@ -11,7 +11,7 @@ class EditTaskBody extends StatefulWidget {
   final ValueNotifier selectedDate;
   final ValueNotifier selectedTime;
   final ValueNotifier stringTime;
-  final Future<VoidCallback> setTaskData;
+  final dynamic setTaskData;
   final TextEditingController percentageController;
   final TextEditingController titleController;
   final TextEditingController subTitleController;
@@ -63,7 +63,7 @@ class _EditTaskBodyState extends State<EditTaskBody> {
                                 text: 'editTask'.tr,
                                 onTap: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    await widget.setTaskData;
+                                    await widget.setTaskData();
                                   }
                                 },
                                 isLeading: true, isAction: true,

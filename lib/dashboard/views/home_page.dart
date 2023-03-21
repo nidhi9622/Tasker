@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/user/views/user_profile.dart';
+import '../../app_utils/global_data.dart';
 import '../../database/app_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,8 +10,6 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
-int selectIndex = 0;
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   PageController pageController = PageController();

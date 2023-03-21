@@ -114,8 +114,7 @@ class _AddSubTaskState extends State<AddSubTask> {
   int dropDown1 = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: CommonAppBar(
         text: 'addTask'.tr,
         onTap: () async {
@@ -292,5 +291,4 @@ class _AddSubTaskState extends State<AddSubTask> {
         ),
       ),
     );
-  }
 }

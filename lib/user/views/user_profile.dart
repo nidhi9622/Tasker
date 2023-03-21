@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/dashboard/views/home_page.dart';
 import 'package:task_manager/user/helper_widgets/explore_options.dart';
 import '../../app_utils/app_routes.dart';
 import '../../app_utils/global_data.dart';

@@ -17,18 +17,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool? isExist;
+
   List<Widget> _buildScreens() {
     return [
       const Dashboard(),
       const Projects(),
       const AddProject(),
       const NotePad(),
-      Profile(isOldUser: isExist==true?true:false,)
+      Profile(
+        isOldUser: isExist == true ? true : false,
+      )
     ];
   }
 
   final PersistentTabController _controller =
-  PersistentTabController(initialIndex: 0);
+      PersistentTabController(initialIndex: 0);
+
   void isProfileExist() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('name')) {
@@ -44,31 +48,31 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) => PersistentTabView(
-    context,
-    controller: _controller,
-    screens: _buildScreens(),
-    items: navBarsItems(),
-    confineInSafeArea: true,
-    backgroundColor: Colors.white,
-    handleAndroidBackButtonPress: true,
-    resizeToAvoidBottomInset: true,
-    stateManagement: true,
-    hideNavigationBarWhenKeyboardShows: true,
-    decoration: NavBarDecoration(
-      borderRadius: BorderRadius.circular(10.0),
-      colorBehindNavBar: Colors.white,
-    ),
-    popAllScreensOnTapOfSelectedTab: true,
-    popActionScreens: PopActionScreensType.all,
-    itemAnimationProperties: const ItemAnimationProperties(
-      duration: Duration(milliseconds: 200),
-      curve: Curves.ease,
-    ),
-    screenTransitionAnimation: const ScreenTransitionAnimation(
-      animateTabTransition: true,
-      curve: Curves.ease,
-      duration: Duration(milliseconds: 200),
-    ),
-    navBarStyle: NavBarStyle.style15,
-  );
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: navBarsItems(),
+        confineInSafeArea: true,
+        backgroundColor: Colors.white,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        decoration: NavBarDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          colorBehindNavBar: Colors.white,
+        ),
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: const ItemAnimationProperties(
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarStyle: NavBarStyle.style15,
+      );
 }

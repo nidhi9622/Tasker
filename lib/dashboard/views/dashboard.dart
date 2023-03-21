@@ -20,11 +20,11 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard>{
   String username = '';
 
   getData() async {
-    //SharedPreferences preferences = await SharedPreferences.getInstance();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       if (preferences.containsKey('name')) {
         username = preferences.getString('name')!;
@@ -36,10 +36,10 @@ class _DashboardState extends State<Dashboard> {
   String? canceled;
   String? ongoing;
   String? completed;
-  late SharedPreferences preferences;
+
   Future getProjectItem() async {
     dynamic map;
-    preferences = await SharedPreferences.getInstance();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
 
     if (preferences.containsKey('projects')) {
       setState(() {
@@ -82,7 +82,6 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
     return WillPopScope(
         onWillPop: () async {
           SystemNavigator.pop();
@@ -114,7 +113,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           body: SizedBox(
             width: double.infinity,
-            height: double.infinity,
+            height:  double.infinity,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,8 +123,7 @@ class _DashboardState extends State<Dashboard> {
                   const ProcessWidgetContainer(),
                   const AddProjectWidget(),
                   Container(
-                      height: deviceSize.height * 0.37,
-                      width: double.infinity,
+                      width:  double.infinity,
                       padding: const EdgeInsets.only(top: 10),
                       child: projectItem.isNotEmpty
                           ? const ProjectItemList()
@@ -138,7 +136,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   ascendingSort() async {
-    //SharedPreferences preferences = await SharedPreferences.getInstance();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
       preferences.setString('projects', jsonEncode(projectItem));
@@ -146,7 +144,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   descendingSort() async {
-   // SharedPreferences preferences = await SharedPreferences.getInstance();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
       preferences.setString('projects', jsonEncode(projectItem));

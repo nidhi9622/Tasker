@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../app_utils/app_routes.dart';
 import '../../app_utils/global_data.dart';
-import '../views/dashboard.dart';
 
 class Search extends SearchDelegate<String> {
   String text;

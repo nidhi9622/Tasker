@@ -3,7 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/splash_screen.dart';
+import 'package:task_manager/app_utils/app_routes.dart';
 import 'app_utils/ios_permission.dart';
 import 'app_utils/local_string.dart';
 
@@ -17,6 +17,8 @@ Future main() async {
   await Permission.camera.request();
   await Permission.photos.request();
   runApp(GetMaterialApp(
+    getPages: AppRouteName.routes,
+    initialRoute: AppRouteName.splash,
       themeMode: status == true ? ThemeMode.dark : ThemeMode.light,
       translations: LocalString(),
       locale: const Locale('en'),
@@ -36,6 +38,5 @@ Future main() async {
         primaryColorLight: Colors.white70,
         scaffoldBackgroundColor: const Color(0xff363535),
         appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
-      ),
-      home: const SplashScreen()));
+      ),));
 }

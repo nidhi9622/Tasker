@@ -59,15 +59,16 @@ class AppRouteName {
   static const String processDetail = '/process_detail';
 
   static final routes = [
-    GetPage(
-        name: homePage,
-        page: () => const HomePage(),
-        binding: BindingsBuilder(() {
-          // Get.put<HomePageController>(
-          //   HomePageController(),
-          // );
-        })),
+    // GetPage(
+    //     name: homePage,
+    //     page: () => const HomePage(),
+    //     binding: BindingsBuilder(() {
+    //       Get.put<HomePageController>(
+    //         HomePageController(),
+    //       );
+    //     })),
     GetPage(name: splash, page: () => const SplashScreen()),
+    GetPage(name: homePage, page: () => const HomePage()),
     GetPage(name: projects, page: () => const Projects()),
     GetPage(name: settings, page: () => const Settings()),
     GetPage(name: userProfile, page: () => const UserProfile()),

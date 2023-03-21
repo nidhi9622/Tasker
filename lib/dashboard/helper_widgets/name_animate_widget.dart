@@ -31,26 +31,23 @@ class _NameAnimateWidgetState extends State<NameAnimateWidget>
   }
 
   @override
-  Widget build(BuildContext context) {
-    final Size deviceSize = MediaQuery.of(context).size;
-    return widget.username.isNotEmpty
+  Widget build(BuildContext context) => widget.username.isNotEmpty
         ? Container(
-            width: deviceSize.width,
-            height: deviceSize.height * 0.08,
-            padding: const EdgeInsets.all(15),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
             child: Text(
               '${greetingMessage()},  ${widget.username}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ))
         : Container(
-            width: deviceSize.width,
-            height: deviceSize.height * 0.15,
-            padding: const EdgeInsets.all(15),
+            width: double.infinity,
+            height: 90,
+            padding: const EdgeInsets.symmetric(horizontal: 15,),
             child: InkWell(
               onTap: () {
                 AppRoutes.go(AppRouteName.userProfile);
               },
-              child: Row(
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FadeTransition(
                       opacity: controller,
@@ -58,7 +55,7 @@ class _NameAnimateWidgetState extends State<NameAnimateWidget>
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold))),
                   SizedBox(
-                      width: deviceSize.width * 0.22,
+                      //width: deviceSize.width * 0.22,
                       child: Text(
                         textAlign: TextAlign.end,
                         'tap'.tr,
@@ -69,5 +66,4 @@ class _NameAnimateWidgetState extends State<NameAnimateWidget>
               ),
             ),
           );
-  }
 }

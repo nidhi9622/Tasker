@@ -7,7 +7,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isLeading;
   final bool isAction;
   final String text;
-  final VoidCallback onTap;
+  final dynamic onTap;
 
   CommonAppBar(
       {Key? key,
@@ -39,7 +39,9 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: false,
       actions: [
         isAction?TextButton(
-            onPressed: onTap,
+            onPressed: ()async{
+              await onTap();
+            },
             child: Text(
               'done'.tr,
               style: TextStyle(

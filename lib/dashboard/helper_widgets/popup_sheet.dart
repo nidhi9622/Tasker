@@ -7,8 +7,7 @@ class PopupSheet extends StatelessWidget {
   const PopupSheet({Key? key, required this.onTapFirst, required this.onTapSecond,}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<int>(
+  Widget build(BuildContext context) => PopupMenuButton<int>(
       icon: const Icon(CupertinoIcons.ellipsis_vertical),
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -44,5 +43,4 @@ class PopupSheet extends StatelessWidget {
       color: Theme.of(context).scaffoldBackgroundColor,
       elevation: 2,
     );
-  }
 }

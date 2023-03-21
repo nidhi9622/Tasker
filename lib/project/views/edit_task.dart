@@ -259,7 +259,7 @@ class _EditTaskState extends State<EditTask> {
   Widget build(BuildContext context) => EditTaskBody(
       selectedTime: selectedTime,
       selectedDate: selectedDate,
-      setTaskData: setTaskData(),
+      setTaskData: setTaskData,
       status: status,
       stringDate: stringDate,
       stringTime: stringTime,

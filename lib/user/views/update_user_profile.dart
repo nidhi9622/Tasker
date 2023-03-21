@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
-import 'package:task_manager/dashboard/views/home_page.dart';
 import 'package:task_manager/project/helper_methods/title_error_dialog.dart';
 import '../../app_utils/app_routes.dart';
+import '../../app_utils/global_data.dart';
 import '../helper_widgets/get_image.dart';
 import '../helper_widgets/profile_text_field.dart';
 

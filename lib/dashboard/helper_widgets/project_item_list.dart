@@ -18,6 +18,8 @@ class ProjectItemList extends StatefulWidget {
 class _ProjectItemListState extends State<ProjectItemList> {
   @override
   Widget build(BuildContext context) => ListView.builder(
+    shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: projectItem.length,
       itemBuilder: (context, index) {
         DataModel dataModel = DataModel(projectItem[index]);
