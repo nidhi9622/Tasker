@@ -66,7 +66,7 @@ class _EditTaskBodyState extends State<EditTaskBody> {
                                     await widget.setTaskData;
                                   }
                                 },
-                                isLeading: true,
+                                isLeading: true, isAction: true,
                               ),
                               body: SingleChildScrollView(
                                 child: Form(

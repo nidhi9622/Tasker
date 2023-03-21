@@ -16,8 +16,7 @@ class ProjectDetail extends StatefulWidget {
 class _ProjectDetailState extends State<ProjectDetail> {
 
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
+  Widget build(BuildContext context) => WillPopScope(
       onWillPop: () async {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => const HomePage()));
@@ -49,5 +48,4 @@ class _ProjectDetailState extends State<ProjectDetail> {
           ),
           body: ProjectDetailBody(object: widget.object,)),
     );
-  }
 }

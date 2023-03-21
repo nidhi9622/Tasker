@@ -7,8 +7,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/dashboard/views/dashboard.dart';
 import 'package:task_manager/project/views/projects.dart';
-import 'package:task_manager/splashScreen.dart';
-import 'package:task_manager/user/views/userProfile.dart';
+import 'package:task_manager/splash_screen.dart';
+import 'package:task_manager/user/views/user_profile.dart';
 import 'project/views/add_project.dart';
 import 'app_utils/local_string.dart';
 import 'notepad/views/notepad.dart';
@@ -131,8 +131,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PersistentTabView(
+  Widget build(BuildContext context) => PersistentTabView(
       context,
       controller: _controller,
       screens: _buildScreens(),
@@ -160,5 +159,4 @@ class _MyAppState extends State<MyApp> {
       ),
       navBarStyle: NavBarStyle.style15,
     );
-  }
 }

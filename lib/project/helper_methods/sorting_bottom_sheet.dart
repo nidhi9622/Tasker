@@ -10,8 +10,7 @@ void sortingBottomSheet(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       context: context,
       backgroundColor: Colors.grey[350],
-      builder: (BuildContext context) {
-        return Padding(
+      builder: (BuildContext context) => Padding(
           padding: const EdgeInsets.all(18.0),
           child: SizedBox(
             height: deviceSize.height * 0.13,
@@ -54,6 +53,5 @@ void sortingBottomSheet(
               ],
             ),
           ),
-        );
-      });
+        ));
 }

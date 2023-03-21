@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/user/views/userProfile.dart';
+import 'package:task_manager/user/views/user_profile.dart';
 import '../../database/app_list.dart';
 
 class HomePage extends StatefulWidget {
@@ -94,8 +94,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: selectIndex,
             type: BottomNavigationBarType.fixed,
@@ -153,5 +152,4 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       children: screens,
     ),*/
         );
-  }
 }

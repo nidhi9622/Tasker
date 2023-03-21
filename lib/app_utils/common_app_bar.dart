@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isLeading;
+  final bool isAction;
   final String text;
   final VoidCallback onTap;
 
   CommonAppBar(
       {Key? key,
-      required this.text, required this.onTap, required this.isLeading})
+      required this.text, required this.onTap, required this.isLeading, required this.isAction})
       : super(key: key);
   final AppBar appBar = AppBar(
     title: const Text('Demo'),

@@ -227,8 +227,7 @@ class _AddProjectState extends State<AddProject> {
   int dropDown1 = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: CommonAppBar(
         text: 'newProject'.tr,
         onTap: () async {
@@ -242,7 +241,7 @@ class _AddProjectState extends State<AddProject> {
             }
           }
         },
-        isLeading: false,
+        isLeading: false, isAction: true,
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -260,5 +259,4 @@ class _AddProjectState extends State<AddProject> {
         ),
       ),
     );
-  }
 }

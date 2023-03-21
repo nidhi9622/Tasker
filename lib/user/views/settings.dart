@@ -1,50 +1,37 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:task_manager/app_utils/common_app_bar.dart';
+import 'package:task_manager/user/helper_widgets/custom_url_launcher.dart';
+import 'package:task_manager/user/helper_widgets/setting_list_tile.dart';
+import '../helper_widgets/box_dialog.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
+
   @override
   State<Settings> createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
-  static const platform = MethodChannel('message');
-  Future getMessage() async {
-    await platform.invokeMethod('getMessage');
-  }
-
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: Text(
-          'setting'.tr,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
+      appBar: CommonAppBar(
+        text: 'setting'.tr,
+        onTap: () {},
+        isLeading: true,
+        isAction: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(17),
         child: Column(
           children: [
             Container(
-              width: deviceSize.width,
+              width: double.infinity,
               height: deviceSize.height * 0.40,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
@@ -63,57 +50,67 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                   //SizedBox(height: deviceSize.height*0.01,),
-                  ListTile(
+                  SettingListTile(
+                    title: 'Appearance'.tr,
                     onTap: () async {
-                      await _showDialogThemeBox(context);
+                      await boxDialog(
+                        context: context,
+                        titleText: 'theme'.tr,
+                        tileTextFirst: 'Dark',
+                        tileTextSecond: 'Light',
+                        tileTapFirst: () async {
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
+                          preferences.setBool('theme', false);
+                          Get.changeThemeMode(ThemeMode.dark);
+                          Navigator.of(context).pop();
+                        },
+                        tileTapSecond: () async {
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
+                          preferences.setBool('theme', true);
+                          Get.changeThemeMode(ThemeMode.light);
+                          Navigator.of(context).pop();
+                        },
+                      );
                     },
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey[200],
-                      child: Icon(
-                        CupertinoIcons.paintbrush,
-                        color: Colors.red[200],
-                      ),
-                    ),
-                    title: Text('Appearance'.tr),
-                    subtitle: Text('changeTheme'.tr),
-                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                    leadingIcon: CupertinoIcons.paintbrush,
+                    subTitle: 'changeTheme'.tr,
                   ),
-                  //SizedBox(height: deviceSize.height*0.01,),
-                  ListTile(
-                    onTap: () async {
-                      await _showDialogLanguageBox(context);
-                    },
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey[200],
-                      child: Icon(
-                        Icons.abc,
-                        color: Colors.red[200],
-                      ),
-                    ),
-                    title: Text('Language'.tr),
-                    subtitle: Text('setLanguage'.tr),
-                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                  ),
-                  //SizedBox(height: deviceSize.height*0.01,),
-                  ListTile(
-                    onTap: () {
-                      AppSettings.openNotificationSettings();
-                    },
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey[200]!,
-                      child:
-                          Icon(CupertinoIcons.calendar, color: Colors.red[200]),
-                    ),
-                    title: Text('reminderHn'.tr),
-                    subtitle: Text('customizeReminder'.tr),
-                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                  ),
+                  SettingListTile(
+                      title: 'Language'.tr,
+                      onTap: () async {
+                        await boxDialog(
+                            context: context,
+                            titleText: 'appLanguage'.tr,
+                            tileTextFirst: 'English',
+                            tileTextSecond: 'हिन्दी',
+                            tileTapFirst: () async {
+                              var locale = const Locale('en');
+                              Get.updateLocale(locale);
+                              Navigator.of(context).pop();
+                            },
+                            tileTapSecond: () async {
+                              var locale = const Locale('hindi');
+                              Get.updateLocale(locale);
+                              Navigator.of(context).pop();
+                            });
+                      },
+                      leadingIcon: Icons.abc,
+                      subTitle: 'setLanguage'.tr),
+                  SettingListTile(
+                      title: 'reminderHn'.tr,
+                      onTap: () {
+                        AppSettings.openNotificationSettings();
+                      },
+                      leadingIcon: CupertinoIcons.calendar,
+                      subTitle: 'customizeReminder'.tr),
                 ],
               ),
             ),
             SizedBox(height: deviceSize.height * 0.04),
             Container(
-              width: deviceSize.width,
+              width: double.infinity,
               height: deviceSize.height * 0.25,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
@@ -129,52 +126,20 @@ class _SettingsState extends State<Settings> {
                         textAlign: TextAlign.start,
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  ListTile(
-                    onTap: () async {
-                      dynamic uri = Uri.parse(
-                          "https://www.wedigtech.com/terms-and-conditions");
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      } else {
-                        // print("can't launch");
-                      }
-                    },
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey[200],
-                      child: Icon(
-                        Icons.privacy_tip_outlined,
-                        color: Colors.red[200],
-                      ),
-                    ),
-                    title: Text('terms'.tr),
-                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                  SettingListTile(
+                    title: 'terms'.tr,
+                    onTap: customLaunchUrl,
+                    leadingIcon: Icons.privacy_tip_outlined,
+                    subTitle: '',
                   ),
                   SizedBox(
                     height: deviceSize.height * 0.01,
                   ),
-                  ListTile(
-                    onTap: () async {
-                      dynamic uri =
-                          Uri.parse("https://www.wedigtech.com/privacy-policy");
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(uri,
-                            mode: LaunchMode.externalApplication);
-                      } else {
-                        // print("can't launch");
-                      }
-                    },
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey[200],
-                      child: Icon(
-                        Icons.security,
-                        color: Colors.red[200],
-                      ),
-                    ),
-                    title: Text('policy'.tr),
-                    trailing: const Icon(Icons.arrow_forward_ios_outlined),
+                  SettingListTile(
+                    title: 'policy'.tr,
+                    onTap: customLaunchUrl,
+                    leadingIcon: Icons.security,
+                    subTitle: '',
                   ),
                 ],
               ),
@@ -184,80 +149,4 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
-}
-
-_showDialogLanguageBox(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-          title: Text('appLanguage'.tr),
-          content: SizedBox(
-            height: 130,
-            child: Column(
-              children: [
-                dialogTile(context, 'English', () async {
-                  var locale = const Locale('en');
-                  Get.updateLocale(locale);
-                  Navigator.of(context).pop();
-                }),
-                dialogTile(context, 'हिन्दी', () async {
-                  var locale = const Locale('hindi');
-                  Get.updateLocale(locale);
-                  Navigator.of(context).pop();
-                })
-              ],
-            ),
-          ));
-    },
-  );
-}
-
-_showDialogThemeBox(BuildContext context) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('theme'.tr),
-        content: SizedBox(
-          height: 130,
-          child: Column(
-            children: [
-              dialogTile(context, 'Dark', () async {
-                SharedPreferences preferences =
-                    await SharedPreferences.getInstance();
-                preferences.setBool('theme', false);
-                Get.changeThemeMode(ThemeMode.dark);
-                Navigator.of(context).pop();
-              }),
-              dialogTile(context, 'Light', () async {
-                SharedPreferences preferences =
-                    await SharedPreferences.getInstance();
-                preferences.setBool('theme', true);
-                Get.changeThemeMode(ThemeMode.light);
-                Navigator.of(context).pop();
-              })
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-dialogTile(BuildContext context, String text, dynamic onTap) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: TextButton(
-        onPressed: onTap,
-        child: Center(
-            child: Text(
-          text,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        )),
-      ),
-    ),
-  );
 }

@@ -257,8 +257,7 @@ class _EditTaskState extends State<EditTask> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return EditTaskBody(
+  Widget build(BuildContext context) => EditTaskBody(
       selectedTime: selectedTime,
       selectedDate: selectedDate,
       setTaskData: setTaskData(),
@@ -272,5 +271,4 @@ class _EditTaskState extends State<EditTask> {
       percentageController: percentageController,
       reminder: reminder ?? false,
     );
-  }
 }

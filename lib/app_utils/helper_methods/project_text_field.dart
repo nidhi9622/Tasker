@@ -23,8 +23,7 @@ class ProjectTextField extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
       child: TextFormField(
         controller: controller,
@@ -56,5 +55,4 @@ class ProjectTextField extends StatelessWidget {
         ),
       ),
     );
-  }
 }

@@ -11,7 +11,7 @@ import 'package:task_manager/project/views/edit_task.dart';
 import 'package:task_manager/project/views/process_detail.dart';
 import 'package:task_manager/project/views/project_detail.dart';
 import 'package:task_manager/dashboard/helper_methods/search.dart';
-import 'package:task_manager/user/views/updateUserProfile.dart';
+import 'package:task_manager/user/views/update_user_profile.dart';
 import '../../models/data_model.dart';
 import 'homePage.dart';
 
@@ -491,8 +491,7 @@ class _DashboardState extends State<Dashboard>
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         context: context,
         backgroundColor: Colors.grey[350],
-        builder: (BuildContext context) {
-          return Padding(
+        builder: (BuildContext context) => Padding(
             padding: const EdgeInsets.all(18.0),
             child: SizedBox(
               height: deviceSize.height * 0.13,
@@ -535,8 +534,7 @@ class _DashboardState extends State<Dashboard>
                 ],
               ),
             ),
-          );
-        });
+          ));
   }
 
   String greetingMessage() {

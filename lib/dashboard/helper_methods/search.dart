@@ -12,8 +12,7 @@ class Search extends SearchDelegate<String> {
   }
 
   @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
+  List<Widget>? buildActions(BuildContext context) => [
       if (query.isNotEmpty)
         IconButton(
             onPressed: () {
@@ -24,21 +23,16 @@ class Search extends SearchDelegate<String> {
               color: Theme.of(context).primaryColorDark,
             ))
     ];
-  }
 
   @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
+  Widget? buildLeading(BuildContext context) => IconButton(
         onPressed: () {
           close(context, query);
         },
         icon: const Icon(Icons.arrow_back_ios));
-  }
 
   @override
-  Widget buildResults(BuildContext context) {
-    return const Center();
-  }
+  Widget buildResults(BuildContext context) => const Center();
 
   @override
   Widget buildSuggestions(BuildContext context) {

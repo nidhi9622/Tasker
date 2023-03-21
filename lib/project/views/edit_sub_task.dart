@@ -145,17 +145,13 @@ class _EditSubTaskState extends State<EditSubTask> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
+  Widget build(BuildContext context) => ValueListenableBuilder(
         valueListenable: stringDate,
-        builder: (context, value, child) {
-          return ValueListenableBuilder(
+        builder: (context, value, child) => ValueListenableBuilder(
               valueListenable: selectedDate,
-              builder: (context, value, child) {
-                return ValueListenableBuilder(
+              builder: (context, value, child) => ValueListenableBuilder(
                     valueListenable: selectedTime,
-                    builder: (context, value, child) {
-                      return ValueListenableBuilder(
+                    builder: (context, value, child) => ValueListenableBuilder(
                           valueListenable: stringTime,
                           builder: (context, value, child) {
                             return Scaffold(
@@ -165,7 +161,7 @@ class _EditSubTaskState extends State<EditSubTask> {
                                   if (_formKey.currentState!.validate()) {
                                     await setTaskData();
                                   }
-                                }, isLeading: true,
+                                }, isLeading: true, isAction: true,
                               ),
                               body: SingleChildScrollView(
                                 child: Form(
@@ -183,9 +179,5 @@ class _EditSubTaskState extends State<EditSubTask> {
                                 ),
                               ),
                             );
-                          });
-                    });
-              });
-        });
-  }
+                          }))));
 }

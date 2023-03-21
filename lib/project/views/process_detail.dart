@@ -16,8 +16,7 @@ class ProcessDetail extends StatefulWidget {
 
 class _ProcessDetailState extends State<ProcessDetail> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: Text(
           widget.title,
@@ -53,5 +52,4 @@ class _ProcessDetailState extends State<ProcessDetail> {
         tabList: widget.object,
       ),
     );
-  }
 }
