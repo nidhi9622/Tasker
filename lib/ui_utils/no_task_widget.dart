@@ -6,7 +6,6 @@ class NoTaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -17,7 +16,7 @@ class NoTaskWidget extends StatelessWidget {
               fontSize: 22,
               color: Color(0xfffc7474)),
         ),
-        SizedBox(height: deviceSize.height * 0.01),
+        const SizedBox(height: 4),
         Text(
           'noTaskText'.tr,
           style: TextStyle(color: Colors.red[200], fontSize: 17),

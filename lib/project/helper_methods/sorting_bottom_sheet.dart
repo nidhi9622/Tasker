@@ -1,57 +1,54 @@
 import 'package:flutter/material.dart';
 
+import '../../app_utils/app_routes.dart';
+
 void sortingBottomSheet(
     {required BuildContext context,
-    required Size deviceSize,
     required VoidCallback ascendingSort,
     required VoidCallback descendingSort}) {
   showModalBottomSheet(
       elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))),
       context: context,
       backgroundColor: Colors.grey[350],
-      builder: (BuildContext context) => Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: SizedBox(
-            height: deviceSize.height * 0.13,
-            width: 50,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    ascendingSort();
-                  },
-                  child: SizedBox(
-                    width: deviceSize.width,
-                    height: deviceSize.height * 0.05,
-                    child: const Center(
-                      child: Text(
-                        "Sort : A-Z",
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                      ),
-                    ),
+      builder: (BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: () {
+              AppRoutes.pop();
+              ascendingSort();
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(top: 14,bottom: 10),
+              child: SizedBox(width: double.infinity,
+                child: Center(
+                  child: Text(
+                    "Sort : A-Z",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                 ),
-                const Divider(thickness: 1),
-                InkWell(
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                      descendingSort();
-                    },
-                    child: SizedBox(
-                      width: deviceSize.width,
-                      height: deviceSize.height * 0.05,
-                      child: const Center(
-                        child: Text('Sort : Z-A',
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 16)),
-                      ),
-                    ))
-              ],
+              ),
             ),
           ),
-        ));
+          const Divider(thickness: 1),
+          InkWell(
+              onTap: () async {
+                AppRoutes.pop();
+                descendingSort();
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(top: 10,bottom: 14),
+                child: SizedBox(width: double.infinity,
+                  child: Center(
+                    child: Text('Sort : Z-A',
+                        style:
+                            TextStyle(color: Colors.black, fontSize: 16)),
+                  ),
+                ),
+              ))
+        ],
+      ));
 }

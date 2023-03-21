@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/dashboard/views/homePage.dart';
+import '../../app_utils/app_routes.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
 import '../helper_methods/title_error_dialog.dart';
@@ -224,8 +224,7 @@ class _EditTaskState extends State<EditTask> {
     }
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const HomePage()));
+    AppRoutes.go(AppRouteName.homePage);
   }
 
   setData() {

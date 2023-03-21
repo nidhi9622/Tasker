@@ -8,22 +8,22 @@ class NotePad extends StatefulWidget {
   State<NotePad> createState() => _NotePadState();
 }
 
-String notes = '';
-
 class _NotePadState extends State<NotePad> {
   late TextEditingController notesController;
+  String notes = '';
 
   @override
   void initState() {
     notesController = TextEditingController(text: notes);
     super.initState();
   }
-
   @override
-  Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      //bottomNavigationBar: bottomNavigation(context, (int i){setState((){bottomIndex = i;});}, 3),
+  void dispose() {
+    notesController.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: Text(
@@ -31,13 +31,10 @@ class _NotePadState extends State<NotePad> {
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         automaticallyImplyLeading: false,
-        /* actions:[ IconButton(onPressed: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Projects()));
-      },icon:const Icon(Icons.arrow_forward_ios_outlined,color: Colors.black,),),],*/
       ),
       body: Container(
-        width: deviceSize.width,
-        height: deviceSize.height,
+        width: double.infinity,
+        height: double.infinity,
         padding: const EdgeInsets.all(12),
         child: TextField(
           controller: notesController,
@@ -57,5 +54,4 @@ class _NotePadState extends State<NotePad> {
         ),
       ),
     );
-  }
 }

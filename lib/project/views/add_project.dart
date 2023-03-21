@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
-import 'package:task_manager/dashboard/views/homePage.dart';
+import 'package:task_manager/dashboard/views/home_page.dart';
+import '../../app_utils/app_routes.dart';
 import '../../dashboard/views/dashboard.dart';
 import '../../app_utils/local_notification_service.dart';
 import '../../database/app_list.dart';
@@ -210,8 +211,7 @@ class _AddProjectState extends State<AddProject> {
       setState(() {
         selectIndex = 0;
       });
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HomePage()));
+      AppRoutes.go(AppRouteName.homePage);
     }
   }
 

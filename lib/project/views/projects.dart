@@ -54,9 +54,7 @@ class _ProjectsState extends State<Projects>{
   }
 
   @override
-  Widget build(BuildContext context) {
-   Size deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar:DefaultAppBar(isLeading: false, actions: [
         IconButton(
             onPressed: () {
@@ -66,7 +64,7 @@ class _ProjectsState extends State<Projects>{
                 color: Theme.of(context).primaryColorDark)),
         IconButton(
             onPressed: () {
-              sortingBottomSheet(context: context, deviceSize: deviceSize, ascendingSort: ascendingSort, descendingSort: descendingSort);
+              sortingBottomSheet(context: context, ascendingSort: ascendingSort, descendingSort: descendingSort);
             },
             icon: Icon(
               CupertinoIcons.sort_down,
@@ -88,7 +86,6 @@ class _ProjectsState extends State<Projects>{
         ),
       ),
     );
-  }
 
   void ascendingSort() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

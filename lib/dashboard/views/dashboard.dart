@@ -7,13 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
-import 'package:task_manager/project/views/edit_task.dart';
-import 'package:task_manager/project/views/process_detail.dart';
-import 'package:task_manager/project/views/project_detail.dart';
 import 'package:task_manager/dashboard/helper_methods/search.dart';
-import 'package:task_manager/user/views/update_user_profile.dart';
+import '../../app_utils/app_routes.dart';
 import '../../models/data_model.dart';
-import 'homePage.dart';
+import 'home_page.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -150,8 +147,7 @@ class _DashboardState extends State<Dashboard>
                             padding: const EdgeInsets.all(15),
                             child: InkWell(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const UserProfile()));
+                                AppRoutes.go(AppRouteName.userProfile);
                               },
                               child: Row(
                                 children: [
@@ -233,8 +229,7 @@ class _DashboardState extends State<Dashboard>
                               setState(() {
                                 selectIndex = 2;
                               });
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const HomePage()));
+                              AppRoutes.go(AppRouteName.homePage);
                             },
                             child: SizedBox(
                               width: deviceSize.width * 0.44,
@@ -293,13 +288,9 @@ class _DashboardState extends State<Dashboard>
                                                 BorderRadius.circular(12)),
                                         child: ListTile(
                                             onTap: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProjectDetail(
-                                                              object:
-                                                                  projectItem[
-                                                                      index])));
+                                              AppRoutes.go(AppRouteName.projectDetail,
+                                                  arguments: {'object': projectItem[
+                                                  index]});
                                             },
                                             leading: Container(
                                               decoration: BoxDecoration(
@@ -370,11 +361,10 @@ class _DashboardState extends State<Dashboard>
       Color bubbleColor, IconData icon, List object) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProcessDetail(
-                  title: text,
-                  object: object,
-                )));
+        AppRoutes.go(AppRouteName.processDetail,arguments: {
+          'object': object,
+          "title": text,
+        });
       },
       child: Padding(
         padding: const EdgeInsets.all(6),
@@ -426,9 +416,10 @@ class _DashboardState extends State<Dashboard>
           value: 1,
           child: InkWell(
             onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => EditTask(object: projectItem[index])));
+              AppRoutes.pop();
+              AppRoutes.go(AppRouteName.editTask,arguments: {
+                'object': projectItem[index]
+              });
             },
             child: Row(
               children: const [
@@ -466,7 +457,6 @@ class _DashboardState extends State<Dashboard>
               preferences.setString(
                   'ongoingProjects', jsonEncode(ongoingProjects));
             });
-            // Navigator.of(context).pop();
           },
           child: Row(
             children: const [
@@ -502,7 +492,7 @@ class _DashboardState extends State<Dashboard>
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pop();
+                      AppRoutes.pop();
                       ascendingSort();
                     },
                     child: SizedBox(
@@ -519,7 +509,7 @@ class _DashboardState extends State<Dashboard>
                   const Divider(thickness: 1),
                   InkWell(
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        AppRoutes.pop();
                         descendingSort();
                       },
                       child: SizedBox(

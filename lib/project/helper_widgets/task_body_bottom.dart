@@ -29,7 +29,7 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
         SizedBox(height: deviceSize.height * 0.02),
         Container(
             color: Theme.of(context).primaryColor,
-            width: deviceSize.width,
+            width: double.infinity,
             height: deviceSize.height * 0.07,
             padding: const EdgeInsets.only(
               left: 14,
@@ -70,7 +70,7 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
         SizedBox(height: deviceSize.height * 0.03),
         Container(
           color: Theme.of(context).primaryColor,
-          width: deviceSize.width,
+          width: double.infinity,
           height: 50,
           padding: const EdgeInsets.only(
             left: 14,

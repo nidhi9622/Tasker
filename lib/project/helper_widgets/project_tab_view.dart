@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/project/helper_widgets/indicator_widget.dart';
 import 'package:task_manager/ui_utils/no_task_widget.dart';
+import '../../app_utils/app_routes.dart';
 import '../../dashboard/views/dashboard.dart';
 import '../../models/data_model.dart';
 import '../helper_methods/delete_bottom_sheet.dart';
-import '../views/edit_task.dart';
-import '../views/project_detail.dart';
 
 class ProjectTabView extends StatefulWidget {
   final List tabList;
@@ -35,47 +34,49 @@ class _ProjectTabViewState extends State<ProjectTabView> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ProjectDetail(object: widget.tabList[index])));
+                        AppRoutes.go(AppRouteName.projectDetail,
+                            arguments: {'object': widget.tabList[index]});
                       },
                       onLongPress: () {
                         deleteBottomSheet(
-                            context: context,
-                            deviceSize: deviceSize,
-                            title: dataModel.title ?? "",
-                            index: index, onTapEdit: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  EditTask(object: projectItem[index])));
-                        }, onTapDelete:() async {
-                          SharedPreferences preferences =
-                          await SharedPreferences.getInstance();
-                          preferences.remove('${dataModel.title}');
-                          projectItem.removeWhere(
-                                  (element) => element['title'] == dataModel.title);
-                          upcomingProjects.removeWhere(
-                                  (element) => element['title'] == dataModel.title);
-                          canceledProjects.removeWhere(
-                                  (element) => element['title'] == dataModel.title);
-                          ongoingProjects.removeWhere(
-                                  (element) => element['title'] == dataModel.title);
-                          completedProjects.removeWhere(
-                                  (element) => element['title'] == dataModel.title);
-                          setState(() {
-                          preferences.setString(
-                              'projects', jsonEncode(projectItem));
-                          preferences.setString('canceledProjects',
-                              jsonEncode(canceledProjects));
-                          preferences.setString('upcomingProjects',
-                              jsonEncode(upcomingProjects));
-                          preferences.setString('completedProjects',
-                              jsonEncode(completedProjects));
-                          preferences.setString('ongoingProjects',
-                              jsonEncode(ongoingProjects));
-                          });
-                          Navigator.of(context).pop();
-                        },);
+                          context: context,
+                          deviceSize: deviceSize,
+                          title: dataModel.title ?? "",
+                          index: index,
+                          onTapEdit: () {
+                            AppRoutes.go(AppRouteName.editTask,arguments: {
+                              'object': projectItem[index]
+                            });
+                          },
+                          onTapDelete: () async {
+                            SharedPreferences preferences =
+                                await SharedPreferences.getInstance();
+                            preferences.remove('${dataModel.title}');
+                            projectItem.removeWhere((element) =>
+                                element['title'] == dataModel.title);
+                            upcomingProjects.removeWhere((element) =>
+                                element['title'] == dataModel.title);
+                            canceledProjects.removeWhere((element) =>
+                                element['title'] == dataModel.title);
+                            ongoingProjects.removeWhere((element) =>
+                                element['title'] == dataModel.title);
+                            completedProjects.removeWhere((element) =>
+                                element['title'] == dataModel.title);
+                            setState(() {
+                              preferences.setString(
+                                  'projects', jsonEncode(projectItem));
+                              preferences.setString('canceledProjects',
+                                  jsonEncode(canceledProjects));
+                              preferences.setString('upcomingProjects',
+                                  jsonEncode(upcomingProjects));
+                              preferences.setString('completedProjects',
+                                  jsonEncode(completedProjects));
+                              preferences.setString('ongoingProjects',
+                                  jsonEncode(ongoingProjects));
+                            });
+                            AppRoutes.pop();
+                          },
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.only(

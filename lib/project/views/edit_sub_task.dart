@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import 'package:task_manager/project/helper_widgets/edit_task_widget.dart';
-import 'package:task_manager/project/views/project_detail.dart';
+import '../../app_utils/app_routes.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
 import '../helper_methods/title_error_dialog.dart';
@@ -121,8 +121,8 @@ class _EditSubTaskState extends State<EditSubTask> {
         context: context, object: widget.homeObject);
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ProjectDetail(object: widget.homeObject)));
+    AppRoutes.go(AppRouteName.projectDetail,
+        arguments: {'object': widget.homeObject});
   }
 
   setData() {

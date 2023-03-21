@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../app_utils/app_routes.dart';
 
 Future titleErrorDialog(
     {required BuildContext context,
@@ -14,7 +15,7 @@ Future titleErrorDialog(
           TextButton(
             child: Center(child: Text('ok'.tr)),
             onPressed: () {
-              Navigator.of(context).pop();
+              AppRoutes.pop();
             },
           ),
         ],

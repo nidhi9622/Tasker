@@ -19,7 +19,7 @@ class _ProjectDetailRightState extends State<ProjectDetailRight> {
   Widget build(BuildContext context) {
     final Size deviceSize = MediaQuery.of(context).size;
     return Container(
-      width: deviceSize.width,
+      width: double.infinity,
       color: Theme.of(context).primaryColor,
       padding: const EdgeInsets.all(12),
       constraints: BoxConstraints(maxHeight: deviceSize.height * 0.378),

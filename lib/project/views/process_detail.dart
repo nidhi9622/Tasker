@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/dashboard/helper_methods/search.dart';
+import '../../app_utils/app_routes.dart';
 import '../helper_widgets/process_detail_view.dart';
 
 class ProcessDetail extends StatefulWidget {
@@ -25,7 +26,7 @@ class _ProcessDetailState extends State<ProcessDetail> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            AppRoutes.pop();
           },
           icon: Icon(
             Icons.arrow_back_ios,

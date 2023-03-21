@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/project/views/project_detail.dart';
+import 'package:task_manager/app_utils/app_routes.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationService {
@@ -29,8 +29,8 @@ class LocalNotificationService {
     notificationsPlugin.initialize(
       initializationSettings,
       onSelectNotification: (String? id) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ProjectDetail(object: jsonDecode(id!))));
+        AppRoutes.go(AppRouteName.projectDetail,
+            arguments: {'object': jsonDecode(id!)});
       },
     );
   }

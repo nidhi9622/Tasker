@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../app_utils/app_routes.dart';
 import '../../dashboard/views/dashboard.dart';
-import '../views/edit_task.dart';
 
 void deleteBottomSheet(
     {required BuildContext context, required Size deviceSize, required String title, required int index,required VoidCallback onTapEdit,required VoidCallback onTapDelete,}) =>
@@ -19,9 +19,9 @@ void deleteBottomSheet(
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  EditTask(object: projectItem[index])));
+                          AppRoutes.go(AppRouteName.editTask,arguments: {
+                            'object': projectItem[index]
+                          });
                         },
                         child: ListTile(
                           title: const Text('Edit'),
@@ -29,14 +29,14 @@ void deleteBottomSheet(
                           tileColor: Colors.grey[350],
                         ),
                       ),
-                      SizedBox(
-                        height: deviceSize.height * 0.01,
+                      const SizedBox(
+                        height: 6,
                       ),
                       InkWell(
                           onTap: () async {
                             SharedPreferences preferences =
                                 await SharedPreferences.getInstance();
-                            preferences.remove('$title');
+                            preferences.remove(title);
                             projectItem.removeWhere(
                                 (element) => element['title'] == title);
                             upcomingProjects.removeWhere(
@@ -59,7 +59,7 @@ void deleteBottomSheet(
                               preferences.setString('ongoingProjects',
                                   jsonEncode(ongoingProjects));
                            // });
-                            Navigator.of(context).pop();
+                            AppRoutes.pop();
                           },
                           child: ListTile(
                             title: const Text('Delete'),

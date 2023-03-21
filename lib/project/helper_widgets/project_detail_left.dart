@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_manager/app_utils/app_routes.dart';
 import 'package:task_manager/project/helper_widgets/project_detail_tile.dart';
 import '../../models/data_model.dart';
 import '../../ui_utils/no_task_widget.dart';
-import '../views/add_sub_task.dart';
 
 class ProjectDetailLeft extends StatefulWidget {
   final Map object;
@@ -31,8 +31,8 @@ class _ProjectDetailLeftState extends State<ProjectDetailLeft> {
         child: Column(
           children: [
             InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AddSubTask(object: widget.object))),
+              onTap: () => AppRoutes.go(AppRouteName.addSubTask,
+                  arguments: {"object": widget.object}),
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, top: 4, right: 15),
                 child: Row(

@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/project/helper_widgets/indicator_widget.dart';
 import 'package:task_manager/ui_utils/no_task_widget.dart';
+import '../../app_utils/app_routes.dart';
 import '../../models/data_model.dart';
-import '../views/project_detail.dart';
 
 class ProcessDetailView extends StatelessWidget {
   final List tabList;
@@ -28,9 +28,8 @@ class ProcessDetailView extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: InkWell(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ProjectDetail(object: tabList[index])));
+                        AppRoutes.go(AppRouteName.projectDetail,
+                            arguments: {'object': tabList[index]});
                       },
                       child: Container(
                         padding: const EdgeInsets.only(

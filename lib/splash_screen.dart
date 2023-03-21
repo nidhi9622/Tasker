@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:task_manager/dashboard/views/homePage.dart';
+import 'package:task_manager/app_utils/app_routes.dart';
+import 'package:task_manager/dashboard/views/home_page.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -13,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     setIndex();
     Timer(const Duration(seconds: 4), (){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));}
+      AppRoutes.pushAndRemoveUntil(AppRouteName.homePage);}
     );
     super.initState();
   }

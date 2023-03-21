@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:task_manager/project/views/project_detail.dart';
+import '../../app_utils/app_routes.dart';
 import '../views/dashboard.dart';
 
 class Search extends SearchDelegate<String> {
@@ -13,23 +13,23 @@ class Search extends SearchDelegate<String> {
 
   @override
   List<Widget>? buildActions(BuildContext context) => [
-      if (query.isNotEmpty)
-        IconButton(
-            onPressed: () {
-              query = '';
-            },
-            icon: Icon(
-              CupertinoIcons.clear,
-              color: Theme.of(context).primaryColorDark,
-            ))
-    ];
+        if (query.isNotEmpty)
+          IconButton(
+              onPressed: () {
+                query = '';
+              },
+              icon: Icon(
+                CupertinoIcons.clear,
+                color: Theme.of(context).primaryColorDark,
+              ))
+      ];
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-        onPressed: () {
-          close(context, query);
-        },
-        icon: const Icon(Icons.arrow_back_ios));
+      onPressed: () {
+        close(context, query);
+      },
+      icon: const Icon(Icons.arrow_back_ios));
 
   @override
   Widget buildResults(BuildContext context) => const Center();
@@ -60,9 +60,8 @@ class Search extends SearchDelegate<String> {
                       return ListTile(
                         title: Text(object['title']),
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  ProjectDetail(object: object)));
+                          AppRoutes.go(AppRouteName.projectDetail,
+                              arguments: {'object': object});
                         },
                       );
                     })

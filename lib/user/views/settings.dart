@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import 'package:task_manager/user/helper_widgets/custom_url_launcher.dart';
 import 'package:task_manager/user/helper_widgets/setting_list_tile.dart';
+import '../../app_utils/app_routes.dart';
 import '../helper_widgets/box_dialog.dart';
 
 class Settings extends StatefulWidget {
@@ -59,14 +60,14 @@ class _SettingsState extends State<Settings> {
                               await SharedPreferences.getInstance();
                           preferences.setBool('theme', false);
                           Get.changeThemeMode(ThemeMode.dark);
-                          Navigator.of(context).pop();
+                          AppRoutes.pop();
                         },
                         tileTapSecond: () async {
                           SharedPreferences preferences =
                               await SharedPreferences.getInstance();
                           preferences.setBool('theme', true);
                           Get.changeThemeMode(ThemeMode.light);
-                          Navigator.of(context).pop();
+                          AppRoutes.pop();
                         },
                       );
                     },
@@ -84,12 +85,12 @@ class _SettingsState extends State<Settings> {
                             tileTapFirst: () async {
                               var locale = const Locale('en');
                               Get.updateLocale(locale);
-                              Navigator.of(context).pop();
+                              AppRoutes.pop();
                             },
                             tileTapSecond: () async {
                               var locale = const Locale('hindi');
                               Get.updateLocale(locale);
-                              Navigator.of(context).pop();
+                              AppRoutes.pop();
                             });
                       },
                       leadingIcon: Icons.abc,

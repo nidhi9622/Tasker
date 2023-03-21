@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
-import 'package:task_manager/dashboard/views/homePage.dart';
+import 'package:task_manager/dashboard/views/home_page.dart';
 import 'package:task_manager/project/helper_methods/title_error_dialog.dart';
+import '../../app_utils/app_routes.dart';
 import '../helper_widgets/get_image.dart';
 import '../helper_widgets/profile_text_field.dart';
 
@@ -81,8 +82,7 @@ class _UserProfileState extends State<UserProfile> {
               setState(() {
                 selectIndex = 4;
               });
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const HomePage()));
+              AppRoutes.go(AppRouteName.homePage);
             }
           },
           isLeading: true, isAction: true,
@@ -103,7 +103,7 @@ class _UserProfileState extends State<UserProfile> {
                       Container(
                           height: 150,
                           width: 150,
-                          decoration: profileImage == null ||profileImage==""
+                          decoration: profileImage==""
                               ? BoxDecoration(
                                   border: Border.all(
                                       width: 2, color: Colors.black),
@@ -235,7 +235,7 @@ class _UserProfileState extends State<UserProfile> {
                 children: [
                   InkWell(
                     onTap: () async {
-                      Navigator.of(context).pop();
+                      AppRoutes.pop();
                       var image = getImage(source: ImageSource.camera);
                       profileImage = await image;
                       setState(() {});
@@ -250,7 +250,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   InkWell(
                       onTap: () async {
-                        Navigator.of(context).pop();
+                        AppRoutes.pop();
                         var image = getImage(source: ImageSource.gallery);
                         profileImage = await image;
                         setState(() {});

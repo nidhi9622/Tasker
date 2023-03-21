@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'app_routes.dart';
+
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isLeading;
   final bool isAction;
@@ -31,7 +33,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: Theme.of(context).primaryColorDark,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  AppRoutes.pop();
                 },
               ):null,
         automaticallyImplyLeading: false,

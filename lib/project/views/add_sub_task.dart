@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/app_utils/common_app_bar.dart';
 import 'package:task_manager/project/helper_widgets/heading_text.dart';
 import 'package:task_manager/project/helper_widgets/hide_container.dart';
 import 'package:task_manager/project/helper_widgets/date_time_widget.dart';
-import 'package:task_manager/project/views/project_detail.dart';
+import '../../app_utils/app_routes.dart';
 import '../../app_utils/helper_methods/project_text_field.dart';
 import '../../database/app_list.dart';
 import '../helper_methods/select_date_time.dart';
@@ -114,45 +115,65 @@ class _AddSubTaskState extends State<AddSubTask> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          'addTask'.tr,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        actions: [
-          TextButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  if (titleController.text.isEmpty ||
-                      subTitleController.text.isEmpty) {
-                    await titleErrorDialog(context: context, content: 'error'.tr, isTitle: true);
-                  } else {
-                    await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
-                    await setData();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            ProjectDetail(object: widget.object)));
-                  }
-                }
-              },
-              child: Text(
-                'done'.tr,
-                style: TextStyle(color: Theme.of(context).primaryColorDark),
-              )),
-        ],
+      appBar: CommonAppBar(
+        text: 'addTask'.tr,
+        onTap: () async {
+          if (_formKey.currentState!.validate()) {
+            if (titleController.text.isEmpty ||
+                subTitleController.text.isEmpty) {
+              await titleErrorDialog(
+                  context: context, content: 'error'.tr, isTitle: true);
+            } else {
+              await titleErrorDialog(
+                  context: context, content: 'success'.tr, isTitle: true);
+              await setData();
+              AppRoutes.go(AppRouteName.projectDetail,
+                  arguments: {'object': widget.object});
+            }
+          }
+        },
+        isLeading: true,
+        isAction: true,
       ),
+
+      // AppBar(
+      //   elevation: 0,
+      //   title: Text(
+      //     'addTask'.tr,
+      //     style: TextStyle(color: Theme.of(context).primaryColorDark),
+      //   ),
+      //   leading: IconButton(
+      //     icon: Icon(
+      //       Icons.arrow_back_ios,
+      //       color: Theme.of(context).primaryColorDark,
+      //     ),
+      //     onPressed: () {
+      //       Navigator.of(context).pop();
+      //     },
+      //   ),
+      //   actions: [
+      //     TextButton(
+      //         onPressed: () async {
+      //           if (_formKey.currentState!.validate()) {
+      //             if (titleController.text.isEmpty ||
+      //                 subTitleController.text.isEmpty) {
+      //               await titleErrorDialog(context: context, content: 'error'.tr, isTitle: true);
+      //             } else {
+      //               await titleErrorDialog(context: context, content: 'success'.tr, isTitle: true);
+      //               await setData();
+      //               Navigator.of(context).push(MaterialPageRoute(
+      //                   builder: (context) =>
+      //                       ProjectDetail(object: widget.object)));
+      //             }
+      //           }
+      //         },
+      //         child: Text(
+      //           'done'.tr,
+      //           style: TextStyle(color: Theme.of(context).primaryColorDark),
+      //         )),
+      //   ],
+      // ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -161,13 +182,14 @@ class _AddSubTaskState extends State<AddSubTask> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // SizedBox(height: deviceSize.height*0.02),
                 HeadingText(text: 'taskDetail'.tr),
-                HideContainer(onTap: () {
-                  setState(() {
-                    titleHeight = 60;
-                  });
-                }, text: 'title'.tr),
+                HideContainer(
+                    onTap: () {
+                      setState(() {
+                        titleHeight = 60;
+                      });
+                    },
+                    text: 'title'.tr),
                 if (titleHeight > 0)
                   SizedBox(
                       height: titleHeight,
@@ -184,11 +206,13 @@ class _AddSubTaskState extends State<AddSubTask> {
                             return null;
                           },
                           maxLines: 1)),
-                HideContainer(onTap: () {
-                  setState(() {
-                    subTitleHeight = 60;
-                  });
-                }, text: 'subTitle'.tr),
+                HideContainer(
+                    onTap: () {
+                      setState(() {
+                        subTitleHeight = 60;
+                      });
+                    },
+                    text: 'subTitle'.tr),
                 if (subTitleHeight > 0)
                   SizedBox(
                     height: subTitleHeight,
@@ -206,35 +230,45 @@ class _AddSubTaskState extends State<AddSubTask> {
                         },
                         maxLines: 1),
                   ),
-                SizedBox(height: deviceSize.height * 0.02),
+                const SizedBox(height: 8),
                 HeadingText(text: 'startDate'.tr),
-                DateTimeWidget(onTap:  () async {
-                  final picked=await selectDate(context);
-                  if (picked != null && picked != selectedDate) {
-                    setState(() {
-                      selectedDate = picked;
-                    });
-                  }
-                }, text: DateFormat("MMM dd, yyyy").format(selectedDate), isDate: true,),
-                SizedBox(height: deviceSize.height * 0.02),
+                DateTimeWidget(
+                  onTap: () async {
+                    final picked = await selectDate(context);
+                    if (picked != null && picked != selectedDate) {
+                      setState(() {
+                        selectedDate = picked;
+                      });
+                    }
+                  },
+                  text: DateFormat("MMM dd, yyyy").format(selectedDate),
+                  isDate: true,
+                ),
+                const SizedBox(height: 8),
                 HeadingText(text: 'startTime'.tr),
-                DateTimeWidget(onTap:  () async {
-                  final picked=await selectTime(context);
-                  if (picked != null && picked != selectedTime) {
-                    setState(() {
-                      selectedTime = picked;
-                    });
-                  }
-                }, text: '${selectedTime.format(context)}', isDate: false,),
-                SizedBox(
-                  height: deviceSize.height * 0.01,
+                DateTimeWidget(
+                  onTap: () async {
+                    final picked = await selectTime(context);
+                    if (picked != null && picked != selectedTime) {
+                      setState(() {
+                        selectedTime = picked;
+                      });
+                    }
+                  },
+                  text: '${selectedTime.format(context)}',
+                  isDate: false,
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 HeadingText(text: 'additional'.tr),
-                HideContainer(onTap: () {
-                  setState(() {
-                    descriptionHeight = 120;
-                  });
-                }, text: 'description'.tr),
+                HideContainer(
+                    onTap: () {
+                      setState(() {
+                        descriptionHeight = 120;
+                      });
+                    },
+                    text: 'description'.tr),
                 if (descriptionHeight > 0)
                   ProjectTextField(
                       controller: descriptionController,
@@ -244,9 +278,14 @@ class _AddSubTaskState extends State<AddSubTask> {
                       maxLength: 100,
                       validator: (String? value) => null,
                       maxLines: 5),
-
-
-                ProjectTextField(controller: descriptionController, labelText: 'description'.tr, inputType: TextInputType.name, inputAction: TextInputAction.next, maxLength: 100, validator: (String? value) => null, maxLines:5),
+                ProjectTextField(
+                    controller: descriptionController,
+                    labelText: 'description'.tr,
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                    maxLength: 100,
+                    validator: (String? value) => null,
+                    maxLines: 5),
               ],
             ),
           ),

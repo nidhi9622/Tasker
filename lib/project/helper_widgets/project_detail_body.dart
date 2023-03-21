@@ -7,12 +7,11 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/project/helper_widgets/project_detail_left.dart';
 import 'package:task_manager/project/helper_widgets/project_detail_right.dart';
+import '../../app_utils/app_routes.dart';
 import '../../dashboard/helper_methods/search.dart';
 import '../../dashboard/views/dashboard.dart';
 import '../../database/app_list.dart';
 import '../../models/data_model.dart';
-import '../views/edit_task.dart';
-import '../views/project_detail.dart';
 import 'custom_tab_bar.dart';
 
 class ProjectDetailBody extends StatefulWidget {
@@ -218,11 +217,9 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
                                   ),
                                   IconButton(
                                       onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (context) => EditTask(
-                                                      object: widget.object,
-                                                    )));
+                                        AppRoutes.go(AppRouteName.editTask,arguments: {
+                                          'object': widget.object,
+                                        });
                                       },
                                       icon: const Icon(CupertinoIcons.pen))
                                 ],
@@ -391,11 +388,8 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
                                             '${widget.object['title']} searchShortcut',
                                             jsonEncode(searchShortcut));
                                       }
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ProjectDetail(
-                                                      object: widget.object)));
+                                      AppRoutes.go(AppRouteName.projectDetail,
+                                          arguments: {'object': widget.object});
                                     },
                                     child: Container(
                                       constraints:

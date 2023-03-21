@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/models/data_model.dart';
+import '../../app_utils/app_routes.dart';
 import '../helper_methods/delete_bottom_sheet.dart';
-import '../views/edit_sub_task.dart';
-import '../views/project_detail.dart';
 
 class ProjectDetailTile extends StatefulWidget {
   final DataModel dataModel;
@@ -32,12 +31,11 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
     final Size deviceSize = MediaQuery.of(context).size;
     return ListTile(
       onTap: () async {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => EditSubTask(
-                  object: widget.subTaskProjects[widget.index],
-                  title: widget.object['title'],
-                  homeObject: widget.object,
-                )));
+        AppRoutes.go(AppRouteName.editSubTask,arguments: {
+          'object': widget.subTaskProjects[widget.index],
+          "title": widget.object['title'],
+          "homeObject": widget.object,
+        });
       },
       trailing: IconButton(
         icon: const Icon(CupertinoIcons.ellipsis_vertical),
@@ -48,13 +46,12 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
             title: widget.dataModel.title ?? "",
             index: widget.index,
             onTapEdit: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => EditSubTask(
-                        object: widget.subTaskProjects[widget.index],
-                        title: widget.object['title'],
-                        homeObject: widget.object,
-                      )));
+              AppRoutes.pop();
+              AppRoutes.go(AppRouteName.editSubTask,arguments: {
+                'object': widget.subTaskProjects[widget.index],
+                "title": widget.object['title'],
+                "homeObject": widget.object,
+              });
             },
             onTapDelete: () async {
               SharedPreferences preferences =
@@ -65,9 +62,9 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
                 preferences.setString('${widget.object['title']}',
                     jsonEncode(widget.subTaskProjects));
               });
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProjectDetail(object: widget.object)));
+              AppRoutes.pop();
+              AppRoutes.go(AppRouteName.projectDetail,
+                  arguments: {'object': widget.object});
             },
           );
         },
