@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_manager/project/views/add_project.dart';
-import 'package:task_manager/project/views/projects.dart';
-import 'package:task_manager/user/views/user_profile.dart';
-import 'dashboard/views/dashboard.dart';
 import 'database/nav_bar_items.dart';
-import 'notepad/views/notepad.dart';
+import 'modules/dashboard/views/dashboard.dart';
+import 'modules/notepad/views/notepad.dart';
+import 'modules/project/views/add_project.dart';
+import 'modules/project/views/projects.dart';
+import 'modules/user/views/user_profile.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

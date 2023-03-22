@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../dashboard/views/dashboard.dart';
-import '../notepad/views/notepad.dart';
-import '../project/views/add_project.dart';
-import '../project/views/projects.dart';
+import '../modules/dashboard/views/dashboard.dart';
+import '../modules/notepad/views/notepad.dart';
+import '../modules/project/views/add_project.dart';
+import '../modules/project/views/projects.dart';
 
 List<Tab> tabs = [
   Tab(text: 'all'.tr),
