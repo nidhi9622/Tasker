@@ -62,9 +62,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
             await titleErrorDialog(
                 context: context, content: "profileUpdated".tr, isTitle: true);
             await setData();
-            setState(() {
-              selectIndex = 4;
-            });
+              selectIndex.value = 4;
             AppRoutes.go(AppRouteName.homePage);
           }
         },

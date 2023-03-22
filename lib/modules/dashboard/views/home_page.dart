@@ -1,23 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../database/app_list.dart';
 import '../../user/views/user_profile.dart';
+import '../controller/dashboard_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  PageController pageController = PageController();
-  int oldIndex = 0;
+  DashboardController dashboardController = Get.put(DashboardController());
+  late AnimationController controller;
+  late Animation<double> animation;
 
   @override
   void dispose() {
-    pageController.dispose();
     controller.dispose();
     super.dispose();
   }
@@ -25,35 +27,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void isProfileExist() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('name')) {
-      setState(() {
-        screens.insert(4, const UserProfile(isOldUser: true,));
-      });
+      dashboardController.screens.value.insert(
+          4,
+          const UserProfile(
+            isOldUser: true,
+          ));
     } else {
-      setState(() {
-        screens.insert(4, const UserProfile(isOldUser: false,));
-      });
+      dashboardController.screens.value.insert(
+          4,
+          const UserProfile(
+            isOldUser: false,
+          ));
     }
   }
 
   void onTap(int index) {
+    dashboardController.oldIndex.value = selectIndex.value;
     setState(() {
-      oldIndex = selectIndex;
-      selectIndex = index;
+      selectIndex.value = index;
     });
-    // when using page view
-    /*pageController.animateToPage(index,
-          duration:const Duration(milliseconds: 300), curve: Curves.easeOut);*/
-    //  pageController.jumpToPage(index);
   }
 
   void onPageChanged(int index) {
     setState(() {
-      selectIndex = index;
+      selectIndex.value = index;
     });
   }
-
-  late AnimationController controller;
-  late Animation<double> animation;
 
   @override
   initState() {
@@ -62,93 +61,82 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   transition() {
-    double position = 1.0;
-    if (oldIndex < selectIndex) {
-      setState(() {
-        position = 1.0;
-      });
+    if (dashboardController.oldIndex.value < selectIndex.value) {
+      dashboardController.position.value = 1.0;
     } else {
-      setState(() {
-        position = -1.0;
-      });
+      dashboardController.position.value = -1.0;
     }
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     animation = CurvedAnimation(curve: Curves.easeIn, parent: controller);
-    return AnimatedSwitcher(
-      switchOutCurve: Curves.decelerate,
-      reverseDuration: const Duration(milliseconds: 0),
-      duration: const Duration(milliseconds: 450),
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return SlideTransition(
-          position: Tween(
-            begin: Offset(position, 0.0),
-            end: const Offset(0.0, 0.0),
-          ).animate(animation),
-          child: child,
-        );
+    return ValueListenableBuilder(
+      builder: (context, value, child) {
+        return Obx(() {
+          return AnimatedSwitcher(
+            switchOutCurve: Curves.decelerate,
+            reverseDuration: const Duration(milliseconds: 0),
+            duration: const Duration(milliseconds: 450),
+            transitionBuilder: (Widget child, Animation<double> animation) =>
+                SlideTransition(
+              position: Tween(
+                begin: Offset(dashboardController.position.value, 0.0),
+                end: const Offset(0.0, 0.0),
+              ).animate(animation),
+              child: child,
+            ),
+            child: dashboardController.screens.value[selectIndex.value],
+          );
+        });
       },
-      child: screens[selectIndex],
+      valueListenable: selectIndex,
     );
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-            currentIndex: selectIndex,
-            type: BottomNavigationBarType.fixed,
-            onTap: onTap,
-            iconSize: 27,
-            selectedLabelStyle: TextStyle(color: Colors.red[200]),
-            selectedFontSize: 0,
-            selectedItemColor: Colors.red[200],
-            unselectedFontSize: 1,
-            items: [
-              const BottomNavigationBarItem(
-                  icon: Icon(
-                    CupertinoIcons.home,
-                  ),
-                  label: ''),
-              const BottomNavigationBarItem(
-                  icon: Icon(
-                    CupertinoIcons.doc,
-                  ),
-                  label: ''),
-              BottomNavigationBarItem(
-                  icon: CircleAvatar(
-                    backgroundColor: Colors.red[200],
-                    child: Icon(
-                      CupertinoIcons.add,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  label: ''),
-              const BottomNavigationBarItem(
-                  icon: Icon(
-                    CupertinoIcons.news,
-                  ),
-                  label: ''),
-              const BottomNavigationBarItem(
-                  icon: Icon(
-                    CupertinoIcons.person,
-                  ),
-                  label: ''),
-            ]),
-        body: transition()
-
-        // From animation package
-        /* PageTransitionSwitcher(
-      duration: const Duration(seconds: 1),
-      child: screens[selectIndex],
-      transitionBuilder: (child,animation,secondaryAnimation)=>
-          SharedAxisTransition(animation: animation, secondaryAnimation: secondaryAnimation, transitionType: SharedAxisTransitionType.horizontal,child: child,),
-    ) */
-        /*PageView(
-   //  physics:const ScrollPhysics(parent: NeverScrollableScrollPhysics()),
-      controller: pageController,
-      onPageChanged: onPageChanged,
-      //scrollDirection: Axis.horizontal,
-      children: screens,
-    ),*/
-        );
+  Widget build(BuildContext context) => ValueListenableBuilder(
+      valueListenable: selectIndex,
+      builder: (context, value, child) {
+        return Scaffold(
+            bottomNavigationBar: BottomNavigationBar(
+                currentIndex: selectIndex.value,
+                type: BottomNavigationBarType.fixed,
+                onTap: onTap,
+                iconSize: 27,
+                selectedLabelStyle: TextStyle(color: Colors.red[200]),
+                selectedFontSize: 0,
+                selectedItemColor: Colors.red[200],
+                unselectedFontSize: 1,
+                items: [
+                  const BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.home,
+                      ),
+                      label: ''),
+                  const BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.doc,
+                      ),
+                      label: ''),
+                  BottomNavigationBarItem(
+                      icon: CircleAvatar(
+                        backgroundColor: Colors.red[200],
+                        child: Icon(
+                          CupertinoIcons.add,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      label: ''),
+                  const BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.news,
+                      ),
+                      label: ''),
+                  const BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.person,
+                      ),
+                      label: ''),
+                ]),
+            body: transition());
+      });
 }

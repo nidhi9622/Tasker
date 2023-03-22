@@ -8,6 +8,7 @@ import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
 import '../../../app_utils/local_notification_service.dart';
 import '../../../database/app_list.dart';
+import '../controller/add_project_controller.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../helper_widgets/add_project_body.dart';
 
@@ -19,44 +20,29 @@ class AddProject extends StatefulWidget {
 }
 
 class _AddProjectState extends State<AddProject> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController subTitleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController percentageController = TextEditingController();
-  List ongoingTask = [];
-  List completedTasks = [];
-  List upcomingTasks = [];
-  List canceledTasks = [];
+  AddProjectController controller = Get.put(AddProjectController());
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Map map = {};
-  bool reminder = true;
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay.now();
-  bool preExist = false;
-
   setData() async {
-    if (percentageController.text.isEmpty) {
-      setState(() {
-        percentageController.text = '0';
-      });
+    if (controller.percentageController.value.text.isEmpty) {
+      controller.percentageController.value.text = '0';
     }
-    int newPercentage = int.parse(percentageController.text);
-    String date = DateFormat("MMM dd, yyyy").format(selectedDate);
-    String time = selectedTime.format(context);
+    int newPercentage = int.parse(controller.percentageController.value.text);
+    String date =
+        DateFormat("MMM dd, yyyy").format(controller.selectedDate.value);
+    String time = controller.selectedTime.value.format(context);
     for (int i = 0; i < projectItem.length; i++) {}
-    setState(() {
-      map = {
-        'title': titleController.text,
-        'subTitle': subTitleController.text,
-        'description': descriptionController.text,
-        'percentage': newPercentage,
-        'date': date,
-        'reminder': reminder,
-        'time': time,
-        'status': dropdownOptions[dropDown1],
-      };
-    });
+    controller.map.value = {
+      'title': controller.titleController.value.text,
+      'subTitle': controller.subTitleController.value.text,
+      'description': controller.descriptionController.value.text,
+      'percentage': newPercentage,
+      'date': date,
+      'reminder': controller.reminder.value,
+      'time': time,
+      'status': dropdownOptions[controller.dropDownValue.value],
+    };
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? mapString;
@@ -66,18 +52,15 @@ class _AddProjectState extends State<AddProject> {
       mapString = preferences.getString('projects');
       newMap = jsonDecode(mapString!);
       for (int i = 0; i < newMap.length; i++) {
-        if (titleController.text.removeAllWhitespace == newMap[i]['title']) {
-          setState(() {
-            preExist = true;
-          });
+        if (controller.titleController.value.text.removeAllWhitespace ==
+            newMap[i]['title']) {
+          controller.preExist.value = true;
         } else {
-          setState(() {
-            preExist = false;
-          });
+          controller.preExist.value = false;
         }
       }
     }
-    if (preExist == true) {
+    if (controller.preExist.value == true) {
       // ignore: use_build_context_synchronously
       titleErrorDialog(
           context: context,
@@ -86,24 +69,18 @@ class _AddProjectState extends State<AddProject> {
           isTitle: false);
     } else {
       if (preferences.containsKey('projects')) {
-        setState(() {
-          mapString = preferences.getString('projects');
-          newMap = jsonDecode(mapString!);
-          for (int i = 0; i < newMap.length; i++) {
-            //print('title is : ${newMap[i]['title']}');
-            projectList.add(newMap[i]);
-          }
-          projectList.add(map);
-        });
+        mapString = preferences.getString('projects');
+        newMap = jsonDecode(mapString!);
+        for (int i = 0; i < newMap.length; i++) {
+          //print('title is : ${newMap[i]['title']}');
+          projectList.add(newMap[i]);
+        }
+        projectList.add(controller.map.value);
       } else {
-        setState(() {
-          projectList.add(map);
-        });
+        projectList.add(controller.map.value);
       }
-      setState(() {
-        preferences.setString('projects', jsonEncode(projectList));
-      });
-      switch (dropDown1) {
+      preferences.setString('projects', jsonEncode(projectList));
+      switch (controller.dropDownValue.value) {
         case 0:
           {
             String? mapStringOnGoing;
@@ -112,16 +89,14 @@ class _AddProjectState extends State<AddProject> {
               mapStringOnGoing = preferences.getString('ongoingProjects');
               newMapOngoing = jsonDecode(mapStringOnGoing!);
               for (int i = 0; i < newMapOngoing.length; i++) {
-                ongoingTask.add(newMapOngoing[i]);
+                controller.ongoingTask.value.add(newMapOngoing[i]);
               }
-              ongoingTask.add(map);
+              controller.ongoingTask.value.add(controller.map.value);
             } else {
-              ongoingTask.add(map);
+              controller.ongoingTask.value.add(controller.map.value);
             }
-            String totalProjects = jsonEncode(ongoingTask);
-            setState(() {
-              preferences.setString('ongoingProjects', totalProjects);
-            });
+            String totalProjects = jsonEncode(controller.ongoingTask.value);
+            preferences.setString('ongoingProjects', totalProjects);
           }
           break;
         case 1:
@@ -132,21 +107,21 @@ class _AddProjectState extends State<AddProject> {
               mapStringCompleted = preferences.getString('completedProjects');
               newMapCompleted = jsonDecode(mapStringCompleted!);
               for (int i = 0; i < newMapCompleted.length; i++) {
-                completedTasks.add(newMapCompleted[i]);
+                controller.completedTasks.value.add(newMapCompleted[i]);
               }
-              map['percentage'] = 100;
-              completedTasks.add(map);
+              controller.map.value['percentage'] = 100;
+              controller.completedTasks.value.add(controller.map.value);
             } else {
-              map['percentage'] = 100;
-              completedTasks.add(map);
-              projectList[projectList.indexWhere(
-                  (element) => element['title'] == titleController.text)] = map;
+              controller.map.value['percentage'] = 100;
+              controller.completedTasks.value.add(controller.map.value);
+              projectList[projectList.indexWhere((element) =>
+                      element['title'] ==
+                      controller.titleController.value.text)] =
+                  controller.map.value;
             }
-            setState(() {
-              preferences.setString(
-                  'completedProjects', jsonEncode(completedTasks));
-              preferences.setString('projects', jsonEncode(projectList));
-            });
+            preferences.setString('completedProjects',
+                jsonEncode(controller.completedTasks.value));
+            preferences.setString('projects', jsonEncode(projectList));
           }
           break;
         case 2:
@@ -157,16 +132,15 @@ class _AddProjectState extends State<AddProject> {
               mapStringUpcoming = preferences.getString('upcomingProjects');
               newMapUpcoming = jsonDecode(mapStringUpcoming!);
               for (int i = 0; i < newMapUpcoming.length; i++) {
-                upcomingTasks.add(newMapUpcoming[i]);
+                controller.upcomingTasks.value.add(newMapUpcoming[i]);
               }
-              upcomingTasks.add(map);
+              controller.upcomingTasks.value.add(controller.map.value);
             } else {
-              upcomingTasks.add(map);
+              controller.upcomingTasks.value.add(controller.map.value);
             }
-            String totalProjects = jsonEncode(upcomingTasks);
-            setState(() {
-              preferences.setString('upcomingProjects', totalProjects);
-            });
+            String totalProjects = jsonEncode(controller.upcomingTasks.value);
+
+            preferences.setString('upcomingProjects', totalProjects);
           }
           break;
         case 3:
@@ -177,85 +151,73 @@ class _AddProjectState extends State<AddProject> {
               mapStringCanceled = preferences.getString('canceledProjects');
               newMapCanceled = jsonDecode(mapStringCanceled!);
               for (int i = 0; i < newMapCanceled.length; i++) {
-                canceledTasks.add(newMapCanceled[i]);
+                controller.canceledTasks.value.add(newMapCanceled[i]);
               }
-              canceledTasks.add(map);
+              controller.canceledTasks.value.add(controller.map.value);
             } else {
-              canceledTasks.add(map);
+              controller.canceledTasks.value.add(controller.map.value);
             }
-            String totalProjects = jsonEncode(canceledTasks);
-            setState(() {
-              preferences.setString('canceledProjects', totalProjects);
-            });
+            String totalProjects = jsonEncode(controller.canceledTasks.value);
+
+            preferences.setString('canceledProjects', totalProjects);
           }
           break;
       }
-      if (reminder) {
+      if (controller.reminder.value) {
         int? id = preferences.getInt('id');
         LocalNotificationService.showScheduleNotification(
             id: id!,
             title: 'Reminder',
-            body: 'Start your ${titleController.text} task now',
-            payload: jsonEncode(map),
-            scheduleTime: DateTime(selectedDate.year, selectedDate.month,
-                selectedDate.day, selectedTime.hour, selectedTime.minute));
-        setState(() {
-          preferences.setInt('id', id + 1);
-        });
+            body:
+                'Start your ${controller.titleController.value.text} task now',
+            payload: jsonEncode(controller.map.value),
+            scheduleTime: DateTime(
+                controller.selectedDate.value.year,
+                controller.selectedDate.value.month,
+                controller.selectedDate.value.day,
+                controller.selectedTime.value.hour,
+                controller.selectedTime.value.minute));
+
+        preferences.setInt('id', id + 1);
       }
-      LocalNotificationService.initialize(context: context, object: map);
+      // ignore: use_build_context_synchronously
+      LocalNotificationService.initialize(
+          context: context, object: controller.map.value);
       // ignore: use_build_context_synchronously
       await titleErrorDialog(
           context: context, content: 'success'.tr, isTitle: true);
-      setState(() {
-        selectIndex = 0;
-      });
+      selectIndex.value = 0;
       AppRoutes.go(AppRouteName.homePage);
     }
   }
 
   @override
-  dispose() {
-    super.dispose();
-    titleController.dispose();
-    subTitleController.dispose();
-    descriptionController.dispose();
-    percentageController.dispose();
-  }
-
-  int dropDown1 = 0;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: CommonAppBar(
-        text: 'newProject'.tr,
-        onTap: () async {
-          if (_formKey.currentState!.validate()) {
-            if (titleController.text.isEmpty ||
-                subTitleController.text.isEmpty) {
-              await titleErrorDialog(
-                  context: context, content: 'error'.tr, isTitle: true);
-            } else {
-              await setData();
-            }
-          }
-        },
-        isLeading: false, isAction: true,
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: AddProjectBody(
-            titleController: titleController,
-            subTitleController: subTitleController,
-            descriptionController: descriptionController,
-            percentageController: percentageController,
-            reminder: reminder,
-            dropdownValue: dropDown1,
-            selectedDate: selectedDate,
-            selectedTime: selectedTime,
+  Widget build(BuildContext context) => Obx(() {
+        return Scaffold(
+          appBar: CommonAppBar(
+            text: 'newProject'.tr,
+            onTap: () async {
+              if (_formKey.currentState!.validate()) {
+                if (controller.titleController.value.text.isEmpty ||
+                    controller.subTitleController.value.text.isEmpty) {
+                  await titleErrorDialog(
+                      context: context, content: 'error'.tr, isTitle: true);
+                } else {
+                  await setData();
+                }
+              }
+            },
+            isLeading: false,
+            isAction: true,
           ),
-        ),
-      ),
-    );
+          body: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: AddProjectBody(
+                controller: controller,
+              ),
+            ),
+          ),
+        );
+      });
 }

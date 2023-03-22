@@ -21,9 +21,7 @@ class _AddProjectWidgetState extends State<AddProjectWidget> {
         children: [
           InkWell(
             onTap: () {
-              setState(() {
-                selectIndex = 2;
-              });
+                selectIndex.value = 2;
               AppRoutes.go(AppRouteName.homePage);
             },
             child: Row(

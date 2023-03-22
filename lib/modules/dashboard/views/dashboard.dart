@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
+import 'package:task_manager/modules/dashboard/controller/dashboard_controller.dart';
 import '../../../app_utils/global_data.dart';
 import '../../../ui_utils/no_task_widget.dart';
 import '../../project/helper_methods/sorting_bottom_sheet.dart';
@@ -21,56 +23,40 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard>{
-  String username = '';
+  DashboardController controller = Get.put(DashboardController());
 
   getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
       if (preferences.containsKey('name')) {
-        username = preferences.getString('name')!;
+        controller.username.value = preferences.getString('name')??"";
       }
-    });
   }
-
-  String? upcoming;
-  String? canceled;
-  String? ongoing;
-  String? completed;
 
   Future getProjectItem() async {
     dynamic map;
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     if (preferences.containsKey('projects')) {
-      setState(() {
         map = preferences.getString('projects');
         projectItem = jsonDecode(map);
-      });
     }
     if (preferences.containsKey('upcomingProjects')) {
-      setState(() {
-        upcoming = preferences.getString('upcomingProjects');
+        var upcoming = preferences.getString('upcomingProjects');
         upcomingProjects = jsonDecode(upcoming!);
-      });
     }
     if (preferences.containsKey('canceledProjects')) {
-      setState(() {
-        canceled = preferences.getString('canceledProjects');
+        var canceled = preferences.getString('canceledProjects');
         canceledProjects = jsonDecode(canceled!);
-      });
     }
     if (preferences.containsKey('ongoingProjects')) {
-      setState(() {
-        ongoing = preferences.getString('ongoingProjects');
+        var ongoing = preferences.getString('ongoingProjects');
         ongoingProjects = jsonDecode(ongoing!);
-      });
     }
     if (preferences.containsKey('completedProjects')) {
-      setState(() {
-        completed = preferences.getString('completedProjects');
+        var completed = preferences.getString('completedProjects');
         completedProjects = jsonDecode(completed!);
-      });
     }
+    setState(() {});
   }
 
   @override
@@ -115,20 +101,23 @@ class _DashboardState extends State<Dashboard>{
             width: double.infinity,
             height:  double.infinity,
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  NameAnimateWidget(username: username),
-                  const ProcessWidgetContainer(),
-                  const AddProjectWidget(),
-                  Container(
-                      width:  double.infinity,
-                      padding: const EdgeInsets.only(top: 10),
-                      child: projectItem.isNotEmpty
-                          ? const ProjectItemList()
-                          : const NoTaskWidget())
-                ],
+              child: Obx(() {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      NameAnimateWidget(username: controller.username.value),
+                      const ProcessWidgetContainer(),
+                      const AddProjectWidget(),
+                      Container(
+                          width:  double.infinity,
+                          padding: const EdgeInsets.only(top: 10),
+                          child: projectItem.isNotEmpty
+                              ? const ProjectItemList()
+                              : const NoTaskWidget())
+                    ],
+                  );
+                }
               ),
             ),
           ),

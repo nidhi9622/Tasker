@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 String currentDate = DateFormat("MMM dd, yyyy").format(DateTime.now());
@@ -6,4 +7,4 @@ List upcomingProjects = [];
 List completedProjects = [];
 List ongoingProjects = [];
 List projectItem = [];
-int selectIndex = 0;
+ValueNotifier selectIndex=ValueNotifier(0);

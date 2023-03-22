@@ -43,8 +43,7 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) => Scaffold(
         appBar: ProfileAppBar(),
         body: SingleChildScrollView(
-          child: Obx(() {
-            return Column(
+          child:Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widget.isOldUser
@@ -56,108 +55,111 @@ class _UserProfileState extends State<UserProfile> {
                               bottomLeft: Radius.circular(25),
                             ),
                             color: Theme.of(context).primaryColor),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Obx(() {
+                            return Column(
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        '${projectItem.length}',
-                                        style:
-                                            TextStyle(color: Colors.red[200]),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '${projectItem.length}',
+                                            style:
+                                                TextStyle(color: Colors.red[200]),
+                                          ),
+                                          Text(
+                                            'allTask'.tr,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                                fontSize: 10),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        'allTask'.tr,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                            fontSize: 10),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: SizedBox(
-                                      child: Container(
-                                          height: 180,
-                                          width: 220,
-                                          decoration: controller
-                                                      .profileImage.value ==
-                                                  ""
-                                              ? BoxDecoration(
-                                                  color: Colors.black,
-                                                  border: Border.all(
-                                                      width: 2,
-                                                      color: Colors.black),
-                                                  shape: BoxShape.circle,
-                                                  image: const DecorationImage(
-                                                      image: AssetImage(
-                                                          "assets/personImage.jpg"),
-                                                      fit: BoxFit.contain))
-                                              : BoxDecoration(
-                                                  border: Border.all(
-                                                      width: 2,
-                                                      color: Colors.black),
-                                                  shape: BoxShape.circle,
-                                                  image: DecorationImage(
-                                                      image: FileImage(
-                                                          File(controller.profileImage.value),
-                                                          scale: 10.0),
-                                                      fit: BoxFit.fill)))),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        '${ongoingProjects.length}',
-                                        style:
-                                            TextStyle(color: Colors.red[200]),
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(
+                                          child: Container(
+                                              height: 180,
+                                              width: 220,
+                                              decoration: controller
+                                                          .profileImage.value ==
+                                                      ""
+                                                  ? BoxDecoration(
+                                                      color: Colors.black,
+                                                      border: Border.all(
+                                                          width: 2,
+                                                          color: Colors.black),
+                                                      shape: BoxShape.circle,
+                                                      image: const DecorationImage(
+                                                          image: AssetImage(
+                                                              "assets/personImage.jpg"),
+                                                          fit: BoxFit.contain))
+                                                  : BoxDecoration(
+                                                      border: Border.all(
+                                                          width: 2,
+                                                          color: Colors.black),
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                          image: FileImage(
+                                                              File(controller.profileImage.value),
+                                                              scale: 10.0),
+                                                          fit: BoxFit.fill)))),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '${ongoingProjects.length}',
+                                            style:
+                                                TextStyle(color: Colors.red[200]),
+                                          ),
+                                          Text(
+                                            'ongoingTask'.tr,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                                fontSize: 10),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        'ongoingTask'.tr,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColorLight,
-                                            fontSize: 10),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  controller.name.value,
+                                  style: const TextStyle(
+                                      fontSize: 20, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 7),
+                                Text(
+                                  controller.designation.value,
+                                  style: const TextStyle(
+                                      fontSize: 11, color: Colors.grey),
+                                ),
+                                const SizedBox(height: 15),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      AppRoutes.go(AppRouteName.userProfile);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.only(
+                                          left: 34, right: 34),
+                                      backgroundColor: Colors.red[200],
+                                    ),
+                                    child: Text(
+                                      'editProfile'.tr,
+                                      style: const TextStyle(color: Colors.white),
+                                    )),
+                                const SizedBox(
+                                  height: 32,
+                                )
                               ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              controller.name.value,
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 7),
-                            Text(
-                              controller.designation.value,
-                              style: const TextStyle(
-                                  fontSize: 11, color: Colors.grey),
-                            ),
-                            const SizedBox(height: 15),
-                            ElevatedButton(
-                                onPressed: () {
-                                  AppRoutes.go(AppRouteName.userProfile);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.only(
-                                      left: 34, right: 34),
-                                  backgroundColor: Colors.red[200],
-                                ),
-                                child: Text(
-                                  'editProfile'.tr,
-                                  style: const TextStyle(color: Colors.white),
-                                )),
-                            const SizedBox(
-                              height: 32,
-                            )
-                          ],
+                            );
+                          }
                         ),
                       )
                     : const SizedBox.shrink(),
@@ -188,9 +190,7 @@ class _UserProfileState extends State<UserProfile> {
                         child: ExploreOptions(
                           onTap: () {
                             if (widget.isOldUser) {
-                              setState(() {
-                                selectIndex = 1;
-                              });
+                                selectIndex.value = 1;
                               AppRoutes.go(AppRouteName.homePage);
                             } else {
                               AppRoutes.go(AppRouteName.projects);
@@ -228,8 +228,7 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                 )
               ],
-            );
-          }),
+            )
         ),
       );
 }

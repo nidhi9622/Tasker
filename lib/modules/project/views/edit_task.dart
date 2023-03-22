@@ -7,6 +7,7 @@ import '../../../app_utils/global_data.dart';
 import '../../../app_utils/local_notification_service.dart';
 import '../../../database/app_list.dart';
 import '../../../models/data_model.dart';
+import '../controller/edit_task_controller.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../helper_widgets/edit_task_body.dart';
 
@@ -22,80 +23,51 @@ class EditTask extends StatefulWidget {
 int newId = 0;
 
 class _EditTaskState extends State<EditTask> {
-  late TextEditingController titleController;
-  late TextEditingController subTitleController;
-  late TextEditingController percentageController;
-  int dropDown1 = 0;
-  late TextEditingController descriptionController;
-  bool? reminder;
-  List optionList = [];
   dynamic status;
-  Map map = {};
-  ValueNotifier selectedDate = ValueNotifier(dynamic);
-  ValueNotifier selectedTime = ValueNotifier(dynamic);
-  ValueNotifier<DateTime> stringDate = ValueNotifier(DateTime.now());
-  ValueNotifier<TimeOfDay> stringTime = ValueNotifier(TimeOfDay.now());
   late DataModel dataModel;
+  EditTaskController controller = Get.put(EditTaskController());
 
   setTaskData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? projectName = preferences.getString('projects');
-    optionList = jsonDecode(projectName!);
-
-    String? upcoming;
-    String? canceled;
-    String? ongoing;
-    String? completed;
+    controller.optionList.value = jsonDecode(projectName!);
     if (preferences.containsKey('upcomingProjects')) {
-      setState(() {
-        upcoming = preferences.getString('upcomingProjects');
-        upcomingProjects = jsonDecode(upcoming!);
-      });
+      String? upcoming = preferences.getString('upcomingProjects');
+      upcomingProjects = jsonDecode(upcoming!);
     }
     if (preferences.containsKey('canceledProjects')) {
-      setState(() {
-        canceled = preferences.getString('canceledProjects');
-        canceledProjects = jsonDecode(canceled!);
-      });
+      String? canceled = preferences.getString('canceledProjects');
+      canceledProjects = jsonDecode(canceled!);
     }
     if (preferences.containsKey('ongoingProjects')) {
-      setState(() {
-        ongoing = preferences.getString('ongoingProjects');
-        ongoingProjects = jsonDecode(ongoing!);
-      });
+      String? ongoing = preferences.getString('ongoingProjects');
+      ongoingProjects = jsonDecode(ongoing!);
     }
     if (preferences.containsKey('completedProjects')) {
-      setState(() {
-        completed = preferences.getString('completedProjects');
-        completedProjects = jsonDecode(completed!);
-      });
+      String? completed = preferences.getString('completedProjects');
+      completedProjects = jsonDecode(completed!);
     }
 
-    if (percentageController.text.isEmpty) {
-      setState(() {
-        percentageController.text = '0';
-      });
+    if (controller.percentageController.value.text.isEmpty) {
+      controller.percentageController.value.text = '0';
     }
-    int newPercentage = int.parse(percentageController.text);
-    setState(() {
-      map = {
-        'title': titleController.text,
-        'subTitle': subTitleController.text,
-        'description': descriptionController.text,
-        'percentage': newPercentage,
-        'date': selectedDate.value,
-        'reminder': reminder,
-        'time': selectedTime.value,
-        'status': dropdownOptions[dropDown1],
-      };
-    });
-    optionList[optionList
-        .indexWhere((element) => element['title'] == dataModel.title)] = map;
-    setState(() {
-      preferences.setString('projects', jsonEncode(optionList));
-    });
+    int newPercentage = int.parse(controller.percentageController.value.text);
+    controller.map.value = {
+      'title': controller.titleController.value.text,
+      'subTitle': controller.subTitleController.value.text,
+      'description': controller.descriptionController.value.text,
+      'percentage': newPercentage,
+      'date': controller.selectedDate.value,
+      'reminder': controller.reminder.value,
+      'time': controller.selectedTime.value,
+      'status': dropdownOptions[controller.dropDownValue.value],
+    };
+    controller.optionList.value[controller.optionList.value
+            .indexWhere((element) => element['title'] == dataModel.title)] =
+        controller.map.value;
+    preferences.setString('projects', jsonEncode(controller.optionList.value));
 
-    switch (dropDown1) {
+    switch (controller.dropDownValue.value) {
       case 0:
         {
           upcomingProjects
@@ -106,17 +78,14 @@ class _EditTaskState extends State<EditTask> {
               .removeWhere((element) => element['title'] == dataModel.title);
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
-          ongoingProjects.add(map);
-          setState(() {
-            preferences.setString(
-                'canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString(
-                'upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString(
-                'completedProjects', jsonEncode(completedProjects));
-            preferences.setString(
-                'ongoingProjects', jsonEncode(ongoingProjects));
-          });
+          ongoingProjects.add(controller.map.value);
+          preferences.setString(
+              'canceledProjects', jsonEncode(canceledProjects));
+          preferences.setString(
+              'upcomingProjects', jsonEncode(upcomingProjects));
+          preferences.setString(
+              'completedProjects', jsonEncode(completedProjects));
+          preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
         }
         break;
       case 1:
@@ -137,24 +106,22 @@ class _EditTaskState extends State<EditTask> {
               list[i]['percentage'] = 100;
             }
           } else {
-            map['percentage'] = 100;
-            optionList[optionList.indexWhere(
-                (element) => element['title'] == dataModel.title)] = map;
+            controller.map.value['percentage'] = 100;
+            controller.optionList.value[controller.optionList.value.indexWhere(
+                    (element) => element['title'] == dataModel.title)] =
+                controller.map.value;
           }
-          completedProjects.add(map);
-          setState(() {
-            preferences.setString(
-                'canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString(
-                'upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString(
-                'completedProjects', jsonEncode(completedProjects));
-            preferences.setString(
-                'ongoingProjects', jsonEncode(ongoingProjects));
-            preferences.setString(
-                '${widget.object['title']}', jsonEncode(list));
-            preferences.setString('projects', jsonEncode(optionList));
-          });
+          completedProjects.add(controller.map.value);
+          preferences.setString(
+              'canceledProjects', jsonEncode(canceledProjects));
+          preferences.setString(
+              'upcomingProjects', jsonEncode(upcomingProjects));
+          preferences.setString(
+              'completedProjects', jsonEncode(completedProjects));
+          preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
+          preferences.setString('${widget.object['title']}', jsonEncode(list));
+          preferences.setString(
+              'projects', jsonEncode(controller.optionList.value));
         }
         break;
       case 2:
@@ -167,17 +134,14 @@ class _EditTaskState extends State<EditTask> {
               .removeWhere((element) => element['title'] == dataModel.title);
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
-          upcomingProjects.add(map);
-          setState(() {
-            preferences.setString(
-                'canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString(
-                'upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString(
-                'completedProjects', jsonEncode(completedProjects));
-            preferences.setString(
-                'ongoingProjects', jsonEncode(ongoingProjects));
-          });
+          upcomingProjects.add(controller.map.value);
+          preferences.setString(
+              'canceledProjects', jsonEncode(canceledProjects));
+          preferences.setString(
+              'upcomingProjects', jsonEncode(upcomingProjects));
+          preferences.setString(
+              'completedProjects', jsonEncode(completedProjects));
+          preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
         }
         break;
       case 3:
@@ -190,37 +154,33 @@ class _EditTaskState extends State<EditTask> {
               .removeWhere((element) => element['title'] == dataModel.title);
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
-          canceledProjects.add(map);
-          setState(() {
-            preferences.setString(
-                'canceledProjects', jsonEncode(canceledProjects));
-            preferences.setString(
-                'upcomingProjects', jsonEncode(upcomingProjects));
-            preferences.setString(
-                'completedProjects', jsonEncode(completedProjects));
-            preferences.setString(
-                'ongoingProjects', jsonEncode(ongoingProjects));
-          });
+          canceledProjects.add(controller.map.value);
+          preferences.setString(
+              'canceledProjects', jsonEncode(canceledProjects));
+          preferences.setString(
+              'upcomingProjects', jsonEncode(upcomingProjects));
+          preferences.setString(
+              'completedProjects', jsonEncode(completedProjects));
+          preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
         }
         break;
     }
-    if (reminder == true) {
+    if (controller.reminder.value == true) {
       int? id = preferences.getInt('id');
       LocalNotificationService.showScheduleNotification(
           id: id!,
           title: 'Reminder',
-          body: 'Start your ${titleController.text} task now',
-          payload: jsonEncode(map),
+          body: 'Start your ${controller.titleController.value.text} task now',
+          payload: jsonEncode(controller.map.value),
           scheduleTime: DateTime(
-              stringDate.value.year,
-              stringDate.value.month,
-              stringDate.value.day,
-              stringTime.value.hour,
-              stringTime.value.minute));
-      setState(() {
-        preferences.setInt('id', id + 1);
-      });
-      LocalNotificationService.initialize(context: context, object: map);
+              controller.selectedDate.value.year,
+              controller.selectedDate.value.month,
+              controller.selectedDate.value.day,
+              controller.selectedTime.value.hour,
+              controller.selectedTime.value.minute));
+      preferences.setInt('id', id + 1);
+      LocalNotificationService.initialize(
+          context: context, object: controller.map.value);
     }
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
@@ -229,15 +189,18 @@ class _EditTaskState extends State<EditTask> {
 
   setData() {
     dataModel = DataModel(widget.object);
-    titleController = TextEditingController(text: dataModel.title);
-    subTitleController = TextEditingController(text: dataModel.subtitle);
-    percentageController =
+    controller.titleController.value =
+        TextEditingController(text: dataModel.title);
+    controller.subTitleController.value =
+        TextEditingController(text: dataModel.subtitle);
+    controller.percentageController.value =
         TextEditingController(text: dataModel.percentage.toString());
-    descriptionController = TextEditingController(text: dataModel.description);
-    selectedDate.value = dataModel.date;
-    selectedTime.value = dataModel.time;
+    controller.descriptionController.value =
+        TextEditingController(text: dataModel.description);
+    controller.stringDate.value = dataModel.date;
+    controller.stringTime.value = dataModel.time;
     status = dataModel.status;
-    reminder = dataModel.reminder;
+    controller.reminder.value = dataModel.reminder ?? false;
   }
 
   @override
@@ -247,27 +210,8 @@ class _EditTaskState extends State<EditTask> {
   }
 
   @override
-  dispose() {
-    super.dispose();
-    titleController.dispose();
-    subTitleController.dispose();
-    descriptionController.dispose();
-    percentageController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => EditTaskBody(
-      selectedTime: selectedTime,
-      selectedDate: selectedDate,
-      setTaskData: setTaskData,
-      status: status,
-      stringDate: stringDate,
-      stringTime: stringTime,
-      subTitleController: subTitleController,
-      descriptionController: descriptionController,
-      dropDownValue: dropDown1,
-      titleController: titleController,
-      percentageController: percentageController,
-      reminder: reminder ?? false,
-    );
+        setTaskData: setTaskData,
+        status: status,controller: controller,
+      );
 }
