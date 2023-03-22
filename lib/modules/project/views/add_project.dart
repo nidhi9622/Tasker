@@ -192,32 +192,30 @@ class _AddProjectState extends State<AddProject> {
   }
 
   @override
-  Widget build(BuildContext context) => Obx(() {
-        return Scaffold(
-          appBar: CommonAppBar(
-            text: 'newProject'.tr,
-            onTap: () async {
-              if (_formKey.currentState!.validate()) {
-                if (controller.titleController.value.text.isEmpty ||
-                    controller.subTitleController.value.text.isEmpty) {
-                  await titleErrorDialog(
-                      context: context, content: 'error'.tr, isTitle: true);
-                } else {
-                  await setData();
-                }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: CommonAppBar(
+          text: 'newProject'.tr,
+          onTap: () async {
+            if (_formKey.currentState!.validate()) {
+              if (controller.titleController.value.text.isEmpty ||
+                  controller.subTitleController.value.text.isEmpty) {
+                await titleErrorDialog(
+                    context: context, content: 'error'.tr, isTitle: true);
+              } else {
+                await setData();
               }
-            },
-            isLeading: false,
-            isAction: true,
-          ),
-          body: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: AddProjectBody(
-                controller: controller,
-              ),
+            }
+          },
+          isLeading: false,
+          isAction: true,
+        ),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: AddProjectBody(
+              controller: controller,
             ),
           ),
-        );
-      });
+        ),
+      );
 }
