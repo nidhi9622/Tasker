@@ -51,7 +51,6 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
               element['title'] == widget.dataModel.title);
               completedProjects.removeWhere((element) =>
               element['title'] == widget.dataModel.title);
-              setState(() {
                 preferences.setString(
                     'projects', jsonEncode(projectItem));
                 preferences.setString('canceledProjects',
@@ -62,7 +61,6 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
                     jsonEncode(completedProjects));
                 preferences.setString('ongoingProjects',
                     jsonEncode(ongoingProjects));
-              });
               AppRoutes.pop();
             },
           );

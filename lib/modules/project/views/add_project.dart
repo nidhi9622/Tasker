@@ -24,6 +24,18 @@ class _AddProjectState extends State<AddProject> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    controller.titleHeight.value = 0;
+    controller.subTitleHeight.value = 0;
+    controller.descriptionHeight.value = 0;
+    controller.percentageController.value.text = '';
+    controller.descriptionController.value.text = '';
+    controller.titleController.value.text = '';
+    controller.subTitleController.value.text = '';
+    super.initState();
+  }
+
   setData() async {
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
