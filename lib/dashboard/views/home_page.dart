@@ -26,11 +26,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('name')) {
       setState(() {
-        screens.insert(4, const Profile(isOldUser: true,));
+        screens.insert(4, const UserProfile(isOldUser: true,));
       });
     } else {
       setState(() {
-        screens.insert(4, const Profile(isOldUser: false,));
+        screens.insert(4, const UserProfile(isOldUser: false,));
       });
     }
   }

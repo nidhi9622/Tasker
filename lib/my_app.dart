@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
       const Projects(),
       const AddProject(),
       const NotePad(),
-      Profile(
+      UserProfile(
         isOldUser: isExist == true ? true : false,
       )
     ];

@@ -10,7 +10,7 @@ class ProfileTextField extends StatelessWidget {
   final TextInputAction inputAction;
   final TextEditingController controller;
   final String? Function(String?) validator;
-  final void Function(String) onChange;
+  //final void Function(String) onChange;
   final IconData icon;
   final bool isPassword;
 
@@ -24,7 +24,7 @@ class ProfileTextField extends StatelessWidget {
       required this.inputAction,
       required this.controller,
       required this.validator,
-      required this.onChange,
+      //required this.onChange,
       required this.icon,
       required this.isPassword})
       : super(key: key);
@@ -38,7 +38,7 @@ class ProfileTextField extends StatelessWidget {
       obscureText: isPassword,
       controller: controller,
       validator: validator,
-      onChanged: onChange,
+      //onChanged: onChange,
       maxLength: isNumber ? 10 : 25,
       decoration: InputDecoration(
           prefixIcon: Icon(

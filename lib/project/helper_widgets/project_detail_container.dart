@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:task_manager/models/data_model.dart';
 import '../../app_utils/app_routes.dart';
-import '../../user/helper_widgets/shortcut_row.dart';
+import 'shortcut_row.dart';
 
 class ProjectDetailContainer extends StatelessWidget {
   final Map object;
