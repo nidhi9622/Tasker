@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../views/update_user_profile.dart';
 
 class ProfileTextField extends StatelessWidget {
+  final Color borderColor = Colors.brown;
   final BuildContext context;
   final String hintText;
   final String labelText;
