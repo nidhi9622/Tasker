@@ -43,15 +43,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   void onTap(int index) {
     dashboardController.oldIndex.value = selectIndex.value;
-    setState(() {
-      selectIndex.value = index;
-    });
+    selectIndex.value = index;
   }
 
   void onPageChanged(int index) {
-    setState(() {
-      selectIndex.value = index;
-    });
+    selectIndex.value = index;
   }
 
   @override
@@ -60,7 +56,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  transition() {
+  ValueListenableBuilder transition() {
     if (dashboardController.oldIndex.value < selectIndex.value) {
       dashboardController.position.value = 1.0;
     } else {
@@ -71,22 +67,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     animation = CurvedAnimation(curve: Curves.easeIn, parent: controller);
     return ValueListenableBuilder(
       builder: (context, value, child) {
-        return Obx(() {
-          return AnimatedSwitcher(
-            switchOutCurve: Curves.decelerate,
-            reverseDuration: const Duration(milliseconds: 0),
-            duration: const Duration(milliseconds: 450),
-            transitionBuilder: (Widget child, Animation<double> animation) =>
-                SlideTransition(
-              position: Tween(
-                begin: Offset(dashboardController.position.value, 0.0),
-                end: const Offset(0.0, 0.0),
-              ).animate(animation),
-              child: child,
-            ),
-            child: dashboardController.screens.value[selectIndex.value],
-          );
-        });
+        return Obx(() => AnimatedSwitcher(
+              switchOutCurve: Curves.decelerate,
+              reverseDuration: const Duration(milliseconds: 0),
+              duration: const Duration(milliseconds: 450),
+              transitionBuilder: (Widget child, Animation<double> animation) =>
+                  SlideTransition(
+                position: Tween(
+                  begin: Offset(dashboardController.position.value, 0.0),
+                  end: const Offset(0.0, 0.0),
+                ).animate(animation),
+                child: child,
+              ),
+              child: dashboardController.screens.value[selectIndex.value],
+            ));
       },
       valueListenable: selectIndex,
     );

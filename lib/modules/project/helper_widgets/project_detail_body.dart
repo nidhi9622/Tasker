@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,9 +60,8 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
         controller.totalPercentage.value +=
             controller.subTaskList.value[i]['percentage'];
       }
-      controller.totalPercentage.value = (controller.totalPercentage.value /
-              controller.subTaskList.value.length)
-          .round();
+      // controller.totalPercentage.value = (controller.totalPercentage.value /
+      //         controller.subTaskList.value.length);
       String? projectName = preferences.getString('projects');
       controller.optionList.value = jsonDecode(projectName!);
       controller.map.value = {

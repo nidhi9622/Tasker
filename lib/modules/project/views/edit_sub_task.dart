@@ -41,7 +41,7 @@ class _EditSubTaskState extends State<EditSubTask> {
     if (controller.percentageController.value.text.isEmpty) {
         controller.percentageController.value.text = '0';
     }
-    int newPercentage = int.parse(controller.percentageController.value.text);
+    double newPercentage = double.parse(controller.percentageController.value.text);
     controller.map.value = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,

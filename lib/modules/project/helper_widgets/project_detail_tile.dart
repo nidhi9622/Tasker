@@ -43,7 +43,7 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
             title: widget.dataModel.title ?? "",
             index: widget.index,
             onTapEdit: () {
-              AppRoutes.pop();
+              //AppRoutes.pop();
               AppRoutes.go(AppRouteName.editSubTask,arguments: {
                 'object': widget.subTaskProjects[widget.index],
                 "title": widget.object['title'],
@@ -53,15 +53,13 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
             onTapDelete: () async {
               SharedPreferences preferences =
                   await SharedPreferences.getInstance();
-              setState(() {
                 widget.subTaskProjects.removeWhere(
                     (element) => element['title'] == widget.dataModel.title);
                 preferences.setString('${widget.object['title']}',
                     jsonEncode(widget.subTaskProjects));
-              });
               AppRoutes.pop();
-              AppRoutes.go(AppRouteName.projectDetail,
-                  arguments: {'object': widget.object});
+              // AppRoutes.go(AppRouteName.projectDetail,
+              //     arguments: {'object': widget.object});
             },
           );
         },

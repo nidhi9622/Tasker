@@ -29,10 +29,8 @@ class _ProjectDetailRightState extends State<ProjectDetailRight> {
         style: const TextStyle(fontSize: 20),
         onChanged: (value) async {
           SharedPreferences preferences = await SharedPreferences.getInstance();
-          setState(() {
             preferences.setString(
                 '${widget.object['title']} notes', widget.notesController.text);
-          });
         },
         maxLength: null,
         maxLines: null,

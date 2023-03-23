@@ -56,7 +56,6 @@ class _DashboardState extends State<Dashboard>{
         var completed = preferences.getString('completedProjects');
         completedProjects = jsonDecode(completed!);
     }
-    setState(() {});
   }
 
   @override

@@ -11,9 +11,9 @@ class ProjectDetailController extends GetxController {
   RxBool reminder = RxBool(false);
   RxBool isAdded = RxBool(false);
   RxInt displayIndex = RxInt(0);
-  Rx totalPercentage = Rx(0);
+  RxDouble totalPercentage = RxDouble(0.0);
   RxString notes=RxString('');
-  RxDouble containerWidth=RxDouble(0.67);
+  RxDouble containerWidth=RxDouble(0.70);
   Rx<TextEditingController> notesController = Rx(TextEditingController());
   Rx<TextEditingController> shortcutController = Rx(TextEditingController());
 

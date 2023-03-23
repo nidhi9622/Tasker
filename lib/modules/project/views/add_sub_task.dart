@@ -34,7 +34,7 @@ class _AddSubTaskState extends State<AddSubTask> {
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
-    int newPercentage = int.parse(controller.percentageController.value.text);
+    double newPercentage = double.parse(controller.percentageController.value.text);
     String date =
         DateFormat("MMM dd, yyyy").format(controller.selectedDate.value);
     String time = controller.selectedTime.value.format(context);

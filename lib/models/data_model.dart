@@ -2,7 +2,7 @@ class DataModel {
   String? title;
   Map object;
   String? subtitle;
-  int? percentage;
+  double? percentage;
   String? description;
   dynamic date;
   bool? reminder;

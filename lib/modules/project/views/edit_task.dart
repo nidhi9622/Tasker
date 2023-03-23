@@ -51,15 +51,15 @@ class _EditTaskState extends State<EditTask> {
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
-    int newPercentage = int.parse(controller.percentageController.value.text);
+    double newPercentage = double.parse(controller.percentageController.value.text);
     controller.map.value = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
       'description': controller.descriptionController.value.text,
       'percentage': newPercentage,
-      'date': controller.selectedDate.value,
+      'date': controller.stringDate.value,
       'reminder': controller.reminder.value,
-      'time': controller.selectedTime.value,
+      'time': controller.stringTime.value,
       'status': dropdownOptions[controller.dropDownValue.value],
     };
     controller.optionList.value[controller.optionList.value
