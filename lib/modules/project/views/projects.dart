@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
 import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../../database/app_list.dart';
@@ -23,19 +22,17 @@ class _ProjectsState extends State<Projects> {
   ProjectController controller = Get.put(ProjectController());
 
   getProjectItem() async {
-    dynamic map;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey('projects')) {
-      map = preferences.getString('projects');
+    if (SharedPrefs.containsKey(SharedPrefs.projects)) {
+      var map = SharedPrefs.getString(SharedPrefs.projects);
       controller.projectItem.value = jsonDecode(map);
     }
-    if (preferences.containsKey('ongoingProjects')) {
-      String? ongoing = preferences.getString('ongoingProjects');
-      controller.ongoingProjects.value = jsonDecode(ongoing!);
+    if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
+      String? ongoing = SharedPrefs.getString(SharedPrefs.ongoingProjects);
+      controller.ongoingProjects.value = jsonDecode(ongoing);
     }
-    if (preferences.containsKey('completedProjects')) {
-      String? completed = preferences.getString('completedProjects');
-      controller.completedProjects.value = jsonDecode(completed!);
+    if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
+      String? completed = SharedPrefs.getString(SharedPrefs.completedProjects);
+      controller.completedProjects.value = jsonDecode(completed);
     }
   }
 
