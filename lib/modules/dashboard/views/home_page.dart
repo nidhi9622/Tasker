@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/app_utils/shared_prefs/shared_prefs.dart';
 import '../../../app_utils/global_data.dart';
 import '../../user/views/user_profile.dart';
 import '../controller/dashboard_controller.dart';
@@ -25,8 +25,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void isProfileExist() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey('name')) {
+    if (SharedPrefs.containKey(SharedPrefs.userName)) {
       dashboardController.screens.value.insert(
           4,
           const UserProfile(

@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../project/helper_methods/title_error_dialog.dart';
 import '../controller/user_controller.dart';
 import '../helper_widgets/get_image.dart';
@@ -24,22 +24,20 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
   UserController controller = Get.put(UserController());
 
   setData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('name', controller.nameController.value.text);
-    preferences.setString('number', controller.phoneController.value.text);
-    preferences.setString('designation', controller.designationController.value.text);
+    SharedPrefs.setString(SharedPrefs.userName, controller.nameController.value.text);
+    SharedPrefs.setString(SharedPrefs.userNumber, controller.phoneController.value.text);
+    SharedPrefs.setString(SharedPrefs.userDesignation, controller.designationController.value.text);
     if (controller.profileImage.value != "") {
-      preferences.setString('imageUrl', controller.profileImage.value);
+      SharedPrefs.setString(SharedPrefs.userImage, controller.profileImage.value);
     }
   }
 
   getData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    controller.name.value = preferences.getString('name') ?? "";
-    controller.designation.value = preferences.getString('designation') ?? "";
-    controller.phone.value = preferences.getString('number') ?? "";
-    if (preferences.containsKey('imageUrl')) {
-      controller.profileImage.value = preferences.getString('imageUrl') ?? "";
+    controller.name.value = SharedPrefs.getString(SharedPrefs.userName);
+    controller.designation.value = SharedPrefs.getString(SharedPrefs.userDesignation,);
+    controller.phone.value = SharedPrefs.getString(SharedPrefs.userNumber,);
+    if (SharedPrefs.containKey(SharedPrefs.userImage)) {
+      controller.profileImage.value = SharedPrefs.getString(SharedPrefs.userImage);
     }
     controller.nameController.value = TextEditingController(text: controller.name.value );
     controller.phoneController.value = TextEditingController(text: controller.phone.value );

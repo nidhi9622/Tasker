@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/app_utils/shared_prefs/shared_prefs.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
 import '../controller/user_controller.dart';
@@ -25,11 +26,10 @@ class _UserProfileState extends State<UserProfile> {
   UserController controller = Get.put(UserController());
 
   getData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    controller.name.value = preferences.getString('name') ?? "";
-    controller.designation.value = preferences.getString('designation') ?? "";
-    if (preferences.containsKey('imageUrl')) {
-      controller.profileImage.value = preferences.getString('imageUrl') ?? "";
+    controller.name.value = SharedPrefs.getString(SharedPrefs.userName);
+    controller.designation.value = SharedPrefs.getString(SharedPrefs.userDesignation);
+    if (SharedPrefs.containKey(SharedPrefs.userImage)) {
+      controller.profileImage.value = SharedPrefs.getString(SharedPrefs.userImage);
     }
   }
 
@@ -214,6 +214,7 @@ class _UserProfileState extends State<UserProfile> {
                                     await SharedPreferences.getInstance();
                                 preferences.clear();
                                 preferences.setInt('id', 0);
+                                SharedPrefs.clear();
                                 AppRoutes.go(AppRouteName.splash);
                               } else {
                                 AppRoutes.go(AppRouteName.userProfile);

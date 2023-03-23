@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:task_manager/app_utils/app_routes.dart';
+import 'package:task_manager/app_utils/shared_prefs/shared_prefs.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,7 +13,9 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 4), (){
+    Timer(const Duration(seconds: 4), ()async{
+      await SharedPrefs.init();
+      SharedPrefs.setInt(SharedPrefs.userId, 0);
       AppRoutes.pushAndRemoveUntil(AppRouteName.homePage);}
     );
     super.initState();
