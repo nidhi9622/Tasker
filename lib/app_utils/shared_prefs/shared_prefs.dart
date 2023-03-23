@@ -52,4 +52,7 @@ class SharedPrefs {
   static int getInt(String key) {
     return _sharedPrefs!.getInt(key) ?? 0;
   }
+  static  remove(String key) {
+    return _sharedPrefs!.remove(key) ;
+  }
 }

@@ -20,8 +20,6 @@ class EditTask extends StatefulWidget {
   State<EditTask> createState() => _EditTaskState();
 }
 
-int newId = 0;
-
 class _EditTaskState extends State<EditTask> {
   dynamic status;
   late DataModel dataModel;
@@ -50,7 +48,8 @@ class _EditTaskState extends State<EditTask> {
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
-    double newPercentage = double.parse(controller.percentageController.value.text);
+    double newPercentage =
+        double.parse(controller.percentageController.value.text);
     controller.map.value = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
@@ -64,7 +63,8 @@ class _EditTaskState extends State<EditTask> {
     controller.optionList.value[controller.optionList.value
             .indexWhere((element) => element['title'] == dataModel.title)] =
         controller.map.value;
-    SharedPrefs.setString(SharedPrefs.projects, jsonEncode(controller.optionList.value));
+    SharedPrefs.setString(
+        SharedPrefs.projects, jsonEncode(controller.optionList.value));
 
     switch (controller.dropDownValue.value) {
       case 0:
@@ -78,10 +78,14 @@ class _EditTaskState extends State<EditTask> {
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
           ongoingProjects.add(controller.map.value);
-          SharedPrefs.setString(SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
+          SharedPrefs.setString(
+              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.completedProjects, jsonEncode(completedProjects));
+          SharedPrefs.setString(
+              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
         }
         break;
       case 1:
@@ -108,10 +112,14 @@ class _EditTaskState extends State<EditTask> {
                 controller.map.value;
           }
           completedProjects.add(controller.map.value);
-          SharedPrefs.setString(SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
+          SharedPrefs.setString(
+              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.completedProjects, jsonEncode(completedProjects));
+          SharedPrefs.setString(
+              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
           SharedPrefs.setString('${widget.object['title']}', jsonEncode(list));
           SharedPrefs.setString(
               SharedPrefs.projects, jsonEncode(controller.optionList.value));
@@ -128,10 +136,14 @@ class _EditTaskState extends State<EditTask> {
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
           upcomingProjects.add(controller.map.value);
-          SharedPrefs.setString(SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
+          SharedPrefs.setString(
+              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.completedProjects, jsonEncode(completedProjects));
+          SharedPrefs.setString(
+              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
         }
         break;
       case 3:
@@ -145,10 +157,14 @@ class _EditTaskState extends State<EditTask> {
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
           canceledProjects.add(controller.map.value);
-          SharedPrefs.setString(SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
+          SharedPrefs.setString(
+              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          SharedPrefs.setString(
+              SharedPrefs.completedProjects, jsonEncode(completedProjects));
+          SharedPrefs.setString(
+              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
         }
         break;
     }
@@ -199,6 +215,7 @@ class _EditTaskState extends State<EditTask> {
   @override
   Widget build(BuildContext context) => EditTaskBody(
         setTaskData: setTaskData,
-        status: status,controller: controller,
+        status: status,
+        controller: controller,
       );
 }
