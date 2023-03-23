@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
-  static SharedPreferences? _sharedPrefs;
+  static late SharedPreferences _sharedPrefs;
 
   static Future init() async {
     _sharedPrefs = await SharedPreferences.getInstance();
@@ -22,37 +22,37 @@ class SharedPrefs {
   static const String completedProjects = "completedProjects";
 
   static void setString(String key, String value) {
-    _sharedPrefs!.setString(key, value);
+    _sharedPrefs.setString(key, value);
   }
 
   static void setInt(String key, int value) {
-    _sharedPrefs!.setInt(key, value);
+    _sharedPrefs.setInt(key, value);
   }
 
   static void setBool(String key, bool value) {
-    _sharedPrefs!.setBool(key, value);
+    _sharedPrefs.setBool(key, value);
   }
 
   static bool containsKey(String key) {
-    return _sharedPrefs!.containsKey(key);
+    return _sharedPrefs.containsKey(key);
   }
 
   static clear() async {
-    await _sharedPrefs!.clear();
+    await _sharedPrefs.clear();
   }
 
   static String getString(String key) {
-    return _sharedPrefs!.getString(key) ?? '';
+    return _sharedPrefs.getString(key) ?? '';
   }
 
   static bool getBool(String key) {
-    return _sharedPrefs!.getBool(key) ?? false;
+    return _sharedPrefs.getBool(key) ?? false;
   }
 
   static int getInt(String key) {
-    return _sharedPrefs!.getInt(key) ?? 0;
+    return _sharedPrefs.getInt(key) ?? 0;
   }
   static  remove(String key) {
-    return _sharedPrefs!.remove(key) ;
+    return _sharedPrefs.remove(key) ;
   }
 }
