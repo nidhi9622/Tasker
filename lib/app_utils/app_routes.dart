@@ -50,7 +50,7 @@ class AppRouteName {
   static const String splash = '/splash_screen';
   static const String homePage = '/home_page';
   static const String projectDetail = '/project_detail';
-  static const String userProfile = '/user_profile';
+  static const String updateUserProfile = '/user_profile';
   static const String projects = '/projects';
   static const String settings = '/settings';
   static const String editTask = '/edit_task';
@@ -71,7 +71,7 @@ class AppRouteName {
     GetPage(name: homePage, page: () => const HomePage()),
     GetPage(name: projects, page: () => const Projects()),
     GetPage(name: settings, page: () => const Settings()),
-    GetPage(name: userProfile, page: () => const UpdateUserProfile()),
+    GetPage(name: updateUserProfile, page: () => const UpdateUserProfile()),
     GetPage(
         name: projectDetail,
         page: () => ProjectDetail(

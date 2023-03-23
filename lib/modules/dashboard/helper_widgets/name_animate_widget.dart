@@ -45,7 +45,7 @@ class _NameAnimateWidgetState extends State<NameAnimateWidget>
             padding: const EdgeInsets.symmetric(horizontal: 15,),
             child: InkWell(
               onTap: () {
-                AppRoutes.go(AppRouteName.userProfile);
+                AppRoutes.go(AppRouteName.updateUserProfile);
               },
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

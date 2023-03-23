@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
 import 'package:task_manager/modules/dashboard/controller/dashboard_controller.dart';
 import '../../../app_utils/global_data.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../../ui_utils/no_task_widget.dart';
 import '../../project/helper_methods/sorting_bottom_sheet.dart';
 import '../helper_methods/search.dart';
@@ -26,35 +26,32 @@ class _DashboardState extends State<Dashboard>{
   DashboardController controller = Get.put(DashboardController());
 
   getData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-      if (preferences.containsKey('name')) {
-        controller.username.value = preferences.getString('name')??"";
+      if (SharedPrefs.containsKey(SharedPrefs.userName)) {
+        controller.username.value = SharedPrefs.getString(SharedPrefs.userName);
       }
   }
 
   Future getProjectItem() async {
-    dynamic map;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    if (preferences.containsKey('projects')) {
-        map = preferences.getString('projects');
+    if (SharedPrefs.containsKey(SharedPrefs.projects)) {
+        var map = SharedPrefs.getString(SharedPrefs.projects);
         projectItem = jsonDecode(map);
     }
-    if (preferences.containsKey('upcomingProjects')) {
-        var upcoming = preferences.getString('upcomingProjects');
-        upcomingProjects = jsonDecode(upcoming!);
+    if (SharedPrefs.containsKey(SharedPrefs.upcomingProjects)) {
+        var upcoming = SharedPrefs.getString(SharedPrefs.upcomingProjects);
+        upcomingProjects = jsonDecode(upcoming);
     }
-    if (preferences.containsKey('canceledProjects')) {
-        var canceled = preferences.getString('canceledProjects');
-        canceledProjects = jsonDecode(canceled!);
+    if (SharedPrefs.containsKey(SharedPrefs.canceledProjects)) {
+        var canceled = SharedPrefs.getString(SharedPrefs.canceledProjects);
+        canceledProjects = jsonDecode(canceled);
     }
-    if (preferences.containsKey('ongoingProjects')) {
-        var ongoing = preferences.getString('ongoingProjects');
-        ongoingProjects = jsonDecode(ongoing!);
+    if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
+        var ongoing = SharedPrefs.getString(SharedPrefs.ongoingProjects);
+        ongoingProjects = jsonDecode(ongoing);
     }
-    if (preferences.containsKey('completedProjects')) {
-        var completed = preferences.getString('completedProjects');
-        completedProjects = jsonDecode(completed!);
+    if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
+        var completed = SharedPrefs.getString(SharedPrefs.completedProjects);
+        completedProjects = jsonDecode(completed);
     }
   }
 
@@ -124,18 +121,16 @@ class _DashboardState extends State<Dashboard>{
   }
 
   ascendingSort() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
-      preferences.setString('projects', jsonEncode(projectItem));
+      SharedPrefs.setString(SharedPrefs.projects, jsonEncode(projectItem));
     });
   }
 
   descendingSort() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
-      preferences.setString('projects', jsonEncode(projectItem));
+      SharedPrefs.setString(SharedPrefs.projects, jsonEncode(projectItem));
     });
   }
 }

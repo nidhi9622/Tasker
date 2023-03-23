@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../controller/notepad_controller.dart';
 
 class NotePad extends StatefulWidget {
@@ -12,7 +11,6 @@ class NotePad extends StatefulWidget {
 }
 
 class _NotePadState extends State<NotePad> {
-  late SharedPreferences preferences;
   NotepadController controller = Get.put(NotepadController());
 
   @override
@@ -21,10 +19,9 @@ class _NotePadState extends State<NotePad> {
   }
 
   getData() async {
-    preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey('notepad')) {
+    if (SharedPrefs.containsKey(SharedPrefs.notepad)) {
       controller.notesController.value =
-          TextEditingController(text: preferences.getString('notepad'));
+          TextEditingController(text: SharedPrefs.getString(SharedPrefs.notepad));
     }
   }
 
@@ -47,7 +44,7 @@ class _NotePadState extends State<NotePad> {
               controller: controller.notesController.value,
               style: const TextStyle(fontSize: 20),
               onChanged: (value) async {
-                await preferences.setString('notepad', value);
+                SharedPrefs.setString(SharedPrefs.notepad, value);
               },
               maxLength: null,
               maxLines: null,

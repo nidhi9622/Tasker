@@ -30,13 +30,14 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
     if (controller.profileImage.value != "") {
       SharedPrefs.setString(SharedPrefs.userImage, controller.profileImage.value);
     }
+    SharedPrefs.setBool(SharedPrefs.isLoggedIn, true);
   }
 
   getData() async {
     controller.name.value = SharedPrefs.getString(SharedPrefs.userName);
     controller.designation.value = SharedPrefs.getString(SharedPrefs.userDesignation,);
     controller.phone.value = SharedPrefs.getString(SharedPrefs.userNumber,);
-    if (SharedPrefs.containKey(SharedPrefs.userImage)) {
+    if (SharedPrefs.containsKey(SharedPrefs.userImage)) {
       controller.profileImage.value = SharedPrefs.getString(SharedPrefs.userImage);
     }
     controller.nameController.value = TextEditingController(text: controller.name.value );

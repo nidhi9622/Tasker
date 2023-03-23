@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/shared_prefs/shared_prefs.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
@@ -28,7 +27,7 @@ class _UserProfileState extends State<UserProfile> {
   getData() async {
     controller.name.value = SharedPrefs.getString(SharedPrefs.userName);
     controller.designation.value = SharedPrefs.getString(SharedPrefs.userDesignation);
-    if (SharedPrefs.containKey(SharedPrefs.userImage)) {
+    if (SharedPrefs.containsKey(SharedPrefs.userImage)) {
       controller.profileImage.value = SharedPrefs.getString(SharedPrefs.userImage);
     }
   }
@@ -143,7 +142,7 @@ class _UserProfileState extends State<UserProfile> {
                                 const SizedBox(height: 15),
                                 ElevatedButton(
                                     onPressed: () {
-                                      AppRoutes.go(AppRouteName.userProfile);
+                                      AppRoutes.go(AppRouteName.updateUserProfile);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.only(
@@ -210,14 +209,11 @@ class _UserProfileState extends State<UserProfile> {
                                 ongoingProjects.clear();
                                 completedProjects.clear();
                                 canceledProjects.clear();
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                preferences.clear();
-                                preferences.setInt('id', 0);
                                 SharedPrefs.clear();
+                                SharedPrefs.setBool(SharedPrefs.isLoggedIn, false);
                                 AppRoutes.go(AppRouteName.splash);
                               } else {
-                                AppRoutes.go(AppRouteName.userProfile);
+                                AppRoutes.go(AppRouteName.updateUserProfile);
                               }
                             },
                             iconData: widget.isOldUser

@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void isProfileExist() async {
-    if (SharedPrefs.containKey(SharedPrefs.userName)) {
+    if (SharedPrefs.getBool(SharedPrefs.isLoggedIn)==true) {
       dashboardController.screens.value.insert(
           4,
           const UserProfile(

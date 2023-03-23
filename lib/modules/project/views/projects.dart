@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../../database/app_list.dart';
 import '../../dashboard/helper_methods/search.dart';
 import '../controller/project_controller.dart';
@@ -99,16 +100,15 @@ class _ProjectsState extends State<Projects> {
       }));
 
   void ascendingSort() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
     controller.projectItem.value
         .sort((a, b) => a["title"].compareTo(b["title"]));
-    preferences.setString('projects', jsonEncode(controller.projectItem.value));
+    SharedPrefs.setString(SharedPrefs.projects, jsonEncode(controller.projectItem.value));
   }
 
   void descendingSort() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
     controller.projectItem.value
         .sort((a, b) => b["title"].compareTo(a["title"]));
-    preferences.setString('projects', jsonEncode(controller.projectItem.value));
+    SharedPrefs.setString(SharedPrefs.projects, jsonEncode(controller.projectItem.value));
+
   }
 }
