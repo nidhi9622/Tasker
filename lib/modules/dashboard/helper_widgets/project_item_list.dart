@@ -85,7 +85,6 @@ class _ProjectItemListState extends State<ProjectItemList> {
                           (element) => element['title'] == dataModel.title);
                       completedProjects.removeWhere(
                           (element) => element['title'] == dataModel.title);
-                      setState(() {
                         preferences.setString(
                             'projects', jsonEncode(projectItem));
                         preferences.setString(
@@ -96,7 +95,6 @@ class _ProjectItemListState extends State<ProjectItemList> {
                             'completedProjects', jsonEncode(completedProjects));
                         preferences.setString(
                             'ongoingProjects', jsonEncode(ongoingProjects));
-                      });
                     },
                   )),
             ));

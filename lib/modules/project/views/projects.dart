@@ -19,7 +19,6 @@ class Projects extends StatefulWidget {
 }
 
 class _ProjectsState extends State<Projects> {
-  ValueNotifier<int> displayIndex = ValueNotifier(0);
   ProjectController controller = Get.put(ProjectController());
 
   getProjectItem() async {
@@ -47,61 +46,57 @@ class _ProjectsState extends State<Projects> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: DefaultAppBar(
-          isLeading: false,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: Search(text: ''));
-                },
-                icon: Icon(CupertinoIcons.search,
-                    color: Theme.of(context).primaryColorDark)),
-            IconButton(
-                onPressed: () {
-                  sortingBottomSheet(
-                      context: context,
-                      ascendingSort: ascendingSort,
-                      descendingSort: descendingSort);
-                },
-                icon: Icon(
-                  CupertinoIcons.sort_down,
-                  color: Theme.of(context).primaryColorDark,
-                ))
+      appBar: DefaultAppBar(
+        isLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: Search(text: ''));
+              },
+              icon: Icon(CupertinoIcons.search,
+                  color: Theme.of(context).primaryColorDark)),
+          IconButton(
+              onPressed: () {
+                sortingBottomSheet(
+                    context: context,
+                    ascendingSort: ascendingSort,
+                    descendingSort: descendingSort);
+              },
+              icon: Icon(
+                CupertinoIcons.sort_down,
+                color: Theme.of(context).primaryColorDark,
+              ))
+        ],
+        text: 'projects'.tr,
+      ),
+      body: Obx(() {
+        return Column(
+          children: [
+            Expanded(
+                flex: 2,
+                child: CustomTabBar(
+                  tabList: tabs,
+                  displayIndex: controller.displayIndex,
+                )),
+            if (controller.displayIndex.value == 0)
+              Expanded(
+                  flex: 12,
+                  child: ProjectTabView(
+                    tabList: controller.projectItem.value,
+                  )),
+            if (controller.displayIndex.value == 1)
+              Expanded(
+                  flex: 12,
+                  child: ProjectTabView(
+                      tabList: controller.ongoingProjects.value)),
+            if (controller.displayIndex.value == 2)
+              Expanded(
+                  flex: 12,
+                  child: ProjectTabView(
+                      tabList: controller.completedProjects.value))
           ],
-          text: 'projects'.tr,
-        ),
-        body: ValueListenableBuilder(
-          builder: (context, value, child) => Obx(() {
-            return Column(
-              children: [
-                Expanded(
-                    flex: 2,
-                    child: CustomTabBar(
-                      tabList: tabs,
-                      displayIndex: displayIndex,
-                    )),
-                if (displayIndex.value == 0)
-                  Expanded(
-                      flex: 12,
-                      child: ProjectTabView(
-                        tabList: controller.projectItem.value,
-                      )),
-                if (displayIndex.value == 1)
-                  Expanded(
-                      flex: 12,
-                      child: ProjectTabView(
-                          tabList: controller.ongoingProjects.value)),
-                if (displayIndex.value == 2)
-                  Expanded(
-                      flex: 12,
-                      child: ProjectTabView(
-                          tabList: controller.completedProjects.value))
-              ],
-            );
-          }),
-          valueListenable: displayIndex,
-        ),
-      );
+        );
+      }));
 
   void ascendingSort() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

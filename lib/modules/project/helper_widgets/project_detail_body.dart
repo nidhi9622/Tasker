@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/modules/project/helper_widgets/project_detail_container.dart';
 import 'package:task_manager/modules/project/helper_widgets/project_detail_left.dart';
@@ -8,6 +9,7 @@ import 'package:task_manager/modules/project/helper_widgets/project_detail_right
 import '../../../app_utils/global_data.dart';
 import '../../../database/app_list.dart';
 import '../../../models/data_model.dart';
+import '../controller/project_detail_controller.dart';
 import 'custom_tab_bar.dart';
 
 class ProjectDetailBody extends StatefulWidget {
@@ -20,163 +22,127 @@ class ProjectDetailBody extends StatefulWidget {
 }
 
 class _ProjectDetailBodyState extends State<ProjectDetailBody> {
-  List subTaskList = [];
   late DataModel dataModel;
-  String? notes = '';
-  ValueNotifier<int> displayIndex = ValueNotifier(0);
-  dynamic totalPercentage = 0;
-  List optionList = [];
-  Map map = {};
-  List subTaskProjects = [];
+  ProjectDetailController controller = Get.put(ProjectDetailController());
 
   getData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('${widget.object['title']} notes')) {
-      setState(() {
-        notes = preferences.getString('${widget.object['title']} notes');
-      });
-      notesController = TextEditingController(text: notes);
+      controller.notes.value =
+          preferences.getString('${widget.object['title']} notes') ?? "";
     }
     if (preferences.containsKey('${widget.object['title']}')) {
       String? subTask = preferences.getString('${widget.object['title']}');
-      setState(() {
-        subTaskProjects = jsonDecode(subTask!);
-      });
+      controller.subTaskProjects.value = jsonDecode(subTask!);
     }
     if (preferences.containsKey('ongoingProjects')) {
       String? ongoing = preferences.getString('ongoingProjects');
-      setState(() {
-        ongoingProjects = jsonDecode(ongoing!);
-      });
+      ongoingProjects = jsonDecode(ongoing!);
     }
     if (preferences.containsKey('upcomingProjects')) {
       String? upcoming = preferences.getString('upcomingProjects');
-      setState(() {
-        upcomingProjects = jsonDecode(upcoming!);
-      });
+      upcomingProjects = jsonDecode(upcoming!);
     }
     if (preferences.containsKey('canceledProjects')) {
       String? cancel = preferences.getString('canceledProjects');
-      setState(() {
-        canceledProjects = jsonDecode(cancel!);
-      });
+      canceledProjects = jsonDecode(cancel!);
     }
     if (preferences.containsKey('completedProjects')) {
       String? completed = preferences.getString('completedProjects');
-      setState(() {
-        completedProjects = jsonDecode(completed!);
-      });
+      completedProjects = jsonDecode(completed!);
     }
 
     if (preferences.containsKey('${widget.object['title']}')) {
       String? subtask = preferences.getString('${widget.object['title']}');
-      setState(() {
-        subTaskList = jsonDecode(subtask!);
-      });
-      for (int i = 0; i < subTaskList.length; i++) {
-        totalPercentage += subTaskList[i]['percentage'];
+      controller.subTaskList.value = jsonDecode(subtask!);
+      for (int i = 0; i < controller.subTaskList.value.length; i++) {
+        controller.totalPercentage.value +=
+            controller.subTaskList.value[i]['percentage'];
       }
-      // print('percentage is ${widget.object['percentage']}');
-      setState(() {
-        totalPercentage = (totalPercentage / subTaskList.length).round();
-      });
+      controller.totalPercentage.value = (controller.totalPercentage.value /
+              controller.subTaskList.value.length)
+          .round();
       String? projectName = preferences.getString('projects');
-      optionList = jsonDecode(projectName!);
-      setState(() {
-        map = {
-          'title': dataModel.title,
-          'subTitle': dataModel.subtitle,
-          'description': dataModel.description,
-          'percentage': totalPercentage,
-          'date': dataModel.date,
-          'reminder': dataModel.reminder,
-          'time': dataModel.time,
-          'status': dataModel.status,
-        };
-      });
+      controller.optionList.value = jsonDecode(projectName!);
+      controller.map.value = {
+        'title': dataModel.title,
+        'subTitle': dataModel.subtitle,
+        'description': dataModel.description,
+        'percentage': controller.totalPercentage.value,
+        'date': dataModel.date,
+        'reminder': dataModel.reminder,
+        'time': dataModel.time,
+        'status': dataModel.status,
+      };
 
-      optionList[optionList
-          .indexWhere((element) => element['title'] == dataModel.title)] = map;
-      setState(() {
-        preferences.setString('projects', jsonEncode(optionList));
-      });
+      controller.optionList.value[controller.optionList.value
+              .indexWhere((element) => element['title'] == dataModel.title)] =
+          controller.map.value;
+      preferences.setString(
+          'projects', jsonEncode(controller.optionList.value));
       if (dataModel.status == 'Ongoing') {
         // ongoingProjects.removeWhere((element) => element['title'] ==dataModel.title);
         // ongoingProjects.add(map);
-        ongoingProjects[ongoingProjects.indexWhere(
-            (element) => element['title'] == dataModel.title)] = map;
-        setState(() {
-          preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
-        });
+        ongoingProjects[ongoingProjects
+                .indexWhere((element) => element['title'] == dataModel.title)] =
+            controller.map.value;
+        preferences.setString('ongoingProjects', jsonEncode(ongoingProjects));
       }
-      if (map['status'] == 'Upcoming') {
-        upcomingProjects[upcomingProjects.indexWhere(
-            (element) => element['title'] == dataModel.title)] = map;
-        setState(() {
-          preferences.setString(
-              'upcomingProjects', jsonEncode(upcomingProjects));
-        });
+      if (controller.map.value['status'] == 'Upcoming') {
+        upcomingProjects[upcomingProjects
+                .indexWhere((element) => element['title'] == dataModel.title)] =
+            controller.map.value;
+        preferences.setString('upcomingProjects', jsonEncode(upcomingProjects));
       }
-      if (map['status'] == 'Canceled') {
-        canceledProjects[canceledProjects.indexWhere(
-            (element) => element['title'] == dataModel.title)] = map;
-        setState(() {
-          preferences.setString(
-              'canceledProjects', jsonEncode(canceledProjects));
-        });
+      if (controller.map.value['status'] == 'Canceled') {
+        canceledProjects[canceledProjects
+                .indexWhere((element) => element['title'] == dataModel.title)] =
+            controller.map.value;
+        preferences.setString('canceledProjects', jsonEncode(canceledProjects));
       }
-      if (map['status'] == 'Complete') {
-        completedProjects[completedProjects.indexWhere(
-            (element) => element['title'] == dataModel.title)] = map;
-        setState(() {
-          preferences.setString(
-              'completedProjects', jsonEncode(completedProjects));
-        });
+      if (controller.map.value['status'] == 'Complete') {
+        completedProjects[completedProjects
+                .indexWhere((element) => element['title'] == dataModel.title)] =
+            controller.map.value;
+        preferences.setString(
+            'completedProjects', jsonEncode(completedProjects));
       }
     } else {
-      setState(() {
-        totalPercentage = widget.object['percentage'];
-      });
+      controller.totalPercentage.value = widget.object['percentage'];
     }
   }
-
-  late TextEditingController notesController;
 
   @override
   initState() {
     dataModel = DataModel(widget.object);
-    notesController = TextEditingController(text: notes);
     getData();
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-      child: ValueListenableBuilder(
-          valueListenable: displayIndex,
-          builder: (context, _, child) {
-            return Column(
-              children: [
-                ProjectDetailContainer(
+  Widget build(BuildContext context) => SingleChildScrollView(child: Obx(() {
+        return Column(
+          children: [
+            ProjectDetailContainer(
+              object: widget.object,
+              totalPercentage: controller.totalPercentage.value,
+              dataModel: dataModel,
+            ),
+            CustomTabBar(
+              tabList: detailedPageTab,
+              displayIndex: controller.displayIndex,
+            ),
+            if (controller.displayIndex.value == 0)
+              ProjectDetailLeft(
                   object: widget.object,
-                  totalPercentage: totalPercentage,
-                  dataModel: dataModel,
-                ),
-                CustomTabBar(
-                  tabList: detailedPageTab,
-                  displayIndex: displayIndex,
-                ),
-                if (displayIndex.value == 0)
-                  ProjectDetailLeft(
-                      object: widget.object,
-                      subTaskList: subTaskList,
-                      subTaskProjects: subTaskProjects),
-                if (displayIndex.value == 1)
-                  ProjectDetailRight(
-                    object: widget.object,
-                    notesController: notesController,
-                  )
-              ],
-            );
-          }));
+                  subTaskList: controller.subTaskList.value,
+                  subTaskProjects: controller.subTaskProjects.value),
+            if (controller.displayIndex.value == 1)
+              ProjectDetailRight(
+                object: widget.object,
+                notesController: controller.notesController.value,
+              )
+          ],
+        );
+      }));
 }

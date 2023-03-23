@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 class CustomTabBar extends StatefulWidget {
   final List<Tab> tabList;
-  ValueNotifier displayIndex;
+  RxInt displayIndex;
 
   CustomTabBar({Key? key, required this.tabList, required this.displayIndex})
       : super(key: key);

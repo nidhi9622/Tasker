@@ -14,7 +14,6 @@ class ProjectDetail extends StatefulWidget {
 }
 
 class _ProjectDetailState extends State<ProjectDetail> {
- // Map object=Get.arguments["object"];
   @override
   Widget build(BuildContext context) => WillPopScope(
       onWillPop: () async {

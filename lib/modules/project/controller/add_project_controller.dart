@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddProjectController extends GetxController {
-  Rx<List> completedProjects = Rx([]);
-  Rx<List> optionList = Rx([]);
   Rx<DateTime> selectedDate = Rx(DateTime.now());
   Rx<TimeOfDay> selectedTime =
       Rx(TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute));
-  Rx<List> ongoingProjects = Rx([]);
-  Rx<List> projectItem = Rx([]);
-  Rx<List> subTaskProjects = Rx([]);
   Rx<List> ongoingTask = Rx([]);
   Rx<List> completedTasks = Rx([]);
   Rx<List> upcomingTasks = Rx([]);
