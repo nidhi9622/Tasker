@@ -24,30 +24,30 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
   UserController controller = Get.put(UserController());
 
   setData() async {
-    SharedPrefs.setString(
-        SharedPrefs.userName, controller.nameController.value.text);
-    SharedPrefs.setString(
-        SharedPrefs.userNumber, controller.phoneController.value.text);
-    SharedPrefs.setString(SharedPrefs.userDesignation,
+    GetPrefs.setString(
+        GetPrefs.userName, controller.nameController.value.text);
+    GetPrefs.setString(
+        GetPrefs.userNumber, controller.phoneController.value.text);
+    GetPrefs.setString(GetPrefs.userDesignation,
         controller.designationController.value.text);
     if (controller.profileImage.value != "") {
-      SharedPrefs.setString(
-          SharedPrefs.userImage, controller.profileImage.value);
+      GetPrefs.setString(
+          GetPrefs.userImage, controller.profileImage.value);
     }
-    SharedPrefs.setBool(SharedPrefs.isLoggedIn, true);
+    GetPrefs.setBool(GetPrefs.isLoggedIn, true);
   }
 
   getData() async {
-    controller.name.value = SharedPrefs.getString(SharedPrefs.userName);
-    controller.designation.value = SharedPrefs.getString(
-      SharedPrefs.userDesignation,
+    controller.name.value = GetPrefs.getString(GetPrefs.userName);
+    controller.designation.value = GetPrefs.getString(
+      GetPrefs.userDesignation,
     );
-    controller.phone.value = SharedPrefs.getString(
-      SharedPrefs.userNumber,
+    controller.phone.value = GetPrefs.getString(
+      GetPrefs.userNumber,
     );
-    if (SharedPrefs.containsKey(SharedPrefs.userImage)) {
+    if (GetPrefs.containsKey(GetPrefs.userImage)) {
       controller.profileImage.value =
-          SharedPrefs.getString(SharedPrefs.userImage);
+          GetPrefs.getString(GetPrefs.userImage);
     }
     controller.nameController.value =
         TextEditingController(text: controller.name.value);

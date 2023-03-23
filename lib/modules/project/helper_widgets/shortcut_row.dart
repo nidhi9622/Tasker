@@ -21,9 +21,9 @@ class _ShortcutRowState extends State<ShortcutRow> {
   ProjectDetailController controller = Get.put(ProjectDetailController());
 
   getData() async {
-    if (SharedPrefs.containsKey('${widget.object['title']} searchShortcut')) {
+    if (GetPrefs.containsKey('${widget.object['title']} searchShortcut')) {
       var searchString =
-      SharedPrefs.getString('${widget.object['title']} searchShortcut');
+      GetPrefs.getString('${widget.object['title']} searchShortcut');
       controller.searchShortcut.value = jsonDecode(searchString);
     }
   }
@@ -129,7 +129,7 @@ class _ShortcutRowState extends State<ShortcutRow> {
             onTap: () async {
               if (shortcutController.text.isNotEmpty) {
                 controller.searchShortcut.value.add(shortcutController.text);
-                SharedPrefs.setString(
+                GetPrefs.setString(
                     '${widget.object['title']} searchShortcut',
                     jsonEncode(controller.searchShortcut.value));
               }

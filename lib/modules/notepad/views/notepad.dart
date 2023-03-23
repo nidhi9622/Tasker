@@ -19,9 +19,9 @@ class _NotePadState extends State<NotePad> {
   }
 
   getData() async {
-    if (SharedPrefs.containsKey(SharedPrefs.notepad)) {
+    if (GetPrefs.containsKey(GetPrefs.notepad)) {
       controller.notesController.value =
-          TextEditingController(text: SharedPrefs.getString(SharedPrefs.notepad));
+          TextEditingController(text: GetPrefs.getString(GetPrefs.notepad));
     }
   }
 
@@ -44,7 +44,7 @@ class _NotePadState extends State<NotePad> {
               controller: controller.notesController.value,
               style: const TextStyle(fontSize: 20),
               onChanged: (value) async {
-                SharedPrefs.setString(SharedPrefs.notepad, value);
+                GetPrefs.setString(GetPrefs.notepad, value);
               },
               maxLength: null,
               maxLines: null,

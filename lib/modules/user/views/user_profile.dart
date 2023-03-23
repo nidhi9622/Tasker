@@ -25,10 +25,10 @@ class _UserProfileState extends State<UserProfile> {
   UserController controller = Get.put(UserController());
 
   getData() async {
-    controller.name.value = SharedPrefs.getString(SharedPrefs.userName);
-    controller.designation.value = SharedPrefs.getString(SharedPrefs.userDesignation);
-    if (SharedPrefs.containsKey(SharedPrefs.userImage)) {
-      controller.profileImage.value = SharedPrefs.getString(SharedPrefs.userImage);
+    controller.name.value = GetPrefs.getString(GetPrefs.userName);
+    controller.designation.value = GetPrefs.getString(GetPrefs.userDesignation);
+    if (GetPrefs.containsKey(GetPrefs.userImage)) {
+      controller.profileImage.value = GetPrefs.getString(GetPrefs.userImage);
     }
   }
 
@@ -209,8 +209,8 @@ class _UserProfileState extends State<UserProfile> {
                                 ongoingProjects.clear();
                                 completedProjects.clear();
                                 canceledProjects.clear();
-                                SharedPrefs.clear();
-                                SharedPrefs.setBool(SharedPrefs.isLoggedIn, false);
+                                GetPrefs.clear();
+                                GetPrefs.setBool(GetPrefs.isLoggedIn, false);
                                 AppRoutes.go(AppRouteName.splash);
                               } else {
                                 AppRoutes.go(AppRouteName.updateUserProfile);

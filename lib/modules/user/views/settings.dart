@@ -56,12 +56,12 @@ class _SettingsState extends State<Settings> {
                         tileTextFirst: 'Dark',
                         tileTextSecond: 'Light',
                         tileTapFirst: () async {
-                          SharedPrefs.setBool(SharedPrefs.theme, false);
+                          GetPrefs.setBool(GetPrefs.theme, false);
                           Get.changeThemeMode(ThemeMode.dark);
                           AppRoutes.pop();
                         },
                         tileTapSecond: () async {
-                          SharedPrefs.setBool(SharedPrefs.theme, true);
+                          GetPrefs.setBool(GetPrefs.theme, true);
                           Get.changeThemeMode(ThemeMode.light);
                           AppRoutes.pop();
                         },

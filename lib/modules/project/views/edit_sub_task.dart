@@ -33,8 +33,8 @@ class _EditSubTaskState extends State<EditSubTask> {
   late DataModel dataModel;
 
   setTaskData() async {
-    if (SharedPrefs.containsKey(widget.title)) {
-      String? subTask = SharedPrefs.getString(widget.title);
+    if (GetPrefs.containsKey(widget.title)) {
+      String? subTask = GetPrefs.getString(widget.title);
         controller.subTaskProjects.value = jsonDecode(subTask);
     }
     if (controller.percentageController.value.text.isEmpty) {
@@ -61,9 +61,9 @@ class _EditSubTaskState extends State<EditSubTask> {
               .indexWhere((element) => element['title'] == dataModel.title)] =
           controller.map.value;
     }
-    SharedPrefs.setString(widget.title, jsonEncode(controller.subTaskProjects.value));
+    GetPrefs.setString(widget.title, jsonEncode(controller.subTaskProjects.value));
     if (controller.reminder.value == true) {
-      int? id = SharedPrefs.getInt(SharedPrefs.userId);
+      int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
           id: id,
           title: 'Reminder',
@@ -75,7 +75,7 @@ class _EditSubTaskState extends State<EditSubTask> {
               controller.selectedDate.value.day,
               controller.selectedTime.value.hour,
               controller.selectedTime.value.minute));
-      SharedPrefs.setInt(SharedPrefs.userId, id + 1);
+      GetPrefs.setInt(GetPrefs.userId, id + 1);
     }
     LocalNotificationService.initialize(
         context: context, object: widget.homeObject);

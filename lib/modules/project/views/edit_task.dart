@@ -26,22 +26,22 @@ class _EditTaskState extends State<EditTask> {
   EditTaskController controller = Get.put(EditTaskController());
 
   setTaskData() async {
-    String? projectName = SharedPrefs.getString(SharedPrefs.projects);
+    String? projectName = GetPrefs.getString(GetPrefs.projects);
     controller.optionList.value = jsonDecode(projectName);
-    if (SharedPrefs.containsKey(SharedPrefs.upcomingProjects)) {
-      String? upcoming = SharedPrefs.getString(SharedPrefs.upcomingProjects);
+    if (GetPrefs.containsKey(GetPrefs.upcomingProjects)) {
+      String? upcoming = GetPrefs.getString(GetPrefs.upcomingProjects);
       upcomingProjects = jsonDecode(upcoming);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.canceledProjects)) {
-      String? canceled = SharedPrefs.getString(SharedPrefs.canceledProjects);
+    if (GetPrefs.containsKey(GetPrefs.canceledProjects)) {
+      String? canceled = GetPrefs.getString(GetPrefs.canceledProjects);
       canceledProjects = jsonDecode(canceled);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
-      String? ongoing = SharedPrefs.getString(SharedPrefs.ongoingProjects);
+    if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
+      String? ongoing = GetPrefs.getString(GetPrefs.ongoingProjects);
       ongoingProjects = jsonDecode(ongoing);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
-      String? completed = SharedPrefs.getString(SharedPrefs.completedProjects);
+    if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
+      String? completed = GetPrefs.getString(GetPrefs.completedProjects);
       completedProjects = jsonDecode(completed);
     }
 
@@ -63,8 +63,8 @@ class _EditTaskState extends State<EditTask> {
     controller.optionList.value[controller.optionList.value
             .indexWhere((element) => element['title'] == dataModel.title)] =
         controller.map.value;
-    SharedPrefs.setString(
-        SharedPrefs.projects, jsonEncode(controller.optionList.value));
+    GetPrefs.setString(
+        GetPrefs.projects, jsonEncode(controller.optionList.value));
 
     switch (controller.dropDownValue.value) {
       case 0:
@@ -78,14 +78,14 @@ class _EditTaskState extends State<EditTask> {
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
           ongoingProjects.add(controller.map.value);
-          SharedPrefs.setString(
-              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(
-              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(
-              SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(
-              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          GetPrefs.setString(
+              GetPrefs.canceledProjects, jsonEncode(canceledProjects));
+          GetPrefs.setString(
+              GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          GetPrefs.setString(
+              GetPrefs.completedProjects, jsonEncode(completedProjects));
+          GetPrefs.setString(
+              GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
         }
         break;
       case 1:
@@ -99,8 +99,8 @@ class _EditTaskState extends State<EditTask> {
               .removeWhere((element) => element['title'] == dataModel.title);
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
-          if (SharedPrefs.containsKey('${widget.object['title']}')) {
-            String? string = SharedPrefs.getString('${widget.object['title']}');
+          if (GetPrefs.containsKey('${widget.object['title']}')) {
+            String? string = GetPrefs.getString('${widget.object['title']}');
             list = jsonDecode(string);
             for (int i = 0; i < list.length; i++) {
               list[i]['percentage'] = 100;
@@ -112,17 +112,17 @@ class _EditTaskState extends State<EditTask> {
                 controller.map.value;
           }
           completedProjects.add(controller.map.value);
-          SharedPrefs.setString(
-              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(
-              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(
-              SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(
-              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
-          SharedPrefs.setString('${widget.object['title']}', jsonEncode(list));
-          SharedPrefs.setString(
-              SharedPrefs.projects, jsonEncode(controller.optionList.value));
+          GetPrefs.setString(
+              GetPrefs.canceledProjects, jsonEncode(canceledProjects));
+          GetPrefs.setString(
+              GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          GetPrefs.setString(
+              GetPrefs.completedProjects, jsonEncode(completedProjects));
+          GetPrefs.setString(
+              GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          GetPrefs.setString('${widget.object['title']}', jsonEncode(list));
+          GetPrefs.setString(
+              GetPrefs.projects, jsonEncode(controller.optionList.value));
         }
         break;
       case 2:
@@ -136,14 +136,14 @@ class _EditTaskState extends State<EditTask> {
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
           upcomingProjects.add(controller.map.value);
-          SharedPrefs.setString(
-              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(
-              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(
-              SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(
-              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          GetPrefs.setString(
+              GetPrefs.canceledProjects, jsonEncode(canceledProjects));
+          GetPrefs.setString(
+              GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          GetPrefs.setString(
+              GetPrefs.completedProjects, jsonEncode(completedProjects));
+          GetPrefs.setString(
+              GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
         }
         break;
       case 3:
@@ -157,19 +157,19 @@ class _EditTaskState extends State<EditTask> {
           completedProjects
               .removeWhere((element) => element['title'] == dataModel.title);
           canceledProjects.add(controller.map.value);
-          SharedPrefs.setString(
-              SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-          SharedPrefs.setString(
-              SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-          SharedPrefs.setString(
-              SharedPrefs.completedProjects, jsonEncode(completedProjects));
-          SharedPrefs.setString(
-              SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+          GetPrefs.setString(
+              GetPrefs.canceledProjects, jsonEncode(canceledProjects));
+          GetPrefs.setString(
+              GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+          GetPrefs.setString(
+              GetPrefs.completedProjects, jsonEncode(completedProjects));
+          GetPrefs.setString(
+              GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
         }
         break;
     }
     if (controller.reminder.value == true) {
-      int? id = SharedPrefs.getInt(SharedPrefs.userId);
+      int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
           id: id,
           title: 'Reminder',
@@ -181,7 +181,7 @@ class _EditTaskState extends State<EditTask> {
               controller.selectedDate.value.day,
               controller.selectedTime.value.hour,
               controller.selectedTime.value.minute));
-      SharedPrefs.setInt(SharedPrefs.userId, id + 1);
+      GetPrefs.setInt(GetPrefs.userId, id + 1);
       LocalNotificationService.initialize(
           context: context, object: controller.map.value);
     }

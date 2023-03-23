@@ -26,31 +26,31 @@ class _DashboardState extends State<Dashboard>{
   DashboardController controller = Get.put(DashboardController());
 
   getData() async {
-      if (SharedPrefs.containsKey(SharedPrefs.userName)) {
-        controller.username.value = SharedPrefs.getString(SharedPrefs.userName);
+      if (GetPrefs.containsKey(GetPrefs.userName)) {
+        controller.username.value = GetPrefs.getString(GetPrefs.userName);
       }
   }
 
   Future getProjectItem() async {
 
-    if (SharedPrefs.containsKey(SharedPrefs.projects)) {
-        var map = SharedPrefs.getString(SharedPrefs.projects);
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+        var map = GetPrefs.getString(GetPrefs.projects);
         projectItem = jsonDecode(map);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.upcomingProjects)) {
-        var upcoming = SharedPrefs.getString(SharedPrefs.upcomingProjects);
+    if (GetPrefs.containsKey(GetPrefs.upcomingProjects)) {
+        var upcoming = GetPrefs.getString(GetPrefs.upcomingProjects);
         upcomingProjects = jsonDecode(upcoming);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.canceledProjects)) {
-        var canceled = SharedPrefs.getString(SharedPrefs.canceledProjects);
+    if (GetPrefs.containsKey(GetPrefs.canceledProjects)) {
+        var canceled = GetPrefs.getString(GetPrefs.canceledProjects);
         canceledProjects = jsonDecode(canceled);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
-        var ongoing = SharedPrefs.getString(SharedPrefs.ongoingProjects);
+    if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
+        var ongoing = GetPrefs.getString(GetPrefs.ongoingProjects);
         ongoingProjects = jsonDecode(ongoing);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
-        var completed = SharedPrefs.getString(SharedPrefs.completedProjects);
+    if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
+        var completed = GetPrefs.getString(GetPrefs.completedProjects);
         completedProjects = jsonDecode(completed);
     }
   }
@@ -123,14 +123,14 @@ class _DashboardState extends State<Dashboard>{
   ascendingSort() async {
     setState(() {
       projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
-      SharedPrefs.setString(SharedPrefs.projects, jsonEncode(projectItem));
+      GetPrefs.setString(GetPrefs.projects, jsonEncode(projectItem));
     });
   }
 
   descendingSort() async {
     setState(() {
       projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
-      SharedPrefs.setString(SharedPrefs.projects, jsonEncode(projectItem));
+      GetPrefs.setString(GetPrefs.projects, jsonEncode(projectItem));
     });
   }
 }

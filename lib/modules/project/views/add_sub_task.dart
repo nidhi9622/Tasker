@@ -47,8 +47,8 @@ class _AddSubTaskState extends State<AddSubTask> {
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
     };
-    if (SharedPrefs.containsKey('${widget.object['title']}')) {
-      String? mapString = SharedPrefs.getString('${widget.object['title']}');
+    if (GetPrefs.containsKey('${widget.object['title']}')) {
+      String? mapString = GetPrefs.getString('${widget.object['title']}');
       List newMap = jsonDecode(mapString);
       for (int i = 0; i < newMap.length; i++) {
         subTask.add(newMap[i]);
@@ -67,9 +67,9 @@ class _AddSubTaskState extends State<AddSubTask> {
         subTask.add(controller.map.value);
       }
     }
-    SharedPrefs.setString('${widget.object['title']}', jsonEncode(subTask));
+    GetPrefs.setString('${widget.object['title']}', jsonEncode(subTask));
     if (controller.reminder.value == true) {
-      int? id = SharedPrefs.getInt(SharedPrefs.userId);
+      int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
           id: id,
           title: '${widget.object['title']} project',
@@ -82,7 +82,7 @@ class _AddSubTaskState extends State<AddSubTask> {
               controller.selectedTime.value.hour,
               controller.selectedTime.value.minute));
 
-      SharedPrefs.setInt(SharedPrefs.userId, id + 1);
+      GetPrefs.setInt(GetPrefs.userId, id + 1);
     }
     LocalNotificationService.initialize(
         context: context, object: widget.object);

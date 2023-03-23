@@ -71,7 +71,7 @@ class _ProjectItemListState extends State<ProjectItemList> {
                             arguments: {'object': projectItem[index]});
                       },
                       onTapSecond: () async {
-                        SharedPrefs.remove('${dataModel.title}');
+                        GetPrefs.remove('${dataModel.title}');
                         projectItem.removeWhere(
                             (element) => element['title'] == dataModel.title);
                         upcomingProjects.removeWhere(
@@ -82,15 +82,15 @@ class _ProjectItemListState extends State<ProjectItemList> {
                             (element) => element['title'] == dataModel.title);
                         completedProjects.removeWhere(
                             (element) => element['title'] == dataModel.title);
-                        SharedPrefs.setString(
-                            SharedPrefs.projects, jsonEncode(projectItem));
-                        SharedPrefs.setString(SharedPrefs.canceledProjects,
+                        GetPrefs.setString(
+                            GetPrefs.projects, jsonEncode(projectItem));
+                        GetPrefs.setString(GetPrefs.canceledProjects,
                             jsonEncode(canceledProjects));
-                        SharedPrefs.setString(SharedPrefs.upcomingProjects,
+                        GetPrefs.setString(GetPrefs.upcomingProjects,
                             jsonEncode(upcomingProjects));
-                        SharedPrefs.setString(SharedPrefs.completedProjects,
+                        GetPrefs.setString(GetPrefs.completedProjects,
                             jsonEncode(completedProjects));
-                        SharedPrefs.setString(SharedPrefs.ongoingProjects,
+                        GetPrefs.setString(GetPrefs.ongoingProjects,
                             jsonEncode(ongoingProjects));
                       },
                     )),

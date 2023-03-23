@@ -26,33 +26,33 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
   ProjectDetailController controller = Get.put(ProjectDetailController());
 
   getData() async {
-    if (SharedPrefs.containsKey('${widget.object['title']} notes')) {
+    if (GetPrefs.containsKey('${widget.object['title']} notes')) {
       controller.notes.value =
-          SharedPrefs.getString('${widget.object['title']} notes');
+          GetPrefs.getString('${widget.object['title']} notes');
     }
-    if (SharedPrefs.containsKey('${widget.object['title']}')) {
-      String? subTask = SharedPrefs.getString('${widget.object['title']}');
+    if (GetPrefs.containsKey('${widget.object['title']}')) {
+      String? subTask = GetPrefs.getString('${widget.object['title']}');
       controller.subTaskProjects.value = jsonDecode(subTask);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
-      String? ongoing = SharedPrefs.getString(SharedPrefs.ongoingProjects);
+    if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
+      String? ongoing = GetPrefs.getString(GetPrefs.ongoingProjects);
       ongoingProjects = jsonDecode(ongoing);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.upcomingProjects)) {
-      String? upcoming = SharedPrefs.getString(SharedPrefs.upcomingProjects);
+    if (GetPrefs.containsKey(GetPrefs.upcomingProjects)) {
+      String? upcoming = GetPrefs.getString(GetPrefs.upcomingProjects);
       upcomingProjects = jsonDecode(upcoming);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.canceledProjects)) {
-      String? cancel = SharedPrefs.getString(SharedPrefs.canceledProjects);
+    if (GetPrefs.containsKey(GetPrefs.canceledProjects)) {
+      String? cancel = GetPrefs.getString(GetPrefs.canceledProjects);
       canceledProjects = jsonDecode(cancel);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
-      String? completed = SharedPrefs.getString(SharedPrefs.completedProjects);
+    if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
+      String? completed = GetPrefs.getString(GetPrefs.completedProjects);
       completedProjects = jsonDecode(completed);
     }
 
-    if (SharedPrefs.containsKey('${widget.object['title']}')) {
-      String? subtask = SharedPrefs.getString('${widget.object['title']}');
+    if (GetPrefs.containsKey('${widget.object['title']}')) {
+      String? subtask = GetPrefs.getString('${widget.object['title']}');
       controller.subTaskList.value = jsonDecode(subtask);
       for (int i = 0; i < controller.subTaskList.value.length; i++) {
         controller.totalPercentage.value +=
@@ -60,7 +60,7 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
       }
       // controller.totalPercentage.value = (controller.totalPercentage.value /
       //         controller.subTaskList.value.length);
-      String? projectName = SharedPrefs.getString(SharedPrefs.projects);
+      String? projectName = GetPrefs.getString(GetPrefs.projects);
       controller.optionList.value = jsonDecode(projectName);
       controller.map.value = {
         'title': dataModel.title,
@@ -76,37 +76,37 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
       controller.optionList.value[controller.optionList.value
               .indexWhere((element) => element['title'] == dataModel.title)] =
           controller.map.value;
-      SharedPrefs.setString(
-          SharedPrefs.projects, jsonEncode(controller.optionList.value));
+      GetPrefs.setString(
+          GetPrefs.projects, jsonEncode(controller.optionList.value));
       if (dataModel.status == 'Ongoing') {
         // ongoingProjects.removeWhere((element) => element['title'] ==dataModel.title);
         // ongoingProjects.add(map);
         ongoingProjects[ongoingProjects
                 .indexWhere((element) => element['title'] == dataModel.title)] =
             controller.map.value;
-        SharedPrefs.setString(
-            SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+        GetPrefs.setString(
+            GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
       }
       if (controller.map.value['status'] == 'Upcoming') {
         upcomingProjects[upcomingProjects
                 .indexWhere((element) => element['title'] == dataModel.title)] =
             controller.map.value;
-        SharedPrefs.setString(
-            SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+        GetPrefs.setString(
+            GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
       }
       if (controller.map.value['status'] == 'Canceled') {
         canceledProjects[canceledProjects
                 .indexWhere((element) => element['title'] == dataModel.title)] =
             controller.map.value;
-        SharedPrefs.setString(
-            SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
+        GetPrefs.setString(
+            GetPrefs.canceledProjects, jsonEncode(canceledProjects));
       }
       if (controller.map.value['status'] == 'Complete') {
         completedProjects[completedProjects
                 .indexWhere((element) => element['title'] == dataModel.title)] =
             controller.map.value;
-        SharedPrefs.setString(
-            SharedPrefs.completedProjects, jsonEncode(completedProjects));
+        GetPrefs.setString(
+            GetPrefs.completedProjects, jsonEncode(completedProjects));
       }
     } else {
       controller.totalPercentage.value = widget.object['percentage'];

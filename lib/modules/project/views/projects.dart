@@ -22,16 +22,16 @@ class _ProjectsState extends State<Projects> {
   ProjectController controller = Get.put(ProjectController());
 
   getProjectItem() async {
-    if (SharedPrefs.containsKey(SharedPrefs.projects)) {
-      var map = SharedPrefs.getString(SharedPrefs.projects);
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
       controller.projectItem.value = jsonDecode(map);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
-      String? ongoing = SharedPrefs.getString(SharedPrefs.ongoingProjects);
+    if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
+      String? ongoing = GetPrefs.getString(GetPrefs.ongoingProjects);
       controller.ongoingProjects.value = jsonDecode(ongoing);
     }
-    if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
-      String? completed = SharedPrefs.getString(SharedPrefs.completedProjects);
+    if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
+      String? completed = GetPrefs.getString(GetPrefs.completedProjects);
       controller.completedProjects.value = jsonDecode(completed);
     }
   }
@@ -99,13 +99,13 @@ class _ProjectsState extends State<Projects> {
   void ascendingSort() async {
     controller.projectItem.value
         .sort((a, b) => a["title"].compareTo(b["title"]));
-    SharedPrefs.setString(SharedPrefs.projects, jsonEncode(controller.projectItem.value));
+    GetPrefs.setString(GetPrefs.projects, jsonEncode(controller.projectItem.value));
   }
 
   void descendingSort() async {
     controller.projectItem.value
         .sort((a, b) => b["title"].compareTo(a["title"]));
-    SharedPrefs.setString(SharedPrefs.projects, jsonEncode(controller.projectItem.value));
+    GetPrefs.setString(GetPrefs.projects, jsonEncode(controller.projectItem.value));
 
   }
 }

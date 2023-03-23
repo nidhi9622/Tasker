@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void isProfileExist() async {
-    if (SharedPrefs.getBool(SharedPrefs.isLoggedIn)==true) {
+    if (GetPrefs.getBool(GetPrefs.isLoggedIn) == true) {
       dashboardController.screens.value.insert(
           4,
           const UserProfile(
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return ValueListenableBuilder(
       builder: (context, value, child) {
         return Obx(() => AnimatedSwitcher(
-              switchOutCurve: Curves.decelerate,
+              switchOutCurve: Curves.easeIn,
               reverseDuration: const Duration(milliseconds: 0),
               duration: const Duration(milliseconds: 450),
               transitionBuilder: (Widget child, Animation<double> animation) =>

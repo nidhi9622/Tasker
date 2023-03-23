@@ -53,7 +53,7 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
               onTapDelete: () async {
                 widget.subTaskProjects.removeWhere(
                     (element) => element['title'] == widget.dataModel.title);
-                SharedPrefs.setString('${widget.object['title']}',
+                GetPrefs.setString('${widget.object['title']}',
                     jsonEncode(widget.subTaskProjects));
                 AppRoutes.pop();
                 // AppRoutes.go(AppRouteName.projectDetail,

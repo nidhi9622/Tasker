@@ -43,7 +43,7 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
                   arguments: {'object': projectItem[widget.index]});
             },
             onTapDelete: () async {
-              SharedPrefs.remove('${widget.dataModel.title}');
+              GetPrefs.remove('${widget.dataModel.title}');
               projectItem.removeWhere(
                   (element) => element['title'] == widget.dataModel.title);
               upcomingProjects.removeWhere(
@@ -54,16 +54,16 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
                   (element) => element['title'] == widget.dataModel.title);
               completedProjects.removeWhere(
                   (element) => element['title'] == widget.dataModel.title);
-              SharedPrefs.setString(
-                  SharedPrefs.projects, jsonEncode(projectItem));
-              SharedPrefs.setString(
-                  SharedPrefs.canceledProjects, jsonEncode(canceledProjects));
-              SharedPrefs.setString(
-                  SharedPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-              SharedPrefs.setString(
-                  SharedPrefs.completedProjects, jsonEncode(completedProjects));
-              SharedPrefs.setString(
-                  SharedPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+              GetPrefs.setString(
+                  GetPrefs.projects, jsonEncode(projectItem));
+              GetPrefs.setString(
+                  GetPrefs.canceledProjects, jsonEncode(canceledProjects));
+              GetPrefs.setString(
+                  GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
+              GetPrefs.setString(
+                  GetPrefs.completedProjects, jsonEncode(completedProjects));
+              GetPrefs.setString(
+                  GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
               AppRoutes.pop();
             },
           );

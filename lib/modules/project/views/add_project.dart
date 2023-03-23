@@ -60,8 +60,8 @@ class _AddProjectState extends State<AddProject> {
     String? mapString;
     List projectList = [];
     List newMap;
-    if (SharedPrefs.containsKey(SharedPrefs.projects)) {
-      mapString = SharedPrefs.getString(SharedPrefs.projects);
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      mapString = GetPrefs.getString(GetPrefs.projects);
       newMap = jsonDecode(mapString);
       for (int i = 0; i < newMap.length; i++) {
         if (controller.titleController.value.text.removeAllWhitespace ==
@@ -80,8 +80,8 @@ class _AddProjectState extends State<AddProject> {
               'Project with this title already exist.\nPlease try with another title.',
           isTitle: false);
     } else {
-      if (SharedPrefs.containsKey(SharedPrefs.projects)) {
-        mapString = SharedPrefs.getString(SharedPrefs.projects);
+      if (GetPrefs.containsKey(GetPrefs.projects)) {
+        mapString = GetPrefs.getString(GetPrefs.projects);
         newMap = jsonDecode(mapString);
         for (int i = 0; i < newMap.length; i++) {
           //print('title is : ${newMap[i]['title']}');
@@ -91,15 +91,15 @@ class _AddProjectState extends State<AddProject> {
       } else {
         projectList.add(controller.map.value);
       }
-      SharedPrefs.setString(SharedPrefs.projects, jsonEncode(projectList));
+      GetPrefs.setString(GetPrefs.projects, jsonEncode(projectList));
       switch (controller.dropDownValue.value) {
         case 0:
           {
             String? mapStringOnGoing;
             List newMapOngoing;
-            if (SharedPrefs.containsKey(SharedPrefs.ongoingProjects)) {
+            if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
               mapStringOnGoing =
-                  SharedPrefs.getString(SharedPrefs.ongoingProjects);
+                  GetPrefs.getString(GetPrefs.ongoingProjects);
               newMapOngoing = jsonDecode(mapStringOnGoing);
               for (int i = 0; i < newMapOngoing.length; i++) {
                 controller.ongoingTask.value.add(newMapOngoing[i]);
@@ -109,16 +109,16 @@ class _AddProjectState extends State<AddProject> {
               controller.ongoingTask.value.add(controller.map.value);
             }
             String totalProjects = jsonEncode(controller.ongoingTask.value);
-            SharedPrefs.setString(SharedPrefs.ongoingProjects, totalProjects);
+            GetPrefs.setString(GetPrefs.ongoingProjects, totalProjects);
           }
           break;
         case 1:
           {
             String? mapStringCompleted;
             List newMapCompleted;
-            if (SharedPrefs.containsKey(SharedPrefs.completedProjects)) {
+            if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
               mapStringCompleted =
-                  SharedPrefs.getString(SharedPrefs.completedProjects);
+                  GetPrefs.getString(GetPrefs.completedProjects);
               newMapCompleted = jsonDecode(mapStringCompleted);
               for (int i = 0; i < newMapCompleted.length; i++) {
                 controller.completedTasks.value.add(newMapCompleted[i]);
@@ -133,19 +133,19 @@ class _AddProjectState extends State<AddProject> {
                       controller.titleController.value.text)] =
                   controller.map.value;
             }
-            SharedPrefs.setString(SharedPrefs.completedProjects,
+            GetPrefs.setString(GetPrefs.completedProjects,
                 jsonEncode(controller.completedTasks.value));
-            SharedPrefs.setString(
-                SharedPrefs.projects, jsonEncode(projectList));
+            GetPrefs.setString(
+                GetPrefs.projects, jsonEncode(projectList));
           }
           break;
         case 2:
           {
             String? mapStringUpcoming;
             List newMapUpcoming;
-            if (SharedPrefs.containsKey(SharedPrefs.upcomingProjects)) {
+            if (GetPrefs.containsKey(GetPrefs.upcomingProjects)) {
               mapStringUpcoming =
-                  SharedPrefs.getString(SharedPrefs.upcomingProjects);
+                  GetPrefs.getString(GetPrefs.upcomingProjects);
               newMapUpcoming = jsonDecode(mapStringUpcoming);
               for (int i = 0; i < newMapUpcoming.length; i++) {
                 controller.upcomingTasks.value.add(newMapUpcoming[i]);
@@ -155,16 +155,16 @@ class _AddProjectState extends State<AddProject> {
               controller.upcomingTasks.value.add(controller.map.value);
             }
             String totalProjects = jsonEncode(controller.upcomingTasks.value);
-            SharedPrefs.setString(SharedPrefs.upcomingProjects, totalProjects);
+            GetPrefs.setString(GetPrefs.upcomingProjects, totalProjects);
           }
           break;
         case 3:
           {
             String? mapStringCanceled;
             List newMapCanceled;
-            if (SharedPrefs.containsKey(SharedPrefs.canceledProjects)) {
+            if (GetPrefs.containsKey(GetPrefs.canceledProjects)) {
               mapStringCanceled =
-                  SharedPrefs.getString(SharedPrefs.canceledProjects);
+                  GetPrefs.getString(GetPrefs.canceledProjects);
               newMapCanceled = jsonDecode(mapStringCanceled);
               for (int i = 0; i < newMapCanceled.length; i++) {
                 controller.canceledTasks.value.add(newMapCanceled[i]);
@@ -174,12 +174,12 @@ class _AddProjectState extends State<AddProject> {
               controller.canceledTasks.value.add(controller.map.value);
             }
             String totalProjects = jsonEncode(controller.canceledTasks.value);
-            SharedPrefs.setString(SharedPrefs.canceledProjects, totalProjects);
+            GetPrefs.setString(GetPrefs.canceledProjects, totalProjects);
           }
           break;
       }
       if (controller.reminder.value) {
-        int? id = SharedPrefs.getInt(SharedPrefs.userId);
+        int? id = GetPrefs.getInt(GetPrefs.userId);
         LocalNotificationService.showScheduleNotification(
             id: id,
             title: 'Reminder',
@@ -193,7 +193,7 @@ class _AddProjectState extends State<AddProject> {
                 controller.selectedTime.value.hour,
                 controller.selectedTime.value.minute));
 
-        SharedPrefs.setInt(SharedPrefs.userId, id + 1);
+        GetPrefs.setInt(GetPrefs.userId, id + 1);
       }
       // ignore: use_build_context_synchronously
       LocalNotificationService.initialize(

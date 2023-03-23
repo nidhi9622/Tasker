@@ -28,7 +28,7 @@ class _ProjectDetailRightState extends State<ProjectDetailRight> {
         controller: widget.notesController,
         style: const TextStyle(fontSize: 20),
         onChanged: (value) async {
-          SharedPrefs.setString(
+          GetPrefs.setString(
               '${widget.object['title']} notes', widget.notesController.text);
         },
         maxLength: null,

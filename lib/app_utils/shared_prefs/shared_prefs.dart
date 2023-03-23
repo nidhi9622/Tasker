@@ -1,10 +1,10 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 
-class SharedPrefs {
-  static late SharedPreferences _sharedPrefs;
+class GetPrefs {
+  static late GetStorage _getStorage;
 
   static Future init() async {
-    _sharedPrefs = await SharedPreferences.getInstance();
+    _getStorage = GetStorage();
   }
 
   static const String userName = "user_name";
@@ -22,37 +22,38 @@ class SharedPrefs {
   static const String completedProjects = "completedProjects";
 
   static void setString(String key, String value) {
-    _sharedPrefs.setString(key, value);
+    _getStorage.write(key, value);
   }
 
   static void setInt(String key, int value) {
-    _sharedPrefs.setInt(key, value);
+    _getStorage.write(key, value);
   }
 
   static void setBool(String key, bool value) {
-    _sharedPrefs.setBool(key, value);
+    _getStorage.write(key, value);
   }
 
   static bool containsKey(String key) {
-    return _sharedPrefs.containsKey(key);
+    return _getStorage.hasData(key);
   }
 
   static clear() async {
-    await _sharedPrefs.clear();
+    await _getStorage.erase();
   }
 
   static String getString(String key) {
-    return _sharedPrefs.getString(key) ?? '';
+    return _getStorage.read(key) ?? '';
   }
 
   static bool getBool(String key) {
-    return _sharedPrefs.getBool(key) ?? false;
+    return _getStorage.read(key) ?? false;
   }
 
   static int getInt(String key) {
-    return _sharedPrefs.getInt(key) ?? 0;
+    return _getStorage.read(key) ?? 0;
   }
-  static  remove(String key) {
-    return _sharedPrefs.remove(key) ;
+
+  static remove(String key) {
+    return _getStorage.remove(key);
   }
 }
