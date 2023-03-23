@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/helper_methods/project_text_field.dart';
 import '../../../app_utils/local_notification_service.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../../database/app_list.dart';
 import '../controller/add_st_controller.dart';
 import '../helper_methods/select_date_time.dart';
@@ -30,7 +30,6 @@ class _AddSubTaskState extends State<AddSubTask> {
 
   setData() async {
     List subTask = [];
-    SharedPreferences preferences = await SharedPreferences.getInstance();
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
@@ -48,9 +47,9 @@ class _AddSubTaskState extends State<AddSubTask> {
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
     };
-    if (preferences.containsKey('${widget.object['title']}')) {
-      String? mapString = preferences.getString('${widget.object['title']}');
-      List newMap = jsonDecode(mapString!);
+    if (SharedPrefs.containsKey('${widget.object['title']}')) {
+      String? mapString = SharedPrefs.getString('${widget.object['title']}');
+      List newMap = jsonDecode(mapString);
       for (int i = 0; i < newMap.length; i++) {
         subTask.add(newMap[i]);
       }
@@ -68,11 +67,11 @@ class _AddSubTaskState extends State<AddSubTask> {
         subTask.add(controller.map.value);
       }
     }
-    preferences.setString('${widget.object['title']}', jsonEncode(subTask));
+    SharedPrefs.setString('${widget.object['title']}', jsonEncode(subTask));
     if (controller.reminder.value == true) {
-      int? id = preferences.getInt('id');
+      int? id = SharedPrefs.getInt(SharedPrefs.userId);
       LocalNotificationService.showScheduleNotification(
-          id: id!,
+          id: id,
           title: '${widget.object['title']} project',
           body: 'Start your ${controller.titleController.value.text} task now',
           payload: jsonEncode(widget.object),
@@ -83,7 +82,7 @@ class _AddSubTaskState extends State<AddSubTask> {
               controller.selectedTime.value.hour,
               controller.selectedTime.value.minute));
 
-      preferences.setInt('id', id + 1);
+      SharedPrefs.setInt(SharedPrefs.userId, id + 1);
     }
     LocalNotificationService.initialize(
         context: context, object: widget.object);
