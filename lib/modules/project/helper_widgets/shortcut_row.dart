@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../dashboard/helper_methods/search.dart';
 import '../controller/project_detail_controller.dart';
 
@@ -21,11 +21,10 @@ class _ShortcutRowState extends State<ShortcutRow> {
   ProjectDetailController controller = Get.put(ProjectDetailController());
 
   getData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey('${widget.object['title']} searchShortcut')) {
+    if (SharedPrefs.containsKey('${widget.object['title']} searchShortcut')) {
       var searchString =
-          preferences.getString('${widget.object['title']} searchShortcut');
-      controller.searchShortcut.value = jsonDecode(searchString!);
+      SharedPrefs.getString('${widget.object['title']} searchShortcut');
+      controller.searchShortcut.value = jsonDecode(searchString);
     }
   }
 
@@ -129,10 +128,8 @@ class _ShortcutRowState extends State<ShortcutRow> {
           InkWell(
             onTap: () async {
               if (shortcutController.text.isNotEmpty) {
-                SharedPreferences preferences =
-                    await SharedPreferences.getInstance();
                 controller.searchShortcut.value.add(shortcutController.text);
-                preferences.setString(
+                SharedPrefs.setString(
                     '${widget.object['title']} searchShortcut',
                     jsonEncode(controller.searchShortcut.value));
               }
