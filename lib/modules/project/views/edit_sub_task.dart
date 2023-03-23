@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/local_notification_service.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 import '../../../database/app_list.dart';
 import '../../../models/data_model.dart';
 import '../controller/sub_task_controller.dart';
@@ -33,10 +33,9 @@ class _EditSubTaskState extends State<EditSubTask> {
   late DataModel dataModel;
 
   setTaskData() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey(widget.title)) {
-      String? subTask = preferences.getString(widget.title);
-        controller.subTaskProjects.value = jsonDecode(subTask!);
+    if (SharedPrefs.containsKey(widget.title)) {
+      String? subTask = SharedPrefs.getString(widget.title);
+        controller.subTaskProjects.value = jsonDecode(subTask);
     }
     if (controller.percentageController.value.text.isEmpty) {
         controller.percentageController.value.text = '0';
@@ -62,11 +61,11 @@ class _EditSubTaskState extends State<EditSubTask> {
               .indexWhere((element) => element['title'] == dataModel.title)] =
           controller.map.value;
     }
-      preferences.setString(widget.title, jsonEncode(controller.subTaskProjects.value));
+    SharedPrefs.setString(widget.title, jsonEncode(controller.subTaskProjects.value));
     if (controller.reminder.value == true) {
-      int? id = preferences.getInt('id');
+      int? id = SharedPrefs.getInt(SharedPrefs.userId);
       LocalNotificationService.showScheduleNotification(
-          id: id!,
+          id: id,
           title: 'Reminder',
           body: 'Start your ${controller.titleController.value.text} task now',
           payload: jsonEncode(widget.homeObject),
@@ -76,7 +75,7 @@ class _EditSubTaskState extends State<EditSubTask> {
               controller.selectedDate.value.day,
               controller.selectedTime.value.hour,
               controller.selectedTime.value.minute));
-        preferences.setInt('id', id + 1);
+      SharedPrefs.setInt(SharedPrefs.userId, id + 1);
     }
     LocalNotificationService.initialize(
         context: context, object: widget.homeObject);

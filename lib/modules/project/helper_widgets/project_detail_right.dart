@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../app_utils/shared_prefs/shared_prefs.dart';
 
 class ProjectDetailRight extends StatefulWidget {
   final Map object;
@@ -28,13 +28,12 @@ class _ProjectDetailRightState extends State<ProjectDetailRight> {
         controller: widget.notesController,
         style: const TextStyle(fontSize: 20),
         onChanged: (value) async {
-          SharedPreferences preferences = await SharedPreferences.getInstance();
-            preferences.setString(
-                '${widget.object['title']} notes', widget.notesController.text);
+          SharedPrefs.setString(
+              '${widget.object['title']} notes', widget.notesController.text);
         },
         maxLength: null,
         maxLines: null,
-         expands: true,
+        expands: true,
         decoration: InputDecoration(
             border: InputBorder.none,
             hintText: 'addNotes'.tr,
