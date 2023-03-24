@@ -23,6 +23,7 @@ class ProjectDetailBody extends StatefulWidget {
 
 class _ProjectDetailBodyState extends State<ProjectDetailBody> {
   late DataModel dataModel;
+
   ProjectDetailController controller = Get.put(ProjectDetailController());
 
   getData() async {
@@ -121,29 +122,28 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
   }
 
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(child: Obx(() {
-        return Column(
-          children: [
-            ProjectDetailContainer(
-              object: widget.object,
-              totalPercentage: controller.totalPercentage.value,
-              dataModel: dataModel,
-            ),
-            CustomTabBar(
-              tabList: detailedPageTab,
-              displayIndex: controller.displayIndex,
-            ),
-            if (controller.displayIndex.value == 0)
-              ProjectDetailLeft(
-                  object: widget.object,
-                  subTaskList: controller.subTaskList.value,
-                  subTaskProjects: controller.subTaskProjects.value),
-            if (controller.displayIndex.value == 1)
-              ProjectDetailRight(
+  Widget build(BuildContext context) => SingleChildScrollView(
+          child: Column(
+        children: [
+          ProjectDetailContainer(
+            object: widget.object,
+            totalPercentage: controller.totalPercentage.value,
+            dataModel: dataModel,
+          ),
+          CustomTabBar(
+            tabList: detailedPageTab,
+            displayIndex: controller.displayIndex,
+          ),
+          if (controller.displayIndex.value == 0)
+            ProjectDetailLeft(
                 object: widget.object,
-                notesController: controller.notesController.value,
-              )
-          ],
-        );
-      }));
+                subTaskList: controller.subTaskList.value,
+                subTaskProjects: controller.subTaskProjects.value),
+          if (controller.displayIndex.value == 1)
+            ProjectDetailRight(
+              object: widget.object,
+              notesController: controller.notesController.value,
+            )
+        ],
+      ));
 }

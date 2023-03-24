@@ -9,7 +9,7 @@ import 'heading_text.dart';
 class EditTaskBody extends StatefulWidget {
   final dynamic setTaskData;
   final String status;
-  final controller;
+  final dynamic controller;
 
   const EditTaskBody(
       {Key? key,

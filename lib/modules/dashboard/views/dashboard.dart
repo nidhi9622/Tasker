@@ -121,16 +121,16 @@ class _DashboardState extends State<Dashboard>{
   }
 
   ascendingSort() async {
-    setState(() {
+    //setState(() {
       projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
       GetPrefs.setString(GetPrefs.projects, jsonEncode(projectItem));
-    });
+    //});
   }
 
   descendingSort() async {
-    setState(() {
+   // setState(() {
       projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
       GetPrefs.setString(GetPrefs.projects, jsonEncode(projectItem));
-    });
+   // });
   }
 }

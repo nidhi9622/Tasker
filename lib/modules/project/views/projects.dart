@@ -97,6 +97,7 @@ class _ProjectsState extends State<Projects> {
       }));
 
   void ascendingSort() async {
+    //var map = GetPrefs.getString(GetPrefs.projects);
     controller.projectItem.value
         .sort((a, b) => a["title"].compareTo(b["title"]));
     GetPrefs.setString(GetPrefs.projects, jsonEncode(controller.projectItem.value));

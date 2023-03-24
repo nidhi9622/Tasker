@@ -14,6 +14,7 @@ class ProjectDetail extends StatefulWidget {
 }
 
 class _ProjectDetailState extends State<ProjectDetail> {
+
   @override
   Widget build(BuildContext context) => WillPopScope(
       onWillPop: () async {

@@ -8,11 +8,27 @@ import 'date_time_widget.dart';
 import 'heading_text.dart';
 import 'hide_container.dart';
 
-class SubTaskBody extends StatelessWidget {
+class SubTaskBody extends StatefulWidget {
   final AddSTController controller;
 
   const SubTaskBody({Key? key, required this.controller}) : super(key: key);
 
+  @override
+  State<SubTaskBody> createState() => _SubTaskBodyState();
+}
+
+class _SubTaskBodyState extends State<SubTaskBody> {
+  // @override
+  // void dispose() {
+  //   widget.controller.titleHeight.value = 0;
+  //   widget.controller.subTitleHeight.value = 0;
+  //   widget.controller.descriptionHeight.value = 0;
+  //   widget.controller.percentageController.value.text = '';
+  //   widget.controller.descriptionController.value.text = '';
+  //   widget.controller.titleController.value.text = '';
+  //   widget.controller.subTitleController.value.text = '';
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,14 +40,14 @@ class SubTaskBody extends StatelessWidget {
             HeadingText(text: 'taskDetail'.tr),
             HideContainer(
                 onTap: () {
-                  controller.titleHeight.value = 60;
+                  widget.controller.titleHeight.value = 60;
                 },
                 text: 'title'.tr),
-            if (controller.titleHeight.value > 0)
+            if (widget.controller.titleHeight.value > 0)
               SizedBox(
-                  height: controller.titleHeight.value,
+                  height: widget.controller.titleHeight.value,
                   child: ProjectTextField(
-                      controller: controller.titleController.value,
+                      controller: widget.controller.titleController.value,
                       labelText: 'title'.tr,
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
@@ -45,14 +61,14 @@ class SubTaskBody extends StatelessWidget {
                       maxLines: 1)),
             HideContainer(
                 onTap: () {
-                  controller.subTitleHeight.value = 60;
+                  widget.controller.subTitleHeight.value = 60;
                 },
                 text: 'subTitle'.tr),
-            if (controller.subTitleHeight.value > 0)
+            if (widget.controller.subTitleHeight.value > 0)
               SizedBox(
-                height: controller.subTitleHeight.value,
+                height: widget.controller.subTitleHeight.value,
                 child: ProjectTextField(
-                    controller: controller.subTitleController.value,
+                    controller: widget.controller.subTitleController.value,
                     labelText: 'subTitle'.tr,
                     inputType: TextInputType.name,
                     inputAction: TextInputAction.next,
@@ -70,12 +86,13 @@ class SubTaskBody extends StatelessWidget {
             DateTimeWidget(
               onTap: () async {
                 DateTime? picked = await selectDate(context);
-                if (picked != null && picked != controller.selectedDate.value) {
-                  controller.selectedDate.value = picked;
+                if (picked != null &&
+                    picked != widget.controller.selectedDate.value) {
+                  widget.controller.selectedDate.value = picked;
                 }
               },
               text: DateFormat("MMM dd, yyyy")
-                  .format(controller.selectedDate.value),
+                  .format(widget.controller.selectedDate.value),
               isDate: true,
             ),
             const SizedBox(height: 8),
@@ -83,11 +100,12 @@ class SubTaskBody extends StatelessWidget {
             DateTimeWidget(
               onTap: () async {
                 final picked = await selectTime(context);
-                if (picked != null && picked != controller.selectedTime.value) {
-                  controller.selectedTime.value = picked;
+                if (picked != null &&
+                    picked != widget.controller.selectedTime.value) {
+                  widget.controller.selectedTime.value = picked;
                 }
               },
-              text: '${controller.selectedTime.value.format(context)}',
+              text: '${widget.controller.selectedTime.value.format(context)}',
               isDate: false,
             ),
             const SizedBox(
@@ -96,12 +114,12 @@ class SubTaskBody extends StatelessWidget {
             HeadingText(text: 'additional'.tr),
             HideContainer(
                 onTap: () {
-                  controller.descriptionHeight.value = 120;
+                  widget.controller.descriptionHeight.value = 120;
                 },
                 text: 'description'.tr),
-            if (controller.descriptionHeight.value > 0)
+            if (widget.controller.descriptionHeight.value > 0)
               ProjectTextField(
-                  controller: controller.descriptionController.value,
+                  controller: widget.controller.descriptionController.value,
                   labelText: 'description'.tr,
                   inputType: TextInputType.name,
                   inputAction: TextInputAction.next,

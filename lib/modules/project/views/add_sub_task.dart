@@ -23,7 +23,18 @@ class AddSubTask extends StatefulWidget {
 class _AddSubTaskState extends State<AddSubTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AddSTController controller = Get.put(AddSTController());
-
+  //
+  // @override
+  // void dispose() {
+  //   controller.titleHeight.value = 0;
+  //   controller.subTitleHeight.value = 0;
+  //   controller.descriptionHeight.value = 0;
+  //   controller.percentageController.value.text = '';
+  //   controller.descriptionController.value.text = '';
+  //   controller.titleController.value.text = '';
+  //   controller.subTitleController.value.text = '';
+  //   super.dispose();
+  // }
   setData() async {
     List subTask = [];
     if (controller.percentageController.value.text.isEmpty) {
