@@ -32,7 +32,7 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
     }
 
     if (GetPrefs.containsKey('${widget.object['id']}')) {
-      String? subtask = GetPrefs.getString('${widget.object['title']}');
+      String? subtask = GetPrefs.getString('${widget.object['id']}');
       controller.subTaskList.value = jsonDecode(subtask);
       for (int i = 0; i < controller.subTaskList.value.length; i++) {
         controller.totalPercentage.value +=

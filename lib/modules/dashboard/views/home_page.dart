@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return AnimatedSwitcher(
       switchOutCurve: Curves.easeIn,
       reverseDuration: const Duration(milliseconds: 0),
-      duration: const Duration(milliseconds: 450),
+      duration: const Duration(milliseconds: 50),
       transitionBuilder: (Widget child, Animation<double> animation) =>
           SlideTransition(
         position: Tween(

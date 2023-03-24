@@ -85,34 +85,43 @@ class _ProjectsState extends State<Projects> {
               Expanded(
                   flex: 12,
                   child: ProjectTabView(
-                    tabList: controller.projectItem.value,
+                    tabList: controller.projectItem,
                   )),
             if (controller.displayIndex.value == 1)
               Expanded(
                   flex: 12,
                   child: ProjectTabView(
-                      tabList: controller.ongoingProjects.value)),
+                      tabList: controller.ongoingProjects)),
             if (controller.displayIndex.value == 2)
               Expanded(
                   flex: 12,
                   child: ProjectTabView(
-                      tabList: controller.completedProjects.value))
+                      tabList: controller.completedProjects))
           ],
         );
       }));
 
   void ascendingSort() async {
+    List list=
+        controller.projectItem.value;
+    list.sort((a, b) => a["title"].compareTo(b["title"]));
+    controller.projectItem.value=list;
+    print("tapped================");
     //var map = GetPrefs.getString(GetPrefs.projects);
-    controller.projectItem.value
-        .sort((a, b) => a["title"].compareTo(b["title"]));
-    GetPrefs.setString(
-        GetPrefs.projects, jsonEncode(controller.projectItem.value));
+    // controller.projectItem.value
+    //     .sort((a, b) => a["title"].compareTo(b["title"]));
+    // GetPrefs.setString(
+    //     GetPrefs.projects, jsonEncode(controller.projectItem.value));
   }
 
   void descendingSort() async {
-    controller.projectItem.value
-        .sort((a, b) => b["title"].compareTo(a["title"]));
-    GetPrefs.setString(
-        GetPrefs.projects, jsonEncode(controller.projectItem.value));
+    List list=
+        controller.projectItem.value;
+    list.sort((a, b) => b["title"].compareTo(a["title"]));
+    controller.projectItem.value=list;
+    // controller.projectItem.value
+    //     .sort((a, b) => b["title"].compareTo(a["title"]));
+    // GetPrefs.setString(
+    //     GetPrefs.projects, jsonEncode(controller.projectItem.value));
   }
 }

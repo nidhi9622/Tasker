@@ -103,8 +103,10 @@ class _DashboardState extends State<Dashboard> {
 
   ascendingSort() async {
     //setState(() {
-    controller.projectList.value
-        .sort((a, b) => a["title"].compareTo(b["title"]));
+    List list=controller.projectList.value;
+
+        list.sort((a, b) => a["title"].compareTo(b["title"]));
+    controller.projectList.value=list;
     // GetPrefs.setString(
     //     GetPrefs.projects, jsonEncode(controller.projectList.value));
     //});
@@ -112,8 +114,10 @@ class _DashboardState extends State<Dashboard> {
 
   descendingSort() async {
     // setState(() {
-    controller.projectList.value
-        .sort((a, b) => b["title"].compareTo(a["title"]));
+    List list=
+    controller.projectList.value;
+    list.sort((a, b) => b["title"].compareTo(a["title"]));
+    controller.projectList.value=list;
     // GetPrefs.setString(
     //     GetPrefs.projects, jsonEncode(controller.projectList.value));
     // });
