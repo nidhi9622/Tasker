@@ -62,7 +62,7 @@ class _ProjectDetailLeftState extends State<ProjectDetailLeft> {
                     itemCount: widget.subTaskList.length,
                     itemBuilder: (context, index) {
                       DataModel dataModel =
-                          DataModel(widget.subTaskList[index]);
+                          DataModel.fromJson(widget.subTaskList[index]);
                       return Padding(
                           padding: const EdgeInsets.only(
                               left: 22, right: 22, bottom: 12, top: 6),

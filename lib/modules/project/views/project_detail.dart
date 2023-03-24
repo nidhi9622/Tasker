@@ -5,7 +5,7 @@ import '../../dashboard/helper_methods/search.dart';
 import '../helper_widgets/project_detail_body.dart';
 
 class ProjectDetail extends StatefulWidget {
-  final Map object;
+  final Map<String,dynamic> object;
 
   const ProjectDetail({Key? key, required this.object, }) : super(key: key);
 

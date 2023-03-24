@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_manager/app_utils/project_status.dart';
 
 class AddProjectController extends GetxController {
   Rx<DateTime> selectedDate = Rx(DateTime.now());
@@ -9,7 +10,8 @@ class AddProjectController extends GetxController {
   Rx<List> completedTasks = Rx([]);
   Rx<List> upcomingTasks = Rx([]);
   Rx<List> canceledTasks = Rx([]);
-  Rx<Map> map = Rx({});
+  RxMap<String,dynamic> map = RxMap({});
+  Rx<ProjectStatus> dropdownText = Rx(ProjectStatus.ongoing);
   RxBool reminder = RxBool(false);
   RxBool preExist = RxBool(false);
   RxInt dropDownValue = RxInt(0);

@@ -57,7 +57,7 @@ class ProjectDetailContainer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
-                '${dataModel.subtitle}',
+                '${dataModel.subTitle}',
                 style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ),

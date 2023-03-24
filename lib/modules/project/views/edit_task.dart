@@ -12,7 +12,7 @@ import '../helper_methods/title_error_dialog.dart';
 import '../helper_widgets/edit_task_body.dart';
 
 class EditTask extends StatefulWidget {
-  final Map object;
+  final Map<String,dynamic> object;
 
   const EditTask({Key? key, required this.object}) : super(key: key);
 
@@ -191,11 +191,11 @@ class _EditTaskState extends State<EditTask> {
   }
 
   setData() {
-    dataModel = DataModel(widget.object);
+    dataModel = DataModel.fromJson(widget.object);
     controller.titleController.value =
         TextEditingController(text: dataModel.title);
     controller.subTitleController.value =
-        TextEditingController(text: dataModel.subtitle);
+        TextEditingController(text: dataModel.subTitle);
     controller.percentageController.value =
         TextEditingController(text: dataModel.percentage.toString());
     controller.descriptionController.value =

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
+import '../../../app_utils/global_data.dart';
 import '../../../app_utils/local_notification_service.dart';
 import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../database/app_list.dart';
@@ -23,18 +24,7 @@ class AddSubTask extends StatefulWidget {
 class _AddSubTaskState extends State<AddSubTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AddSTController controller = Get.put(AddSTController());
-  //
-  // @override
-  // void dispose() {
-  //   controller.titleHeight.value = 0;
-  //   controller.subTitleHeight.value = 0;
-  //   controller.descriptionHeight.value = 0;
-  //   controller.percentageController.value.text = '';
-  //   controller.descriptionController.value.text = '';
-  //   controller.titleController.value.text = '';
-  //   controller.subTitleController.value.text = '';
-  //   super.dispose();
-  // }
+
   setData() async {
     List subTask = [];
     if (controller.percentageController.value.text.isEmpty) {
@@ -54,28 +44,20 @@ class _AddSubTaskState extends State<AddSubTask> {
       'reminder': controller.reminder.value,
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
+      'projectStatus':controller.dropdownText.value,
+      'id':totalProjectList.length
     };
-    if (GetPrefs.containsKey('${widget.object['title']}')) {
-      String? mapString = GetPrefs.getString('${widget.object['title']}');
+    if (GetPrefs.containsKey('${widget.object['id']}')) {
+      String? mapString = GetPrefs.getString('${widget.object['id']}');
       List newMap = jsonDecode(mapString);
       for (int i = 0; i < newMap.length; i++) {
         subTask.add(newMap[i]);
       }
-      if (controller.dropDownValue.value == 1) {
-        controller.map.value['percentage'] = 100;
-        subTask.add(controller.map.value);
-      } else {
-        subTask.add(controller.map.value);
-      }
+      subTask.add(controller.map.value);
     } else {
-      if (controller.dropDownValue.value == 1) {
-        controller.map.value['percentage'] = 100;
-        subTask.add(controller.map.value);
-      } else {
-        subTask.add(controller.map.value);
-      }
+      subTask.add(controller.map.value);
     }
-    GetPrefs.setString('${widget.object['title']}', jsonEncode(subTask));
+    GetPrefs.setString('${widget.object['id']}', jsonEncode(subTask));
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(

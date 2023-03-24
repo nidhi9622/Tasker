@@ -21,7 +21,7 @@ class _ProjectTabViewState extends State<ProjectTabView> {
             ? ListView.builder(
                 itemCount: widget.tabList.length,
                 itemBuilder: (context, index) {
-                  DataModel dataModel = DataModel(widget.tabList[index]);
+                  DataModel dataModel = DataModel.fromJson(widget.tabList[index]);
                   return TaskDetailContainer(
                     dataModel: dataModel,
                     tabList: widget.tabList,

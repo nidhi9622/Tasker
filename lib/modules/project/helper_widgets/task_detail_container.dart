@@ -87,7 +87,7 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
                         fontWeight: FontWeight.bold, fontSize: 22),
                   ),
                   const SizedBox(height: 4),
-                  Text(widget.dataModel.subtitle!,
+                  Text(widget.dataModel.subTitle!,
                       style: const TextStyle(color: Colors.grey)),
                   const SizedBox(height: 12),
                   Row(
@@ -100,7 +100,7 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
                         width: 8,
                       ),
                       Text(
-                        widget.dataModel.date,
+                        widget.dataModel.date??"",
                         style: const TextStyle(color: Colors.grey),
                       )
                     ],

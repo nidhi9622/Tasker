@@ -22,7 +22,7 @@ class ProcessDetailView extends StatelessWidget {
             ? ListView.builder(
                 itemCount: tabList.length,
                 itemBuilder: (context, index) {
-                  DataModel dataModel = DataModel(tabList[index]);
+                  DataModel dataModel = DataModel.fromJson(tabList[index]);
                   return TaskDetailContainer(
                     dataModel: dataModel,
                     tabList: tabList,

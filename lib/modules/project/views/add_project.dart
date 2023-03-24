@@ -55,6 +55,8 @@ class _AddProjectState extends State<AddProject> {
       'reminder': controller.reminder.value,
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
+      'projectStatus': controller.dropdownText.value,
+      'id': totalProjectList.length
     };
 
     String? mapString;
@@ -64,146 +66,38 @@ class _AddProjectState extends State<AddProject> {
       mapString = GetPrefs.getString(GetPrefs.projects);
       newMap = jsonDecode(mapString);
       for (int i = 0; i < newMap.length; i++) {
-        if (controller.titleController.value.text.removeAllWhitespace ==
-            newMap[i]['title']) {
-          controller.preExist.value = true;
-        } else {
-          controller.preExist.value = false;
-        }
+        totalProjectList.add(newMap[i]);
       }
-    }
-    if (controller.preExist.value == true) {
-      // ignore: use_build_context_synchronously
-      titleErrorDialog(
-          context: context,
-          content:
-              'Project with this title already exist.\nPlease try with another title.',
-          isTitle: false);
+      totalProjectList.add(controller.map.value);
     } else {
-      if (GetPrefs.containsKey(GetPrefs.projects)) {
-        mapString = GetPrefs.getString(GetPrefs.projects);
-        newMap = jsonDecode(mapString);
-        for (int i = 0; i < newMap.length; i++) {
-          //print('title is : ${newMap[i]['title']}');
-          projectList.add(newMap[i]);
-        }
-        projectList.add(controller.map.value);
-      } else {
-        projectList.add(controller.map.value);
-      }
-      GetPrefs.setString(GetPrefs.projects, jsonEncode(projectList));
-      switch (controller.dropDownValue.value) {
-        case 0:
-          {
-            String? mapStringOnGoing;
-            List newMapOngoing;
-            if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
-              mapStringOnGoing =
-                  GetPrefs.getString(GetPrefs.ongoingProjects);
-              newMapOngoing = jsonDecode(mapStringOnGoing);
-              for (int i = 0; i < newMapOngoing.length; i++) {
-                controller.ongoingTask.value.add(newMapOngoing[i]);
-              }
-              controller.ongoingTask.value.add(controller.map.value);
-            } else {
-              controller.ongoingTask.value.add(controller.map.value);
-            }
-            String totalProjects = jsonEncode(controller.ongoingTask.value);
-            GetPrefs.setString(GetPrefs.ongoingProjects, totalProjects);
-          }
-          break;
-        case 1:
-          {
-            String? mapStringCompleted;
-            List newMapCompleted;
-            if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
-              mapStringCompleted =
-                  GetPrefs.getString(GetPrefs.completedProjects);
-              newMapCompleted = jsonDecode(mapStringCompleted);
-              for (int i = 0; i < newMapCompleted.length; i++) {
-                controller.completedTasks.value.add(newMapCompleted[i]);
-              }
-              controller.map.value['percentage'] = 100;
-              controller.completedTasks.value.add(controller.map.value);
-            } else {
-              controller.map.value['percentage'] = 100;
-              controller.completedTasks.value.add(controller.map.value);
-              projectList[projectList.indexWhere((element) =>
-                      element['title'] ==
-                      controller.titleController.value.text)] =
-                  controller.map.value;
-            }
-            GetPrefs.setString(GetPrefs.completedProjects,
-                jsonEncode(controller.completedTasks.value));
-            GetPrefs.setString(
-                GetPrefs.projects, jsonEncode(projectList));
-          }
-          break;
-        case 2:
-          {
-            String? mapStringUpcoming;
-            List newMapUpcoming;
-            if (GetPrefs.containsKey(GetPrefs.upcomingProjects)) {
-              mapStringUpcoming =
-                  GetPrefs.getString(GetPrefs.upcomingProjects);
-              newMapUpcoming = jsonDecode(mapStringUpcoming);
-              for (int i = 0; i < newMapUpcoming.length; i++) {
-                controller.upcomingTasks.value.add(newMapUpcoming[i]);
-              }
-              controller.upcomingTasks.value.add(controller.map.value);
-            } else {
-              controller.upcomingTasks.value.add(controller.map.value);
-            }
-            String totalProjects = jsonEncode(controller.upcomingTasks.value);
-            GetPrefs.setString(GetPrefs.upcomingProjects, totalProjects);
-          }
-          break;
-        case 3:
-          {
-            String? mapStringCanceled;
-            List newMapCanceled;
-            if (GetPrefs.containsKey(GetPrefs.canceledProjects)) {
-              mapStringCanceled =
-                  GetPrefs.getString(GetPrefs.canceledProjects);
-              newMapCanceled = jsonDecode(mapStringCanceled);
-              for (int i = 0; i < newMapCanceled.length; i++) {
-                controller.canceledTasks.value.add(newMapCanceled[i]);
-              }
-              controller.canceledTasks.value.add(controller.map.value);
-            } else {
-              controller.canceledTasks.value.add(controller.map.value);
-            }
-            String totalProjects = jsonEncode(controller.canceledTasks.value);
-            GetPrefs.setString(GetPrefs.canceledProjects, totalProjects);
-          }
-          break;
-      }
-      if (controller.reminder.value) {
-        int? id = GetPrefs.getInt(GetPrefs.userId);
-        LocalNotificationService.showScheduleNotification(
-            id: id,
-            title: 'Reminder',
-            body:
-                'Start your ${controller.titleController.value.text} task now',
-            payload: jsonEncode(controller.map.value),
-            scheduleTime: DateTime(
-                controller.selectedDate.value.year,
-                controller.selectedDate.value.month,
-                controller.selectedDate.value.day,
-                controller.selectedTime.value.hour,
-                controller.selectedTime.value.minute));
-
-        GetPrefs.setInt(GetPrefs.userId, id + 1);
-      }
-      // ignore: use_build_context_synchronously
-      LocalNotificationService.initialize(
-          context: context, object: controller.map.value);
-      // ignore: use_build_context_synchronously
-      await titleErrorDialog(
-          context: context, content: 'success'.tr, isTitle: true);
-      selectIndex.value = 0;
-      AppRoutes.go(AppRouteName.homePage);
+      //projectList.add(controller.map.value);
+      totalProjectList.add(controller.map.value);
     }
+    GetPrefs.setString(GetPrefs.projects, jsonEncode(projectList));
+    if (controller.reminder.value) {
+      int? id = GetPrefs.getInt(GetPrefs.userId);
+      LocalNotificationService.showScheduleNotification(
+          id: id,
+          title: 'Reminder',
+          body: 'Start your ${controller.titleController.value.text} task now',
+          payload: jsonEncode(controller.map.value),
+          scheduleTime: DateTime(
+              controller.selectedDate.value.year,
+              controller.selectedDate.value.month,
+              controller.selectedDate.value.day,
+              controller.selectedTime.value.hour,
+              controller.selectedTime.value.minute));
+
+      GetPrefs.setInt(GetPrefs.userId, id + 1);
+    }
+    // ignore: use_build_context_synchronously
+    LocalNotificationService.initialize(
+        context: context, object: controller.map.value);
+    // ignore: use_build_context_synchronously
+    await titleErrorDialog(
+        context: context, content: 'success'.tr, isTitle: true);
+    selectIndex.value = 0;
+    AppRoutes.go(AppRouteName.homePage);
   }
 
   @override

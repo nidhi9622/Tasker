@@ -22,7 +22,7 @@ class _ProjectItemListState extends State<ProjectItemList> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: projectItem.length,
         itemBuilder: (context, index) {
-          DataModel dataModel = DataModel(projectItem[index]);
+          DataModel dataModel = DataModel.fromJson(projectItem[index]);
           return Container(
               width: double.infinity,
               padding: const EdgeInsets.only(

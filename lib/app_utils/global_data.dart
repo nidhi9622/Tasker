@@ -8,3 +8,4 @@ List completedProjects = [];
 List ongoingProjects = [];
 List projectItem = [];
 ValueNotifier selectIndex=ValueNotifier(0);
+List<Map<String,dynamic>> totalProjectList=[];

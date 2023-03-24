@@ -13,7 +13,7 @@ import '../controller/project_detail_controller.dart';
 import 'custom_tab_bar.dart';
 
 class ProjectDetailBody extends StatefulWidget {
-  final Map object;
+  final Map<String,dynamic> object;
 
   const ProjectDetailBody({Key? key, required this.object}) : super(key: key);
 
@@ -65,7 +65,7 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
       controller.optionList.value = jsonDecode(projectName);
       controller.map.value = {
         'title': dataModel.title,
-        'subTitle': dataModel.subtitle,
+        'subTitle': dataModel.subTitle,
         'description': dataModel.description,
         'percentage': controller.totalPercentage.value,
         'date': dataModel.date,
@@ -116,7 +116,7 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
 
   @override
   initState() {
-    dataModel = DataModel(widget.object);
+    dataModel = DataModel.fromJson(widget.object);
     getData();
     super.initState();
   }
