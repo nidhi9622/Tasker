@@ -24,7 +24,15 @@ class AddSubTask extends StatefulWidget {
 class _AddSubTaskState extends State<AddSubTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AddSTController controller = Get.put(AddSTController());
-
+  List totalProjectList=[];
+  @override
+  void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      totalProjectList = jsonDecode(map);
+    }
+    super.initState();
+  }
   setData() async {
     List subTask = [];
     if (controller.percentageController.value.text.isEmpty) {
@@ -53,9 +61,9 @@ class _AddSubTaskState extends State<AddSubTask> {
       for (int i = 0; i < newMap.length; i++) {
         subTask.add(newMap[i]);
       }
-      subTask.add(controller.map.value);
+      subTask.add(controller.map);
     } else {
-      subTask.add(controller.map.value);
+      subTask.add(controller.map);
     }
     GetPrefs.setString('${widget.object['id']}', jsonEncode(subTask));
     if (controller.reminder.value == true) {

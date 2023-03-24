@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  ValueListenableBuilder transition() {
+  AnimatedSwitcher transition() {
     if (dashboardController.oldIndex.value < selectIndex.value) {
       dashboardController.position.value = 1.0;
     } else {
@@ -64,24 +64,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     animation = CurvedAnimation(curve: Curves.easeIn, parent: controller);
-    return ValueListenableBuilder(
-      builder: (context, value, child) {
-        return Obx(() => AnimatedSwitcher(
-              switchOutCurve: Curves.easeIn,
-              reverseDuration: const Duration(milliseconds: 0),
-              duration: const Duration(milliseconds: 450),
-              transitionBuilder: (Widget child, Animation<double> animation) =>
-                  SlideTransition(
-                position: Tween(
-                  begin: Offset(dashboardController.position.value, 0.0),
-                  end: const Offset(0.0, 0.0),
-                ).animate(animation),
-                child: child,
-              ),
-              child: dashboardController.screens.value[selectIndex.value],
-            ));
-      },
-      valueListenable: selectIndex,
+    return AnimatedSwitcher(
+      switchOutCurve: Curves.easeIn,
+      reverseDuration: const Duration(milliseconds: 0),
+      duration: const Duration(milliseconds: 450),
+      transitionBuilder: (Widget child, Animation<double> animation) =>
+          SlideTransition(
+        position: Tween(
+          begin: Offset(dashboardController.position.value, 0.0),
+          end: const Offset(0.0, 0.0),
+        ).animate(animation),
+        child: child,
+      ),
+      child: dashboardController.screens.value[selectIndex.value],
     );
   }
 

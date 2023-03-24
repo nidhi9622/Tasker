@@ -21,11 +21,15 @@ class AddProject extends StatefulWidget {
 
 class _AddProjectState extends State<AddProject> {
   AddProjectController controller = Get.put(AddProjectController());
-
+List newList=[];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      newList = jsonDecode(map);
+    }
     controller.titleHeight.value = 0;
     controller.subTitleHeight.value = 0;
     controller.descriptionHeight.value = 0;
@@ -45,8 +49,7 @@ class _AddProjectState extends State<AddProject> {
     String date =
         DateFormat("MMM dd, yyyy").format(controller.selectedDate.value);
     String time = controller.selectedTime.value.format(context);
-    for (int i = 0; i < projectItem.length; i++) {}
-    controller.map.value = {
+    var map= {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
       'description': controller.descriptionController.value.text,
@@ -55,8 +58,8 @@ class _AddProjectState extends State<AddProject> {
       'reminder': controller.reminder.value,
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
-      'projectStatus': controller.dropdownText.value,
-      'id': totalProjectList.length
+      'projectStatus': "${controller.dropdownText.value}",
+      'id': newList.length
     };
 
     String? mapString;
@@ -66,12 +69,12 @@ class _AddProjectState extends State<AddProject> {
       mapString = GetPrefs.getString(GetPrefs.projects);
       newMap = jsonDecode(mapString);
       for (int i = 0; i < newMap.length; i++) {
-        totalProjectList.add(newMap[i]);
+        projectList.add(newMap[i]);
       }
-      totalProjectList.add(controller.map.value);
+      projectList.add(map);
     } else {
       //projectList.add(controller.map.value);
-      totalProjectList.add(controller.map.value);
+      projectList.add(map);
     }
     GetPrefs.setString(GetPrefs.projects, jsonEncode(projectList));
     if (controller.reminder.value) {
@@ -80,7 +83,7 @@ class _AddProjectState extends State<AddProject> {
           id: id,
           title: 'Reminder',
           body: 'Start your ${controller.titleController.value.text} task now',
-          payload: jsonEncode(controller.map.value),
+          payload: jsonEncode(map),
           scheduleTime: DateTime(
               controller.selectedDate.value.year,
               controller.selectedDate.value.month,
@@ -92,7 +95,7 @@ class _AddProjectState extends State<AddProject> {
     }
     // ignore: use_build_context_synchronously
     LocalNotificationService.initialize(
-        context: context, object: controller.map.value);
+        context: context, object: map);
     // ignore: use_build_context_synchronously
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);

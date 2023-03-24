@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
+import 'package:task_manager/app_utils/project_status.dart';
 import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../database/app_list.dart';
 import '../../dashboard/helper_methods/search.dart';
@@ -25,14 +26,18 @@ class _ProjectsState extends State<Projects> {
     if (GetPrefs.containsKey(GetPrefs.projects)) {
       var map = GetPrefs.getString(GetPrefs.projects);
       controller.projectItem.value = jsonDecode(map);
-    }
-    if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
-      String? ongoing = GetPrefs.getString(GetPrefs.ongoingProjects);
-      controller.ongoingProjects.value = jsonDecode(ongoing);
-    }
-    if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
-      String? completed = GetPrefs.getString(GetPrefs.completedProjects);
-      controller.completedProjects.value = jsonDecode(completed);
+      controller.ongoingProjects.value.clear();
+      controller.completedProjects.value.clear();
+      for (int i = 0; i < controller.projectItem.value.length; i++) {
+        if (controller.projectItem.value[i]["projectStatus"] ==
+            "${ProjectStatus.ongoing}") {
+          controller.ongoingProjects.value.add(controller.projectItem.value[i]);
+        }
+        if (controller.projectItem.value[i]["projectStatus"] ==
+            "${ProjectStatus.completed}") {
+          controller.completedProjects.value.add(controller.projectItem.value[i]);
+        }
+      }
     }
   }
 
@@ -49,7 +54,7 @@ class _ProjectsState extends State<Projects> {
         actions: [
           IconButton(
               onPressed: () {
-                showSearch(context: context, delegate: Search(text: ''));
+                showSearch(context: context, delegate: Search(text: '', totalProjectList: controller.projectItem.value));
               },
               icon: Icon(CupertinoIcons.search,
                   color: Theme.of(context).primaryColorDark)),
@@ -100,13 +105,14 @@ class _ProjectsState extends State<Projects> {
     //var map = GetPrefs.getString(GetPrefs.projects);
     controller.projectItem.value
         .sort((a, b) => a["title"].compareTo(b["title"]));
-    GetPrefs.setString(GetPrefs.projects, jsonEncode(controller.projectItem.value));
+    GetPrefs.setString(
+        GetPrefs.projects, jsonEncode(controller.projectItem.value));
   }
 
   void descendingSort() async {
     controller.projectItem.value
         .sort((a, b) => b["title"].compareTo(a["title"]));
-    GetPrefs.setString(GetPrefs.projects, jsonEncode(controller.projectItem.value));
-
+    GetPrefs.setString(
+        GetPrefs.projects, jsonEncode(controller.projectItem.value));
   }
 }

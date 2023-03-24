@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../app_utils/app_routes.dart';
-import '../../../app_utils/global_data.dart';
 import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../user/controller/user_controller.dart';
 
@@ -23,9 +23,13 @@ class _UpperProfileBodyState extends State<UpperProfileBody> {
       controller.profileImage.value = GetPrefs.getString(GetPrefs.userImage);
     }
   }
-
+  List totalProjectList=[];
   @override
   void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      totalProjectList = jsonDecode(map);
+    }
     getData();
     super.initState();
   }
@@ -48,7 +52,7 @@ class _UpperProfileBodyState extends State<UpperProfileBody> {
                       child: Column(
                         children: [
                           Text(
-                            '${projectItem.length}',
+                            '${totalProjectList.length}',
                             style: TextStyle(color: Colors.red[200]),
                           ),
                           Text(
@@ -89,10 +93,10 @@ class _UpperProfileBodyState extends State<UpperProfileBody> {
                     Expanded(
                       child: Column(
                         children: [
-                          Text(
-                            '${ongoingProjects.length}',
-                            style: TextStyle(color: Colors.red[200]),
-                          ),
+                          // Text(
+                          //   '${ongoingProjects.length}',
+                          //   style: TextStyle(color: Colors.red[200]),
+                          // ),
                           Text(
                             'ongoingTask'.tr,
                             style: TextStyle(

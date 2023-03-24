@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../app_utils/project_status.dart';
+
 class EditTaskController extends GetxController {
   Rx optionList = Rx([]);
   Rx selectedDate = Rx(DateTime.now());
   Rx selectedTime = Rx(TimeOfDay);
   Rx stringDate = Rx('');
   Rx stringTime = Rx('');
-  Rx map = Rx({});
+  RxMap<String,dynamic> map = RxMap({});
+  Rx<String> dropdownText = Rx("${ProjectStatus.ongoing}");
   RxBool reminder=RxBool(false);
   RxInt dropDownValue=RxInt(0);
   Rx<TextEditingController> titleController = Rx(TextEditingController());

@@ -11,7 +11,7 @@ class AddProjectController extends GetxController {
   Rx<List> upcomingTasks = Rx([]);
   Rx<List> canceledTasks = Rx([]);
   RxMap<String,dynamic> map = RxMap({});
-  Rx<ProjectStatus> dropdownText = Rx(ProjectStatus.ongoing);
+  Rx<String> dropdownText = Rx("${ProjectStatus.ongoing}");
   RxBool reminder = RxBool(false);
   RxBool preExist = RxBool(false);
   RxInt dropDownValue = RxInt(0);

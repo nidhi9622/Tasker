@@ -53,18 +53,22 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
                         ],
                         onChanged: (int? value) {
                           widget.controller.dropDownValue.value = value!;
-                          switch(value){
+                          switch (value) {
                             case 0:
-                              widget.controller.dropdownText.value=ProjectStatus.ongoing;
+                              widget.controller.dropdownText.value =
+                                  "${ProjectStatus.ongoing}";
                               break;
                             case 1:
-                              widget.controller.dropdownText.value=ProjectStatus.completed;
+                              widget.controller.dropdownText.value =
+                                  "${ProjectStatus.completed}";
                               break;
                             case 2:
-                              widget.controller.dropdownText.value=ProjectStatus.upcoming;
+                              widget.controller.dropdownText.value =
+                                  "${ProjectStatus.upcoming}";
                               break;
                             case 3:
-                              widget.controller.dropdownText.value=ProjectStatus.canceled;
+                              widget.controller.dropdownText.value =
+                                  "${ProjectStatus.canceled}";
                               break;
                           }
                         },

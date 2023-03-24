@@ -1,14 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../app_utils/app_routes.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../dashboard/helper_methods/search.dart';
 import '../helper_widgets/process_detail_view.dart';
 
 class ProcessDetail extends StatefulWidget {
   final String title;
-  final List object;
+  final String status;
 
-  const ProcessDetail({Key? key, required this.title, required this.object})
+  const ProcessDetail({Key? key, required this.title, required this.status})
       : super(key: key);
 
   @override
@@ -16,6 +19,15 @@ class ProcessDetail extends StatefulWidget {
 }
 
 class _ProcessDetailState extends State<ProcessDetail> {
+  List totalProjectList=[];
+  @override
+  void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      totalProjectList = jsonDecode(map);
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -38,7 +50,7 @@ class _ProcessDetailState extends State<ProcessDetail> {
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
               onPressed: () {
-                showSearch(context: context, delegate: Search(text: ''));
+                showSearch(context: context, delegate: Search(text: '', totalProjectList: totalProjectList));
               },
               icon: Icon(
                 CupertinoIcons.search,
@@ -50,7 +62,7 @@ class _ProcessDetailState extends State<ProcessDetail> {
         automaticallyImplyLeading: false,
       ),
       body: ProcessDetailView(
-        tabList: widget.object,
+        tabList: widget.status,
       ),
     );
 }

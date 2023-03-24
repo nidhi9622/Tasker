@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:task_manager/models/data_model.dart';
 import '../../../app_utils/app_routes.dart';
-import '../../../app_utils/global_data.dart';
 import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../helper_methods/delete_bottom_sheet.dart';
 import 'indicator_widget.dart';
@@ -24,11 +23,20 @@ class TaskDetailContainer extends StatefulWidget {
 }
 
 class _TaskDetailContainerState extends State<TaskDetailContainer> {
+  List totalProjectList=[];
+  @override
+  void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      totalProjectList = jsonDecode(map);
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
+      child:InkWell(
         onTap: () {
           AppRoutes.go(AppRouteName.projectDetail,
               arguments: {'object': widget.tabList[widget.index]});
@@ -40,30 +48,14 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
             index: widget.index,
             onTapEdit: () {
               AppRoutes.go(AppRouteName.editTask,
-                  arguments: {'object': projectItem[widget.index]});
+                  arguments: {'object': totalProjectList[widget.index]});
             },
             onTapDelete: () async {
               GetPrefs.remove('${widget.dataModel.title}');
-              projectItem.removeWhere(
-                  (element) => element['title'] == widget.dataModel.title);
-              upcomingProjects.removeWhere(
-                  (element) => element['title'] == widget.dataModel.title);
-              canceledProjects.removeWhere(
-                  (element) => element['title'] == widget.dataModel.title);
-              ongoingProjects.removeWhere(
-                  (element) => element['title'] == widget.dataModel.title);
-              completedProjects.removeWhere(
-                  (element) => element['title'] == widget.dataModel.title);
+              totalProjectList.removeWhere(
+                      (element) => element['title'] == widget.dataModel.id);
               GetPrefs.setString(
-                  GetPrefs.projects, jsonEncode(projectItem));
-              GetPrefs.setString(
-                  GetPrefs.canceledProjects, jsonEncode(canceledProjects));
-              GetPrefs.setString(
-                  GetPrefs.upcomingProjects, jsonEncode(upcomingProjects));
-              GetPrefs.setString(
-                  GetPrefs.completedProjects, jsonEncode(completedProjects));
-              GetPrefs.setString(
-                  GetPrefs.ongoingProjects, jsonEncode(ongoingProjects));
+                  GetPrefs.projects, jsonEncode(totalProjectList));
               AppRoutes.pop();
             },
           );
@@ -111,7 +103,7 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
             ],
           ),
         ),
-      ),
+      )
     );
   }
 }

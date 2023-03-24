@@ -24,7 +24,6 @@
 Map<String, dynamic> map = jsonDecode(<myJSONString>);
 var myRootNode = Root.fromJson(map);
 */
-import 'package:task_manager/app_utils/project_status.dart';
 
 class DataModel {
   String? title;
@@ -36,7 +35,7 @@ class DataModel {
   String? time;
   String? status;
   int? id;
-  ProjectStatus? projectStatus;
+  String? projectStatus;
 
   DataModel(
       {this.title,

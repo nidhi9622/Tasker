@@ -85,7 +85,7 @@ class AppRouteName {
     GetPage(
         name: processDetail,
         page: () => ProcessDetail(
-              object: Get.arguments["object"],
+              status: Get.arguments["object"],
               title: Get.arguments["title"],
             )),
     GetPage(

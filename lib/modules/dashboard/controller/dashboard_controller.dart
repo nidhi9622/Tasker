@@ -8,6 +8,7 @@ class DashboardController extends GetxController {
   RxString username=RxString('');
   RxDouble position = RxDouble(1.0);
   RxInt oldIndex = RxInt(0);
+  Rx<List> projectList=Rx([]);
   Rx screens=Rx([
     const Dashboard(),
     const Projects(),

@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../app_utils/app_routes.dart';
-import '../../../app_utils/global_data.dart';
 
 class Search extends SearchDelegate<String> {
   String text;
-  Search({required this.text});
+  List totalProjectList;
+  Search({required this.text,required this.totalProjectList});
   @override
   set query(String value) {
     super.query = text;
@@ -38,7 +37,7 @@ class Search extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     dynamic list;
-    list = projectItem
+    list = totalProjectList
         .where((element) =>
             element['title'].toLowerCase().contains(query.toLowerCase()))
         .toList();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../app_utils/app_routes.dart';
 
 class ProcessWidget extends StatelessWidget {
@@ -7,7 +6,7 @@ class ProcessWidget extends StatelessWidget {
   final Color containerColor;
   final Color bubbleColor;
   final IconData icon;
-  final List object;
+  final String status;
 
   const ProcessWidget(
       {Key? key,
@@ -15,14 +14,14 @@ class ProcessWidget extends StatelessWidget {
       required this.containerColor,
       required this.bubbleColor,
       required this.icon,
-      required this.object})
+      required this.status})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) => InkWell(
       onTap: () {
         AppRoutes.go(AppRouteName.processDetail, arguments: {
-          'object': object,
+          'object': status,
           "title": text,
         });
       },

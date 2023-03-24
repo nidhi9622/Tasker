@@ -7,7 +7,7 @@ import 'date_time_widget.dart';
 import 'heading_text.dart';
 
 class EditTaskWidget extends StatefulWidget {
-  final controller;
+  final dynamic controller;
 
   const EditTaskWidget({
     Key? key,

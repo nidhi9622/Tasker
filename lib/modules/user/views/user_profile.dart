@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,9 +20,22 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  List totalProjectList = [];
+
+  @override
+  void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      totalProjectList = jsonDecode(map);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: ProfileAppBar(),
+        appBar: ProfileAppBar(
+          searchList: totalProjectList,
+        ),
         body: SingleChildScrollView(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,11 +85,6 @@ class _UserProfileState extends State<UserProfile> {
                     child: ExploreOptions(
                         onTap: () async {
                           if (widget.isOldUser) {
-                            projectItem.clear();
-                            upcomingProjects.clear();
-                            ongoingProjects.clear();
-                            completedProjects.clear();
-                            canceledProjects.clear();
                             GetPrefs.clear();
                             GetPrefs.setBool(GetPrefs.isLoggedIn, false);
                             AppRoutes.go(AppRouteName.splash);

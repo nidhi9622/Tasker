@@ -33,9 +33,13 @@ class _ShortcutRowState extends State<ShortcutRow> {
     super.dispose();
     shortcutController.dispose();
   }
-
+List searchList=[];
   @override
   void initState() {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      searchList = jsonDecode(map);
+    }
     getData();
     controller.containerWidth.value = 0.70;
     super.initState();
@@ -59,7 +63,7 @@ class _ShortcutRowState extends State<ShortcutRow> {
                                   context: context,
                                   delegate: Search(
                                       text:
-                                          '${controller.searchShortcut.value[index]}'));
+                                          '${controller.searchShortcut.value[index]}', totalProjectList: searchList));
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8.0),

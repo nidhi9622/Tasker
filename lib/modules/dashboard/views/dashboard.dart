@@ -22,42 +22,21 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard>{
+class _DashboardState extends State<Dashboard> {
   DashboardController controller = Get.put(DashboardController());
 
   getData() async {
-      if (GetPrefs.containsKey(GetPrefs.userName)) {
-        controller.username.value = GetPrefs.getString(GetPrefs.userName);
-      }
-  }
-
-  Future getProjectItem() async {
-
-    if (GetPrefs.containsKey(GetPrefs.projects)) {
-        var map = GetPrefs.getString(GetPrefs.projects);
-        projectItem = jsonDecode(map);
-    }
-    if (GetPrefs.containsKey(GetPrefs.upcomingProjects)) {
-        var upcoming = GetPrefs.getString(GetPrefs.upcomingProjects);
-        upcomingProjects = jsonDecode(upcoming);
-    }
-    if (GetPrefs.containsKey(GetPrefs.canceledProjects)) {
-        var canceled = GetPrefs.getString(GetPrefs.canceledProjects);
-        canceledProjects = jsonDecode(canceled);
-    }
-    if (GetPrefs.containsKey(GetPrefs.ongoingProjects)) {
-        var ongoing = GetPrefs.getString(GetPrefs.ongoingProjects);
-        ongoingProjects = jsonDecode(ongoing);
-    }
-    if (GetPrefs.containsKey(GetPrefs.completedProjects)) {
-        var completed = GetPrefs.getString(GetPrefs.completedProjects);
-        completedProjects = jsonDecode(completed);
+    if (GetPrefs.containsKey(GetPrefs.userName)) {
+      controller.username.value = GetPrefs.getString(GetPrefs.userName);
     }
   }
 
   @override
   void initState() {
-    getProjectItem();
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      controller.projectList.value = jsonDecode(map);
+    }
     getData();
     super.initState();
   }
@@ -75,7 +54,7 @@ class _DashboardState extends State<Dashboard>{
             actions: [
               IconButton(
                   onPressed: () {
-                    showSearch(context: context, delegate: Search(text: ''));
+                    showSearch(context: context, delegate: Search(text: '', totalProjectList: controller.projectList.value));
                   },
                   icon: Icon(CupertinoIcons.search,
                       color: Theme.of(context).primaryColorDark)),
@@ -95,26 +74,28 @@ class _DashboardState extends State<Dashboard>{
           ),
           body: SizedBox(
             width: double.infinity,
-            height:  double.infinity,
+            height: double.infinity,
             child: SingleChildScrollView(
               child: Obx(() {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      NameAnimateWidget(username: controller.username.value),
-                      const ProcessWidgetContainer(),
-                      const AddProjectWidget(),
-                      Container(
-                          width:  double.infinity,
-                          padding: const EdgeInsets.only(top: 10),
-                          child: projectItem.isNotEmpty
-                              ? const ProjectItemList()
-                              : const NoTaskWidget())
-                    ],
-                  );
-                }
-              ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    NameAnimateWidget(username: controller.username.value),
+                    const ProcessWidgetContainer(),
+                    const AddProjectWidget(),
+                    Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.only(top: 10),
+                        child: controller.projectList.value == [] ||
+                            controller.projectList.value.isEmpty
+                            ? const NoTaskWidget()
+                            : ProjectItemList(
+                          controller: controller,
+                        ))
+                  ],
+                );
+              }),
             ),
           ),
         ));
@@ -122,15 +103,19 @@ class _DashboardState extends State<Dashboard>{
 
   ascendingSort() async {
     //setState(() {
-      projectItem.sort((a, b) => a["title"].compareTo(b["title"]));
-      GetPrefs.setString(GetPrefs.projects, jsonEncode(projectItem));
+    controller.projectList.value
+        .sort((a, b) => a["title"].compareTo(b["title"]));
+    // GetPrefs.setString(
+    //     GetPrefs.projects, jsonEncode(controller.projectList.value));
     //});
   }
 
   descendingSort() async {
-   // setState(() {
-      projectItem.sort((a, b) => b["title"].compareTo(a["title"]));
-      GetPrefs.setString(GetPrefs.projects, jsonEncode(projectItem));
-   // });
+    // setState(() {
+    controller.projectList.value
+        .sort((a, b) => b["title"].compareTo(a["title"]));
+    // GetPrefs.setString(
+    //     GetPrefs.projects, jsonEncode(controller.projectList.value));
+    // });
   }
 }
