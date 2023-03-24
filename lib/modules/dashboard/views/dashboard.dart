@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
 import 'package:task_manager/modules/dashboard/controller/dashboard_controller.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../ui_utils/no_task_widget.dart';
 import '../../project/helper_methods/sorting_bottom_sheet.dart';
 import '../helper_methods/search.dart';

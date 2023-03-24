@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:task_manager/models/data_model.dart';
 import '../../../app_utils/app_routes.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../helper_methods/delete_bottom_sheet.dart';
 
 class ProjectDetailTile extends StatefulWidget {

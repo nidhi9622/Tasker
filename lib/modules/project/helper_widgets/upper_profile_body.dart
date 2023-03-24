@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../user/controller/user_controller.dart';
 
 class UpperProfileBody extends StatefulWidget {

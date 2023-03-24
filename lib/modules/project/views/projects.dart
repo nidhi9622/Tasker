@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/app_utils/default_app_bar.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../database/app_list.dart';
 import '../../dashboard/helper_methods/search.dart';
 import '../controller/project_controller.dart';

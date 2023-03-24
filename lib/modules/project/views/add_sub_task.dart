@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/local_notification_service.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../database/app_list.dart';
 import '../controller/add_st_controller.dart';
 import '../helper_methods/title_error_dialog.dart';

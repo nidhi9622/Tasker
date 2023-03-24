@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_manager/app_utils/shared_prefs/shared_prefs.dart';
+import 'package:task_manager/app_utils/shared_prefs/get_prefs.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
 import '../../project/helper_widgets/upper_profile_body.dart';

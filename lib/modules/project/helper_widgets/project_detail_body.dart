@@ -6,7 +6,7 @@ import 'package:task_manager/modules/project/helper_widgets/project_detail_conta
 import 'package:task_manager/modules/project/helper_widgets/project_detail_left.dart';
 import 'package:task_manager/modules/project/helper_widgets/project_detail_right.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../database/app_list.dart';
 import '../../../models/data_model.dart';
 import '../controller/project_detail_controller.dart';

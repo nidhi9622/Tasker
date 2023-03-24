@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/models/data_model.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../helper_methods/delete_bottom_sheet.dart';
 import 'indicator_widget.dart';
 

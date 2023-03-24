@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../project/helper_methods/title_error_dialog.dart';
 import '../controller/user_controller.dart';
 import '../helper_methods/image_sheet.dart';

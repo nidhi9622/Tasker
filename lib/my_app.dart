@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager/app_utils/shared_prefs/get_prefs.dart';
 import 'database/nav_bar_items.dart';
 import 'modules/dashboard/views/dashboard.dart';
 import 'modules/notepad/views/notepad.dart';
@@ -34,8 +34,7 @@ class _MyAppState extends State<MyApp> {
       PersistentTabController(initialIndex: 0);
 
   void isProfileExist() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.containsKey('name')) {
+    if (GetPrefs.containsKey(GetPrefs.userName)) {
       setState(() {
         isExist = true;
       });

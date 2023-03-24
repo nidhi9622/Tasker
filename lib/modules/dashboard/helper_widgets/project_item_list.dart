@@ -5,7 +5,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:task_manager/modules/dashboard/helper_widgets/popup_sheet.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/shared_prefs/shared_prefs.dart';
+import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../models/data_model.dart';
 
 class ProjectItemList extends StatefulWidget {
