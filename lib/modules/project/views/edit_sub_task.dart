@@ -51,6 +51,7 @@ class _EditSubTaskState extends State<EditSubTask> {
       'reminder': controller.reminder.value,
       'time': controller.selectedTime.value,
       'status': dropdownOptions[controller.dropDownValue.value],
+      'id':dataModel.id
     };
     if (controller.dropDownValue.value == 1) {
       controller.map.value['percentage'] = 100;
@@ -67,7 +68,7 @@ class _EditSubTaskState extends State<EditSubTask> {
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
-          id: id,
+          id: dataModel.id??id,
           title: 'Reminder',
           body: 'Start your ${controller.titleController.value.text} task now',
           payload: jsonEncode(widget.homeObject),

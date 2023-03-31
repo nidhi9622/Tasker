@@ -59,7 +59,7 @@ class _EditProjectState extends State<EditProject> {
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
-          id: id,
+          id: dataModel.id??id,
           title: 'Reminder',
           body: 'Start your ${controller.titleController.value.text} task now',
           payload: jsonEncode(controller.map),

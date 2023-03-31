@@ -7,7 +7,7 @@ class AddSTController extends GetxController {
   Rx selectedDate = Rx(DateTime.now());
   Rx selectedTime =
       Rx(TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute));
-  RxMap<String, dynamic> map = RxMap({});
+  // RxMap<String, dynamic> map = RxMap({});
   Rx<String> dropdownText = Rx("${ProjectStatus.ongoing}");
   RxBool reminder = RxBool(false);
   RxInt dropDownValue = RxInt(0);

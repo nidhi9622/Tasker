@@ -69,22 +69,10 @@ class _AddProjectState extends State<AddProject> {
     String? mapString;
     List projectList = [];
     List newMap;
-    if (GetPrefs.containsKey(GetPrefs.projects)) {
-      mapString = GetPrefs.getString(GetPrefs.projects);
-      newMap = jsonDecode(mapString);
-      for (int i = 0; i < newMap.length; i++) {
-        projectList.add(newMap[i]);
-      }
-      projectList.add(map);
-    } else {
-      //projectList.add(controller.map.value);
-      projectList.add(map);
-    }
-    GetPrefs.setString(GetPrefs.projects, jsonEncode(projectList));
     if (controller.reminder.value) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
-          id: id,
+          id: newList.length,
           title: 'Reminder',
           body: 'Start your ${controller.titleController.value.text} task now',
           payload: jsonEncode(map),
@@ -97,6 +85,19 @@ class _AddProjectState extends State<AddProject> {
 
       GetPrefs.setInt(GetPrefs.userId, id + 1);
     }
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      mapString = GetPrefs.getString(GetPrefs.projects);
+      newMap = jsonDecode(mapString);
+      for (int i = 0; i < newMap.length; i++) {
+        projectList.add(newMap[i]);
+      }
+      projectList.add(map);
+    } else {
+      //projectList.add(controller.map.value);
+      projectList.add(map);
+    }
+    GetPrefs.setString(GetPrefs.projects, jsonEncode(projectList));
+
     // ignore: use_build_context_synchronously
     LocalNotificationService.initialize(context: context, object: map);
     // ignore: use_build_context_synchronously

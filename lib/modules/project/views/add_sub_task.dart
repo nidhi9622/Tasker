@@ -24,18 +24,22 @@ class _AddSubTaskState extends State<AddSubTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AddSTController controller = Get.put(AddSTController());
   List totalProjectList = [];
-
+  List subTask = [];
   @override
   void initState() {
     if (GetPrefs.containsKey(GetPrefs.projects)) {
       var map = GetPrefs.getString(GetPrefs.projects);
       totalProjectList = jsonDecode(map);
     }
+    if (GetPrefs.containsKey(widget.object['id'])) {
+      var map = GetPrefs.getString(widget.object['id']);
+      subTask = jsonDecode(map);
+    }
     super.initState();
   }
 
   setData() async {
-    List subTask = [];
+
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
@@ -44,7 +48,7 @@ class _AddSubTaskState extends State<AddSubTask> {
     String date =
         DateFormat("MMM dd, yyyy").format(controller.selectedDate.value);
     String time = controller.selectedTime.value.format(context);
-    controller.map.value = {
+   var map = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
       'description': controller.descriptionController.value.text,
@@ -54,23 +58,14 @@ class _AddSubTaskState extends State<AddSubTask> {
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
       'projectStatus': controller.dropdownText.value,
-      'id': totalProjectList.length
+      'id': subTask.length
     };
-    if (GetPrefs.containsKey('${widget.object['id']}')) {
-      String? mapString = GetPrefs.getString('${widget.object['id']}');
-      List newMap = jsonDecode(mapString);
-      for (int i = 0; i < newMap.length; i++) {
-        subTask.add(newMap[i]);
-      }
-      subTask.add(controller.map);
-    } else {
-      subTask.add(controller.map);
-    }
+
     GetPrefs.setString('${widget.object['id']}', jsonEncode(subTask));
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
-          id: id,
+          id: subTask.length,
           title: '${widget.object['title']} project',
           body: 'Start your ${controller.titleController.value.text} task now',
           payload: jsonEncode(widget.object),
@@ -82,6 +77,16 @@ class _AddSubTaskState extends State<AddSubTask> {
               controller.selectedTime.value.minute));
 
       GetPrefs.setInt(GetPrefs.userId, id + 1);
+    }
+    if (GetPrefs.containsKey('${widget.object['id']}')) {
+      String? mapString = GetPrefs.getString('${widget.object['id']}');
+      List newMap = jsonDecode(mapString);
+      for (int i = 0; i < newMap.length; i++) {
+        subTask.add(newMap[i]);
+      }
+      subTask.add(map);
+    } else {
+      subTask.add(map);
     }
     LocalNotificationService.initialize(
         context: context, object: widget.object);
