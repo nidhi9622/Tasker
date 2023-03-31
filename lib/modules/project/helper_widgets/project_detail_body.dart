@@ -52,9 +52,7 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
           ),
           if (controller.displayIndex.value == 0)
             ProjectDetailLeft(
-                object: widget.object,
-                subTaskList: controller.subTaskList,
-                subTaskProjects: controller.subTaskProjects),
+                object: widget.object,),
           if (controller.displayIndex.value == 1)
             ProjectDetailRight(
               object: widget.object,

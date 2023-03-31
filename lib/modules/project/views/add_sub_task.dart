@@ -23,23 +23,18 @@ class AddSubTask extends StatefulWidget {
 class _AddSubTaskState extends State<AddSubTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AddSTController controller = Get.put(AddSTController());
-  List totalProjectList = [];
   List subTask = [];
+
   @override
   void initState() {
-    if (GetPrefs.containsKey(GetPrefs.projects)) {
-      var map = GetPrefs.getString(GetPrefs.projects);
-      totalProjectList = jsonDecode(map);
-    }
-    if (GetPrefs.containsKey("${widget.object['id']}")) {
-      var map = GetPrefs.getString("${widget.object['id']}");
-      subTask = jsonDecode(map);
-    }
     super.initState();
   }
 
   setData() async {
-
+    if (GetPrefs.containsKey("${widget.object['id']}")) {
+      var map = GetPrefs.getString("${widget.object['id']}");
+      subTask = jsonDecode(map);
+    }
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
@@ -48,7 +43,7 @@ class _AddSubTaskState extends State<AddSubTask> {
     String date =
         DateFormat("MMM dd, yyyy").format(controller.selectedDate.value);
     String time = controller.selectedTime.value.format(context);
-   var map = {
+    var map = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
       'description': controller.descriptionController.value.text,
@@ -61,7 +56,6 @@ class _AddSubTaskState extends State<AddSubTask> {
       'id': subTask.length
     };
 
-    GetPrefs.setString('${widget.object['id']}', jsonEncode(subTask));
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
@@ -88,6 +82,7 @@ class _AddSubTaskState extends State<AddSubTask> {
     } else {
       subTask.add(map);
     }
+    GetPrefs.setString('${widget.object['id']}', jsonEncode(subTask));
     LocalNotificationService.initialize(
         context: context, object: widget.object);
   }
