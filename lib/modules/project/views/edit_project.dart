@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_manager/app_utils/global_data.dart';
 import 'package:task_manager/app_utils/project_status.dart';
 import 'package:task_manager/app_utils/shared_prefs/get_prefs.dart';
 import '../../../app_utils/app_routes.dart';
@@ -12,7 +13,7 @@ import '../helper_methods/title_error_dialog.dart';
 import '../helper_widgets/edit_task_body.dart';
 
 class EditProject extends StatefulWidget {
-  final Map<String,dynamic> object;
+  final Map<String, dynamic> object;
 
   const EditProject({Key? key, required this.object}) : super(key: key);
 
@@ -25,7 +26,7 @@ class _EditProjectState extends State<EditProject> {
   late DataModel dataModel;
   EditTaskController controller = Get.put(EditTaskController());
 
-  setTaskData() async {
+  Future<void> setTaskData() async {
     String? projectName = GetPrefs.getString(GetPrefs.projects);
     controller.optionList.value = jsonDecode(projectName);
 
@@ -34,11 +35,14 @@ class _EditProjectState extends State<EditProject> {
     }
     double newPercentage =
         double.parse(controller.percentageController.value.text);
-    controller.map.value= {
+    controller.map.value = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
       'description': controller.descriptionController.value.text,
-      'percentage': newPercentage,
+      'percentage':
+          controller.dropdownText.value == "${ProjectStatus.completed}"
+              ? 100.0
+              : newPercentage,
       'date': controller.stringDate.value,
       'reminder': controller.reminder.value,
       'time': controller.stringTime.value,
@@ -71,10 +75,11 @@ class _EditProjectState extends State<EditProject> {
     }
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
+    selectIndex.value = 0;
     AppRoutes.go(AppRouteName.bottomNavPage);
   }
 
-  setData() {
+  void setData() {
     dataModel = DataModel.fromJson(widget.object);
     controller.titleController.value =
         TextEditingController(text: dataModel.title);
@@ -86,7 +91,8 @@ class _EditProjectState extends State<EditProject> {
         TextEditingController(text: dataModel.description);
     controller.stringDate.value = dataModel.date;
     controller.stringTime.value = dataModel.time;
-    controller.dropdownText.value = dataModel.projectStatus??"${ProjectStatus.ongoing}";
+    controller.dropdownText.value =
+        dataModel.projectStatus ?? "${ProjectStatus.ongoing}";
     status = dataModel.status;
     controller.reminder.value = dataModel.reminder ?? false;
   }

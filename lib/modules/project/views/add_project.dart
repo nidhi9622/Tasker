@@ -6,6 +6,7 @@ import 'package:task_manager/app_utils/common_app_bar.dart';
 import 'package:task_manager/app_utils/shared_prefs/get_prefs.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
+import '../../../app_utils/project_status.dart';
 import '../../../services/local_notification_service.dart';
 import '../../../database/app_list.dart';
 import '../controller/add_project_controller.dart';
@@ -21,7 +22,7 @@ class AddProject extends StatefulWidget {
 
 class _AddProjectState extends State<AddProject> {
   AddProjectController controller = Get.put(AddProjectController());
-List newList=[];
+  List newList = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -49,11 +50,14 @@ List newList=[];
     String date =
         DateFormat("MMM dd, yyyy").format(controller.selectedDate.value);
     String time = controller.selectedTime.value.format(context);
-    var map= {
+    var map = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
       'description': controller.descriptionController.value.text,
-      'percentage': newPercentage,
+      'percentage':
+          controller.dropdownText.value == "${ProjectStatus.completed}"
+              ? 100.0
+              : newPercentage,
       'date': date,
       'reminder': controller.reminder.value,
       'time': time,
@@ -94,8 +98,7 @@ List newList=[];
       GetPrefs.setInt(GetPrefs.userId, id + 1);
     }
     // ignore: use_build_context_synchronously
-    LocalNotificationService.initialize(
-        context: context, object: map);
+    LocalNotificationService.initialize(context: context, object: map);
     // ignore: use_build_context_synchronously
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
