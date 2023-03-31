@@ -34,7 +34,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
         leading: IconButton(
           onPressed: () {
             selectIndex.value=0;
-            AppRoutes.go(AppRouteName.homePage);
+            AppRoutes.go(AppRouteName.bottomNavPage);
           },
           icon: Icon(
             Icons.arrow_back_ios,

@@ -71,7 +71,7 @@ class _EditProjectState extends State<EditProject> {
     }
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
-    AppRoutes.go(AppRouteName.homePage);
+    AppRoutes.go(AppRouteName.bottomNavPage);
   }
 
   setData() {

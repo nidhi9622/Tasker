@@ -100,7 +100,7 @@ List newList=[];
     await titleErrorDialog(
         context: context, content: 'success'.tr, isTitle: true);
     selectIndex.value = 0;
-    AppRoutes.pushAndRemoveUntil(AppRouteName.homePage);
+    AppRoutes.pushAndRemoveUntil(AppRouteName.bottomNavPage);
   }
 
   @override

@@ -71,7 +71,7 @@ class _UserProfileState extends State<UserProfile> {
                       onTap: () {
                         if (widget.isOldUser) {
                           selectIndex.value = 1;
-                          AppRoutes.go(AppRouteName.homePage);
+                          AppRoutes.go(AppRouteName.bottomNavPage);
                         } else {
                           AppRoutes.go(AppRouteName.projects);
                         }

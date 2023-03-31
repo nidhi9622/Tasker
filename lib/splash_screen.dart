@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(const Duration(seconds: 4), () async {
       GetPrefs.setInt(GetPrefs.userId, 0);
-      AppRoutes.pushAndRemoveUntil(AppRouteName.homePage);
+      AppRoutes.pushAndRemoveUntil(AppRouteName.bottomNavPage);
     });
     super.initState();
   }

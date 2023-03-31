@@ -73,7 +73,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
                 context: context, content: "profileUpdated".tr, isTitle: true);
             await setData();
             selectIndex.value = 4;
-            AppRoutes.go(AppRouteName.homePage);
+            AppRoutes.go(AppRouteName.bottomNavPage);
           }
         },
         isLeading: true,

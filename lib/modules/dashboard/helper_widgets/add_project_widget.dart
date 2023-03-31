@@ -16,13 +16,13 @@ class _AddProjectWidgetState extends State<AddProjectWidget> {
   @override
   Widget build(BuildContext context) => Padding(
       padding:
-      const EdgeInsets.all(20),
+      const EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 6),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
             onTap: () {
                 selectIndex.value = 2;
-              AppRoutes.go(AppRouteName.homePage);
+              AppRoutes.go(AppRouteName.bottomNavPage);
             },
             child: Row(
               children: [
@@ -41,10 +41,16 @@ class _AddProjectWidgetState extends State<AddProjectWidget> {
               ],
             ),
           ),
-          Text(
-            'allProject'.tr,
-            textAlign: TextAlign.end,
-            style: const TextStyle(color: Colors.grey),
+          InkWell(
+            onTap: (){
+              selectIndex.value=1;
+              AppRoutes.go(AppRouteName.bottomNavPage);
+            },
+            child: Text(
+              'allProject'.tr,
+              textAlign: TextAlign.end,
+              style: const TextStyle(color: Colors.grey),
+            ),
           )
         ],
       ),
