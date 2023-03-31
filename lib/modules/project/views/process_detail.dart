@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../app_utils/app_routes.dart';
@@ -19,7 +18,8 @@ class ProcessDetail extends StatefulWidget {
 }
 
 class _ProcessDetailState extends State<ProcessDetail> {
-  List totalProjectList=[];
+  List totalProjectList = [];
+
   @override
   void initState() {
     if (GetPrefs.containsKey(GetPrefs.projects)) {
@@ -28,41 +28,41 @@ class _ProcessDetailState extends State<ProcessDetail> {
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(color: Theme.of(context).primaryColorDark),
-        ),
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            AppRoutes.pop();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).primaryColorDark,
+        appBar: AppBar(
+          title: Text(
+            widget.title,
+            style: TextStyle(color: Theme.of(context).primaryColorDark),
           ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: Search(text: '', totalProjectList: totalProjectList));
-              },
-              icon: Icon(
-                CupertinoIcons.search,
-                color: Theme.of(context).primaryColorDark,
-              ),
+          elevation: 0,
+          leading: IconButton(
+            onPressed: () => AppRoutes.pop(),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Theme.of(context).primaryColorDark,
             ),
           ),
-        ],
-        automaticallyImplyLeading: false,
-      ),
-      body: ProcessDetailView(
-        tabList: widget.status,
-      ),
-    );
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                onPressed: () => showSearch(
+                    context: context,
+                    delegate:
+                        Search(text: '', totalProjectList: totalProjectList)),
+                icon: Icon(
+                  CupertinoIcons.search,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+              ),
+            ),
+          ],
+          automaticallyImplyLeading: false,
+        ),
+        body: ProcessDetailView(
+          tabList: widget.status,
+        ),
+      );
 }

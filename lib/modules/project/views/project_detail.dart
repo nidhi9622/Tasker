@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/app_utils/global_data.dart';
@@ -9,16 +8,20 @@ import '../../dashboard/helper_methods/search.dart';
 import '../helper_widgets/project_detail_body.dart';
 
 class ProjectDetail extends StatefulWidget {
-  final Map<String,dynamic> object;
+  final Map<String, dynamic> object;
 
-  const ProjectDetail({Key? key, required this.object, }) : super(key: key);
+  const ProjectDetail({
+    Key? key,
+    required this.object,
+  }) : super(key: key);
 
   @override
   State<ProjectDetail> createState() => _ProjectDetailState();
 }
 
 class _ProjectDetailState extends State<ProjectDetail> {
-  List totalProjectList=[];
+  List totalProjectList = [];
+
   @override
   void initState() {
     if (GetPrefs.containsKey(GetPrefs.projects)) {
@@ -27,13 +30,14 @@ class _ProjectDetailState extends State<ProjectDetail> {
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            selectIndex.value=0;
+            selectIndex.value = 0;
             AppRoutes.go(AppRouteName.bottomNavPage);
           },
           icon: Icon(
@@ -43,14 +47,17 @@ class _ProjectDetailState extends State<ProjectDetail> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: Search(text: '', totalProjectList: totalProjectList));
-              },
+              onPressed: () => showSearch(
+                  context: context,
+                  delegate:
+                      Search(text: '', totalProjectList: totalProjectList)),
               icon: Icon(
                 CupertinoIcons.search,
                 color: Theme.of(context).primaryColorDark,
               ))
         ],
       ),
-      body: ProjectDetailBody(object: widget.object,));
+      body: ProjectDetailBody(
+        object: widget.object,
+      ));
 }

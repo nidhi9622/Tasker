@@ -13,14 +13,13 @@ Future<String> getImage({required ImageSource source}) async {
               toolbarTitle: "Crop",
               toolbarColor: Colors.white10,
               statusBarColor: Colors.blueGrey));
-      var image=crop!.path.toString();
+      var image = crop!.path.toString();
       return image;
-    }
-    else{
+    } else {
       return "";
     }
   } else {
-    var image=file!.path.toString();
+    var image = file!.path.toString();
     return image;
   }
 }

@@ -20,9 +20,7 @@ class TaskBodyBottom extends StatefulWidget {
 
 class _TaskBodyBottomState extends State<TaskBodyBottom> {
   @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      return Column(
+  Widget build(BuildContext context) => Obx(() => Column(
         children: [
           const SizedBox(height: 12),
           Container(
@@ -39,41 +37,40 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
                   ),
                   SizedBox(
                     width: 100,
-                    child: FormField(builder: (state) {
-                      return DropdownButtonFormField(
-                        decoration:
-                            const InputDecoration(border: InputBorder.none),
-                        hint: Text(dropdownOptions[0]),
-                        items: [
-                          for (int i = 0; i < dropdownOptions.length; i++)
-                            DropdownMenuItem(
-                              value: i,
-                              child: Text(dropdownOptions[i]),
-                            ),
-                        ],
-                        onChanged: (int? value) {
-                          widget.controller.dropDownValue.value = value!;
-                          switch (value) {
-                            case 0:
-                              widget.controller.dropdownText.value =
-                                  "${ProjectStatus.ongoing}";
-                              break;
-                            case 1:
-                              widget.controller.dropdownText.value =
-                                  "${ProjectStatus.completed}";
-                              break;
-                            case 2:
-                              widget.controller.dropdownText.value =
-                                  "${ProjectStatus.upcoming}";
-                              break;
-                            case 3:
-                              widget.controller.dropdownText.value =
-                                  "${ProjectStatus.canceled}";
-                              break;
-                          }
-                        },
-                      );
-                    }),
+                    child: FormField(
+                        builder: (state) => DropdownButtonFormField(
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none),
+                              hint: Text(dropdownOptions[0]),
+                              items: [
+                                for (int i = 0; i < dropdownOptions.length; i++)
+                                  DropdownMenuItem(
+                                    value: i,
+                                    child: Text(dropdownOptions[i]),
+                                  ),
+                              ],
+                              onChanged: (int? value) {
+                                widget.controller.dropDownValue.value = value!;
+                                switch (value) {
+                                  case 0:
+                                    widget.controller.dropdownText.value =
+                                        "${ProjectStatus.ongoing}";
+                                    break;
+                                  case 1:
+                                    widget.controller.dropdownText.value =
+                                        "${ProjectStatus.completed}";
+                                    break;
+                                  case 2:
+                                    widget.controller.dropdownText.value =
+                                        "${ProjectStatus.upcoming}";
+                                    break;
+                                  case 3:
+                                    widget.controller.dropdownText.value =
+                                        "${ProjectStatus.canceled}";
+                                    break;
+                                }
+                              },
+                            )),
                   ),
                 ],
               )),
@@ -118,7 +115,5 @@ class _TaskBodyBottomState extends State<TaskBodyBottom> {
               maxLines: 1),
           const SizedBox(height: 25),
         ],
-      );
-    });
-  }
+      ));
 }

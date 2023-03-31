@@ -23,7 +23,7 @@ class _ShortcutRowState extends State<ShortcutRow> {
   getData() async {
     if (GetPrefs.containsKey('${widget.object['title']} searchShortcut')) {
       var searchString =
-      GetPrefs.getString('${widget.object['title']} searchShortcut');
+          GetPrefs.getString('${widget.object['title']} searchShortcut');
       controller.searchShortcut.value = jsonDecode(searchString);
     }
   }
@@ -33,7 +33,9 @@ class _ShortcutRowState extends State<ShortcutRow> {
     super.dispose();
     shortcutController.dispose();
   }
-List searchList=[];
+
+  List searchList = [];
+
   @override
   void initState() {
     if (GetPrefs.containsKey(GetPrefs.projects)) {
@@ -56,33 +58,30 @@ List searchList=[];
                     ? ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.searchShortcut.value.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              showSearch(
+                        itemBuilder: (context, index) => InkWell(
+                              onTap: () => showSearch(
                                   context: context,
                                   delegate: Search(
                                       text:
-                                          '${controller.searchShortcut.value[index]}', totalProjectList: searchList));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                width: 80,
-                                decoration: BoxDecoration(
-                                    color: Colors.green[50],
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Center(
-                                    child: Text(
-                                  controller.searchShortcut.value[index],
-                                  style: const TextStyle(color: Colors.green),
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                )),
+                                          '${controller.searchShortcut.value[index]}',
+                                      totalProjectList: searchList)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green[50],
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Center(
+                                      child: Text(
+                                    controller.searchShortcut.value[index],
+                                    style: const TextStyle(color: Colors.green),
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                  )),
+                                ),
                               ),
-                            ),
-                          );
-                        })
+                            ))
                     : Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
@@ -133,8 +132,7 @@ List searchList=[];
             onTap: () async {
               if (shortcutController.text.isNotEmpty) {
                 controller.searchShortcut.value.add(shortcutController.text);
-                GetPrefs.setString(
-                    '${widget.object['title']} searchShortcut',
+                GetPrefs.setString('${widget.object['title']} searchShortcut',
                     jsonEncode(controller.searchShortcut.value));
               }
               controller.isAdded.value = false;

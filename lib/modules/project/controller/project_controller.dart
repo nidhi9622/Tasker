@@ -4,5 +4,5 @@ class ProjectController extends GetxController {
   Rx<List> completedProjects = Rx([]);
   Rx<List> ongoingProjects = Rx([]);
   Rx<List> projectItem = Rx([]);
-  RxInt displayIndex=RxInt(0);
+  RxInt displayIndex = RxInt(0);
 }

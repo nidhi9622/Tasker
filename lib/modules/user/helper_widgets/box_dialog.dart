@@ -8,10 +8,10 @@ Future boxDialog({
   required String tileTextSecond,
   required VoidCallback tileTapFirst,
   required VoidCallback tileTapSecond,
-}) {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
+}) =>
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
         title: Text(titleText),
         content: SizedBox(
           height: 130,
@@ -23,5 +23,4 @@ Future boxDialog({
           ),
         ),
       ),
-  );
-}
+    );

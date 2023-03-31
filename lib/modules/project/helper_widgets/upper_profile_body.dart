@@ -122,9 +122,8 @@ class _UpperProfileBodyState extends State<UpperProfileBody> {
                 ),
                 const SizedBox(height: 15),
                 ElevatedButton(
-                    onPressed: () {
-                      AppRoutes.go(AppRouteName.updateUserProfile);
-                    },
+                    onPressed: () =>
+                        AppRoutes.go(AppRouteName.updateUserProfile),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.only(left: 34, right: 34),
                       backgroundColor: Colors.red[200],

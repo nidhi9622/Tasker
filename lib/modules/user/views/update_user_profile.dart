@@ -24,15 +24,13 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
   UserController controller = Get.put(UserController());
 
   setData() async {
-    GetPrefs.setString(
-        GetPrefs.userName, controller.nameController.value.text);
+    GetPrefs.setString(GetPrefs.userName, controller.nameController.value.text);
     GetPrefs.setString(
         GetPrefs.userNumber, controller.phoneController.value.text);
-    GetPrefs.setString(GetPrefs.userDesignation,
-        controller.designationController.value.text);
+    GetPrefs.setString(
+        GetPrefs.userDesignation, controller.designationController.value.text);
     if (controller.profileImage.value != "") {
-      GetPrefs.setString(
-          GetPrefs.userImage, controller.profileImage.value);
+      GetPrefs.setString(GetPrefs.userImage, controller.profileImage.value);
     }
     GetPrefs.setBool(GetPrefs.isLoggedIn, true);
   }
@@ -46,8 +44,7 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
       GetPrefs.userNumber,
     );
     if (GetPrefs.containsKey(GetPrefs.userImage)) {
-      controller.profileImage.value =
-          GetPrefs.getString(GetPrefs.userImage);
+      controller.profileImage.value = GetPrefs.getString(GetPrefs.userImage);
     }
     controller.nameController.value =
         TextEditingController(text: controller.name.value);
@@ -79,67 +76,65 @@ class _UpdateUserProfileState extends State<UpdateUserProfile> {
         isLeading: true,
         isAction: true,
       ),
-      body: Obx(() {
-        return SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      Container(
-                          height: 150,
-                          width: 150,
-                          decoration: controller.profileImage.value == ""
-                              ? BoxDecoration(
-                                  border:
-                                      Border.all(width: 2, color: Colors.black),
-                                  shape: BoxShape.circle,
-                                  image: const DecorationImage(
-                                      image:
-                                          AssetImage("assets/personImage.jpg"),
-                                      fit: BoxFit.fill))
-                              : BoxDecoration(
-                                  border:
-                                      Border.all(width: 2, color: Colors.black),
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: FileImage(
-                                          File(controller.profileImage.value),
-                                          scale: 10.0),
-                                      fit: BoxFit.fill))),
-                      Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              child: IconButton(
-                                onPressed: () async {
-                                  await Permission.camera.request();
-                                  await Permission.photos.request();
-                                  bottomSheet(controller: controller);
-                                },
-                                icon: const Icon(
-                                  CupertinoIcons.add,
-                                  color: Colors.black,
-                                ),
-                              )))
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  TextFieldColumn(controller: controller)
-                ],
+      body: Obx(() => SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        Container(
+                            height: 150,
+                            width: 150,
+                            decoration: controller.profileImage.value == ""
+                                ? BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: Colors.black),
+                                    shape: BoxShape.circle,
+                                    image: const DecorationImage(
+                                        image: AssetImage(
+                                            "assets/personImage.jpg"),
+                                        fit: BoxFit.fill))
+                                : BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: Colors.black),
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: FileImage(
+                                            File(controller.profileImage.value),
+                                            scale: 10.0),
+                                        fit: BoxFit.fill))),
+                        Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    await Permission.camera.request();
+                                    await Permission.photos.request();
+                                    bottomSheet(controller: controller);
+                                  },
+                                  icon: const Icon(
+                                    CupertinoIcons.add,
+                                    color: Colors.black,
+                                  ),
+                                )))
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 80,
+                    ),
+                    TextFieldColumn(controller: controller)
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }));
+          )));
 }

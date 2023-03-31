@@ -35,7 +35,8 @@ class _ProjectsState extends State<Projects> {
         }
         if (controller.projectItem.value[i]["projectStatus"] ==
             "${ProjectStatus.completed}") {
-          controller.completedProjects.value.add(controller.projectItem.value[i]);
+          controller.completedProjects.value
+              .add(controller.projectItem.value[i]);
         }
       }
     }
@@ -53,18 +54,18 @@ class _ProjectsState extends State<Projects> {
         isLeading: false,
         actions: [
           IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: Search(text: '', totalProjectList: controller.projectItem.value));
-              },
+              onPressed: () => showSearch(
+                  context: context,
+                  delegate: Search(
+                      text: '',
+                      totalProjectList: controller.projectItem.value)),
               icon: Icon(CupertinoIcons.search,
                   color: Theme.of(context).primaryColorDark)),
           IconButton(
-              onPressed: () {
-                sortingBottomSheet(
-                    context: context,
-                    ascendingSort: ascendingSort,
-                    descendingSort: descendingSort);
-              },
+              onPressed: () => sortingBottomSheet(
+                  context: context,
+                  ascendingSort: ascendingSort,
+                  descendingSort: descendingSort),
               icon: Icon(
                 CupertinoIcons.sort_down,
                 color: Theme.of(context).primaryColorDark,
@@ -72,40 +73,37 @@ class _ProjectsState extends State<Projects> {
         ],
         text: 'projects'.tr,
       ),
-      body: Obx(() {
-        return Column(
-          children: [
-            Expanded(
-                flex: 2,
-                child: CustomTabBar(
-                  tabList: tabs,
-                  displayIndex: controller.displayIndex,
-                )),
-            if (controller.displayIndex.value == 0)
+      body: Obx(() => Column(
+            children: [
               Expanded(
-                  flex: 12,
-                  child: ProjectTabView(
-                    tabList: controller.projectItem,
+                  flex: 2,
+                  child: CustomTabBar(
+                    tabList: tabs,
+                    displayIndex: controller.displayIndex,
                   )),
-            if (controller.displayIndex.value == 1)
-              Expanded(
-                  flex: 12,
-                  child: ProjectTabView(
-                      tabList: controller.ongoingProjects)),
-            if (controller.displayIndex.value == 2)
-              Expanded(
-                  flex: 12,
-                  child: ProjectTabView(
-                      tabList: controller.completedProjects))
-          ],
-        );
-      }));
+              if (controller.displayIndex.value == 0)
+                Expanded(
+                    flex: 12,
+                    child: ProjectTabView(
+                      tabList: controller.projectItem,
+                    )),
+              if (controller.displayIndex.value == 1)
+                Expanded(
+                    flex: 12,
+                    child: ProjectTabView(tabList: controller.ongoingProjects)),
+              if (controller.displayIndex.value == 2)
+                Expanded(
+                    flex: 12,
+                    child:
+                        ProjectTabView(tabList: controller.completedProjects))
+            ],
+          )));
 
   void ascendingSort() async {
-    List list=
-        controller.projectItem.value;
-    list.sort((a, b) => a["title"].toLowerCase().compareTo(b["title"].toLowerCase()));
-    controller.projectItem.value=list;
+    List list = controller.projectItem.value;
+    list.sort(
+        (a, b) => a["title"].toLowerCase().compareTo(b["title"].toLowerCase()));
+    controller.projectItem.value = list;
     setState(() {});
     //var map = GetPrefs.getString(GetPrefs.projects);
     // controller.projectItem.value
@@ -115,10 +113,10 @@ class _ProjectsState extends State<Projects> {
   }
 
   void descendingSort() async {
-    List list=
-        controller.projectItem.value;
-    list.sort((a, b) => b["title"].toLowerCase().compareTo(a["title"].toLowerCase()));
-    controller.projectItem.value=list;
+    List list = controller.projectItem.value;
+    list.sort(
+        (a, b) => b["title"].toLowerCase().compareTo(a["title"].toLowerCase()));
+    controller.projectItem.value = list;
     setState(() {});
     // controller.projectItem.value
     //     .sort((a, b) => b["title"].compareTo(a["title"]));

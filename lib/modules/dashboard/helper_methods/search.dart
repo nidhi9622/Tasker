@@ -5,7 +5,9 @@ import '../../../app_utils/app_routes.dart';
 class Search extends SearchDelegate<String> {
   String text;
   List totalProjectList;
-  Search({required this.text,required this.totalProjectList});
+
+  Search({required this.text, required this.totalProjectList});
+
   @override
   set query(String value) {
     super.query = text;
@@ -15,9 +17,7 @@ class Search extends SearchDelegate<String> {
   List<Widget>? buildActions(BuildContext context) => [
         if (query.isNotEmpty)
           IconButton(
-              onPressed: () {
-                query = '';
-              },
+              onPressed: () => query = '',
               icon: Icon(
                 CupertinoIcons.clear,
                 color: Theme.of(context).primaryColorDark,
@@ -26,9 +26,7 @@ class Search extends SearchDelegate<String> {
 
   @override
   Widget? buildLeading(BuildContext context) => IconButton(
-      onPressed: () {
-        close(context, query);
-      },
+      onPressed: () => close(context, query),
       icon: const Icon(Icons.arrow_back_ios));
 
   @override
@@ -49,20 +47,16 @@ class Search extends SearchDelegate<String> {
             padding: const EdgeInsets.all(10.0),
             child: query.isNotEmpty
                 ? ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return const Divider(
-                        thickness: 2,
-                      );
-                    },
+                    separatorBuilder: (context, index) => const Divider(
+                          thickness: 2,
+                        ),
                     itemCount: list.length,
                     itemBuilder: (context, index) {
                       final object = list[index];
                       return ListTile(
                         title: Text(object['title']),
-                        onTap: () {
-                          AppRoutes.go(AppRouteName.projectDetail,
-                              arguments: {'object': object});
-                        },
+                        onTap: () => AppRoutes.go(AppRouteName.projectDetail,
+                            arguments: {'object': object}),
                       );
                     })
                 : null,

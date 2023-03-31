@@ -23,7 +23,8 @@ class TaskDetailContainer extends StatefulWidget {
 }
 
 class _TaskDetailContainerState extends State<TaskDetailContainer> {
-  List totalProjectList=[];
+  List totalProjectList = [];
+
   @override
   void initState() {
     if (GetPrefs.containsKey(GetPrefs.projects)) {
@@ -32,34 +33,27 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
     }
     super.initState();
   }
+
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child:InkWell(
-        onTap: () {
-          AppRoutes.go(AppRouteName.projectDetail,
-              arguments: {'object': widget.tabList[widget.index]});
-        },
-        onLongPress: () {
-          deleteBottomSheet(
-            context: context,
-            title: widget.dataModel.title ?? "",
-            index: widget.index,
-            onTapEdit: () {
-              AppRoutes.go(AppRouteName.editTask,
-                  arguments: {'object': totalProjectList[widget.index]});
-            },
-            onTapDelete: () async {
-              GetPrefs.remove('${widget.dataModel.title}');
-              totalProjectList.removeWhere(
-                      (element) => element['title'] == widget.dataModel.id);
-              GetPrefs.setString(
-                  GetPrefs.projects, jsonEncode(totalProjectList));
-              AppRoutes.pop();
-            },
-          );
-        },
+      child: InkWell(
+        onTap: () => AppRoutes.go(AppRouteName.projectDetail,
+            arguments: {'object': widget.tabList[widget.index]}),
+        onLongPress: () => deleteBottomSheet(
+          context: context,
+          title: widget.dataModel.title ?? "",
+          index: widget.index,
+          onTapEdit: () => AppRoutes.go(AppRouteName.editTask,
+              arguments: {'object': totalProjectList[widget.index]}),
+          onTapDelete: () async {
+            GetPrefs.remove('${widget.dataModel.title}');
+            totalProjectList.removeWhere(
+                (element) => element['title'] == widget.dataModel.id);
+            GetPrefs.setString(GetPrefs.projects, jsonEncode(totalProjectList));
+            AppRoutes.pop();
+          },
+        ),
         child: Container(
           padding: const EdgeInsets.all(18),
           width: double.infinity,
@@ -92,7 +86,7 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
                         width: 8,
                       ),
                       Text(
-                        widget.dataModel.date??"",
+                        widget.dataModel.date ?? "",
                         style: const TextStyle(color: Colors.grey),
                       )
                     ],
@@ -103,7 +97,5 @@ class _TaskDetailContainerState extends State<TaskDetailContainer> {
             ],
           ),
         ),
-      )
-    );
-  }
+      ));
 }

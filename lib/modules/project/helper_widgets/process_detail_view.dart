@@ -16,22 +16,23 @@ class ProcessDetailView extends StatefulWidget {
 }
 
 class _ProcessDetailViewState extends State<ProcessDetailView> {
-  List processList=[];
+  List processList = [];
+
   @override
   void initState() {
-    String string=GetPrefs.getString(GetPrefs.projects);
-    List newList=jsonDecode(string);
-    for(int i=0;i<newList.length;i++){
-      if(newList[i]["projectStatus"]==widget.tabList){
+    String string = GetPrefs.getString(GetPrefs.projects);
+    List newList = jsonDecode(string);
+    for (int i = 0; i < newList.length; i++) {
+      if (newList[i]["projectStatus"] == widget.tabList) {
         processList.add(newList[i]);
       }
     }
 
     super.initState();
   }
+
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(top: 18),
       child: Container(
         height: double.infinity,
@@ -39,7 +40,7 @@ class _ProcessDetailViewState extends State<ProcessDetailView> {
         padding: const EdgeInsets.only(left: 14, right: 14),
         child: processList.isNotEmpty
             ? ListView.builder(
-                itemCount:processList.length,
+                itemCount: processList.length,
                 itemBuilder: (context, index) {
                   DataModel dataModel = DataModel.fromJson(processList[index]);
                   return TaskDetailContainer(
@@ -51,5 +52,4 @@ class _ProcessDetailViewState extends State<ProcessDetailView> {
             : const NoTaskWidget(),
       ),
     );
-  }
 }

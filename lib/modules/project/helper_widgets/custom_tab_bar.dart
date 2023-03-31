@@ -3,9 +3,9 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 class CustomTabBar extends StatefulWidget {
   final List<Tab> tabList;
-  RxInt displayIndex;
+  final RxInt displayIndex;
 
-  CustomTabBar({Key? key, required this.tabList, required this.displayIndex})
+  const CustomTabBar({Key? key, required this.tabList, required this.displayIndex})
       : super(key: key);
 
   @override
@@ -22,9 +22,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
           child: Builder(builder: (context) {
             final TabController tabController =
                 DefaultTabController.of(context);
-            tabController.addListener(() {
-              widget.displayIndex.value = tabController.index;
-            });
+            tabController.addListener(() => widget.displayIndex.value = tabController.index);
             return Container(
               //height: 65,
               width: double.infinity,

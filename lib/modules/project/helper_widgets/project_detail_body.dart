@@ -12,7 +12,7 @@ import '../controller/project_detail_controller.dart';
 import 'custom_tab_bar.dart';
 
 class ProjectDetailBody extends StatefulWidget {
-  final Map<String,dynamic> object;
+  final Map<String, dynamic> object;
 
   const ProjectDetailBody({Key? key, required this.object}) : super(key: key);
 

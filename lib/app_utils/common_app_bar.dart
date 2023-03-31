@@ -11,7 +11,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   CommonAppBar(
       {Key? key,
-      required this.text, required this.onTap, required this.isLeading, required this.isAction})
+      required this.text,
+      required this.onTap,
+      required this.isLeading,
+      required this.isAction})
       : super(key: key);
   final AppBar appBar = AppBar(
     title: const Text('Demo'),
@@ -19,37 +22,35 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   AppBar build(BuildContext context) => AppBar(
-        elevation: 0,
-        title: Padding(
-          padding: EdgeInsets.only(left: isLeading?8.0:0),
-          child: Text(
-            text,
-            style: TextStyle(color: Theme.of(context).primaryColorDark),
-          ),
-        ),
-        leading:isLeading? IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Theme.of(context).primaryColorDark,
-                ),
-                onPressed: () {
-                  AppRoutes.pop();
-                },
-              ):null,
-        automaticallyImplyLeading: false,
-      actions: [
-        isAction?TextButton(
-            onPressed: ()async{
-              await onTap();
-            },
+          elevation: 0,
+          title: Padding(
+            padding: EdgeInsets.only(left: isLeading ? 8.0 : 0),
             child: Text(
-              'done'.tr,
-              style: TextStyle(
-                  color: Theme.of(context)
-                      .primaryColorDark),
-            )):const SizedBox.shrink()
-      ]
-      );
+              text,
+              style: TextStyle(color: Theme.of(context).primaryColorDark),
+            ),
+          ),
+          leading: isLeading
+              ? IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  onPressed: () => AppRoutes.pop(),
+                )
+              : null,
+          automaticallyImplyLeading: false,
+          actions: [
+            isAction
+                ? TextButton(
+                    onPressed: () async => await onTap(),
+                    child: Text(
+                      'done'.tr,
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark),
+                    ))
+                : const SizedBox.shrink()
+          ]);
 
   @override
   Size get preferredSize =>

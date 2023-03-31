@@ -28,39 +28,32 @@ class ProjectDetailTile extends StatefulWidget {
 class _ProjectDetailTileState extends State<ProjectDetailTile> {
   @override
   Widget build(BuildContext context) => ListTile(
-        onTap: () async {
-          AppRoutes.go(AppRouteName.editSubTask, arguments: {
-            'object': widget.subTaskProjects[widget.index],
-            "title": widget.object['title'],
-            "homeObject": widget.object,
-          });
-        },
+        onTap: () async => AppRoutes.go(AppRouteName.editSubTask, arguments: {
+          'object': widget.subTaskProjects[widget.index],
+          "title": widget.object['title'],
+          "homeObject": widget.object,
+        }),
         trailing: IconButton(
           icon: const Icon(CupertinoIcons.ellipsis_vertical),
-          onPressed: () {
-            deleteBottomSheet(
-              context: context,
-              title: widget.dataModel.title ?? "",
-              index: widget.index,
-              onTapEdit: () {
-                //AppRoutes.pop();
-                AppRoutes.go(AppRouteName.editSubTask, arguments: {
-                  'object': widget.subTaskProjects[widget.index],
-                  "title": widget.object['title'],
-                  "homeObject": widget.object,
-                });
-              },
-              onTapDelete: () async {
-                widget.subTaskProjects.removeWhere(
-                    (element) => element['title'] == widget.dataModel.title);
-                GetPrefs.setString('${widget.object['title']}',
-                    jsonEncode(widget.subTaskProjects));
-                AppRoutes.pop();
-                // AppRoutes.go(AppRouteName.projectDetail,
-                //     arguments: {'object': widget.object});
-              },
-            );
-          },
+          onPressed: () => deleteBottomSheet(
+            context: context,
+            title: widget.dataModel.title ?? "",
+            index: widget.index,
+            onTapEdit: () => AppRoutes.go(AppRouteName.editSubTask, arguments: {
+              'object': widget.subTaskProjects[widget.index],
+              "title": widget.object['title'],
+              "homeObject": widget.object,
+            }),
+            onTapDelete: () async {
+              widget.subTaskProjects.removeWhere(
+                  (element) => element['title'] == widget.dataModel.title);
+              GetPrefs.setString('${widget.object['title']}',
+                  jsonEncode(widget.subTaskProjects));
+              AppRoutes.pop();
+              // AppRoutes.go(AppRouteName.projectDetail,
+              //     arguments: {'object': widget.object});
+            },
+          ),
         ),
         leading: Container(
           decoration: BoxDecoration(

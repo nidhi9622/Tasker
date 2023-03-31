@@ -8,13 +8,11 @@ class LocalNotificationService {
   static FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  static Future notificationDetails() async {
-    return const NotificationDetails(
-        android: AndroidNotificationDetails('channelId', 'channel name',
-            //'channel description',
-            importance: Importance.max),
-        iOS: IOSNotificationDetails(presentAlert: true, presentBadge: true));
-  }
+  static Future notificationDetails() async => const NotificationDetails(
+      android: AndroidNotificationDetails('channelId', 'channel name',
+          //'channel description',
+          importance: Importance.max),
+      iOS: IOSNotificationDetails(presentAlert: true, presentBadge: true));
 
   static Future initialize(
       {required Map object, required BuildContext context}) async {

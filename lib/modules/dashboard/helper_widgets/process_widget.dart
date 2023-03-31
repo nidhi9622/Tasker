@@ -19,41 +19,39 @@ class ProcessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InkWell(
-      onTap: () {
-        AppRoutes.go(AppRouteName.processDetail, arguments: {
-          'object': status,
-          "title": text,
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: Container(
-          alignment: Alignment.bottomCenter,
-          height: 84,
-          decoration: BoxDecoration(
-              color: containerColor,
-              borderRadius: BorderRadius.circular(15)),
-          child:  Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  text,
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(fontSize: 20, color: Colors.white),
-                ),
-                CircleAvatar(
-                  backgroundColor: bubbleColor,
-                  radius: 17,
-                  child: Icon(
-                    icon,
-                    color: Colors.black,
+        onTap: () => AppRoutes.go(AppRouteName.processDetail, arguments: {
+            'object': status,
+            "title": text,
+          }),
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Container(
+            alignment: Alignment.bottomCenter,
+            height: 84,
+            decoration: BoxDecoration(
+                color: containerColor, borderRadius: BorderRadius.circular(15)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    text,
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
-                ),
-              ],
+                  CircleAvatar(
+                    backgroundColor: bubbleColor,
+                    radius: 17,
+                    child: Icon(
+                      icon,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
 }

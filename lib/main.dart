@@ -20,10 +20,11 @@ Future main() async {
   runApp(GetMaterialApp(
     getPages: AppRouteName.routes,
     initialRoute: AppRouteName.splash,
-      themeMode: status == true ? ThemeMode.dark : ThemeMode.light,
-      translations: LocalString(),
-      locale: const Locale('en'),
-      debugShowCheckedModeBanner: false,
-      theme: lightThemeData(),
-      darkTheme: darkThemeData(),));
+    themeMode: status == true ? ThemeMode.dark : ThemeMode.light,
+    translations: LocalString(),
+    locale: const Locale('en'),
+    debugShowCheckedModeBanner: false,
+    theme: lightThemeData(),
+    darkTheme: darkThemeData(),
+  ));
 }

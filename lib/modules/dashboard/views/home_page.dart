@@ -83,48 +83,46 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
       valueListenable: selectIndex,
-      builder: (context, value, child) {
-        return Scaffold(
-            bottomNavigationBar: BottomNavigationBar(
-                currentIndex: selectIndex.value,
-                type: BottomNavigationBarType.fixed,
-                onTap: onTap,
-                iconSize: 27,
-                selectedLabelStyle: TextStyle(color: Colors.red[200]),
-                selectedFontSize: 0,
-                selectedItemColor: Colors.red[200],
-                unselectedFontSize: 1,
-                items: [
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        CupertinoIcons.home,
+      builder: (context, value, child) => Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: selectIndex.value,
+              type: BottomNavigationBarType.fixed,
+              onTap: onTap,
+              iconSize: 27,
+              selectedLabelStyle: TextStyle(color: Colors.red[200]),
+              selectedFontSize: 0,
+              selectedItemColor: Colors.red[200],
+              unselectedFontSize: 1,
+              items: [
+                const BottomNavigationBarItem(
+                    icon: Icon(
+                      CupertinoIcons.home,
+                    ),
+                    label: ''),
+                const BottomNavigationBarItem(
+                    icon: Icon(
+                      CupertinoIcons.doc,
+                    ),
+                    label: ''),
+                BottomNavigationBarItem(
+                    icon: CircleAvatar(
+                      backgroundColor: Colors.red[200],
+                      child: Icon(
+                        CupertinoIcons.add,
+                        color: Theme.of(context).primaryColor,
                       ),
-                      label: ''),
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        CupertinoIcons.doc,
-                      ),
-                      label: ''),
-                  BottomNavigationBarItem(
-                      icon: CircleAvatar(
-                        backgroundColor: Colors.red[200],
-                        child: Icon(
-                          CupertinoIcons.add,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      label: ''),
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        CupertinoIcons.news,
-                      ),
-                      label: ''),
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        CupertinoIcons.person,
-                      ),
-                      label: ''),
-                ]),
-            body: transition());
-      });
+                    ),
+                    label: ''),
+                const BottomNavigationBarItem(
+                    icon: Icon(
+                      CupertinoIcons.news,
+                    ),
+                    label: ''),
+                const BottomNavigationBarItem(
+                    icon: Icon(
+                      CupertinoIcons.person,
+                    ),
+                    label: ''),
+              ]),
+          body: transition()));
 }

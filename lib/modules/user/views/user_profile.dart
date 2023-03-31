@@ -78,9 +78,7 @@ class _UserProfileState extends State<UserProfile> {
                 children: [
                   Expanded(
                     child: ExploreOptions(
-                        onTap: () {
-                          AppRoutes.go(AppRouteName.settings);
-                        },
+                        onTap: () => AppRoutes.go(AppRouteName.settings),
                         iconData: CupertinoIcons.settings,
                         text: 'setting'.tr),
                   ),

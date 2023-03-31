@@ -3,9 +3,7 @@ import 'package:get_storage/get_storage.dart';
 class GetPrefs {
   static late GetStorage _getStorage;
 
-  static Future init() async {
-    _getStorage = GetStorage();
-  }
+  static Future init() async => _getStorage = GetStorage();
 
   static const String userName = "user_name";
   static const String userNumber = "user_number";
@@ -21,39 +19,22 @@ class GetPrefs {
   static const String ongoingProjects = "ongoingProjects";
   static const String completedProjects = "completedProjects";
 
-  static void setString(String key, String value) {
-    _getStorage.write(key, value);
-  }
+  static void setString(String key, String value) =>
+      _getStorage.write(key, value);
 
-  static void setInt(String key, int value) {
-    _getStorage.write(key, value);
-  }
+  static void setInt(String key, int value) => _getStorage.write(key, value);
 
-  static void setBool(String key, bool value) {
-    _getStorage.write(key, value);
-  }
+  static void setBool(String key, bool value) => _getStorage.write(key, value);
 
-  static bool containsKey(String key) {
-    return _getStorage.hasData(key);
-  }
+  static bool containsKey(String key) => _getStorage.hasData(key);
 
-  static clear() async {
-    await _getStorage.erase();
-  }
+  static clear() async => await _getStorage.erase();
 
-  static String getString(String key) {
-    return _getStorage.read(key) ?? '';
-  }
+  static String getString(String key) => _getStorage.read(key) ?? '';
 
-  static bool getBool(String key) {
-    return _getStorage.read(key) ?? false;
-  }
+  static bool getBool(String key) => _getStorage.read(key) ?? false;
 
-  static int getInt(String key) {
-    return _getStorage.read(key) ?? 0;
-  }
+  static int getInt(String key) => _getStorage.read(key) ?? 0;
 
-  static remove(String key) {
-    return _getStorage.remove(key);
-  }
+  static remove(String key) => _getStorage.remove(key);
 }

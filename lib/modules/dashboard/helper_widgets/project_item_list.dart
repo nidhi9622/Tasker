@@ -20,70 +20,68 @@ class ProjectItemList extends StatefulWidget {
 class _ProjectItemListState extends State<ProjectItemList> {
   @override
   Widget build(BuildContext context) => ListView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemCount: widget.controller.projectList.value.length,
-    itemBuilder: (context, index) {
-      DataModel dataModel =
-      DataModel.fromJson(widget.controller.projectList.value[index]);
-      return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(
-              left: 22, right: 22, bottom: 12, top: 6),
-          child: Container(
-            height: 70,
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(12)),
-            child: ListTile(
-                onTap: () {
-                  AppRoutes.go(AppRouteName.projectDetail, arguments: {
-                    'object': widget.controller.projectList.value[index]
-                  });
-                },
-                leading: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: dataModel.percentage! < 100
-                              ? Colors.grey
-                              : Colors.green),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Icon(
-                    CupertinoIcons.checkmark,
-                    color: dataModel.percentage! < 100
-                        ? Colors.grey
-                        : Colors.green,
-                  ),
-                ),
-                title: Text(dataModel.title!),
-                subtitle: LinearPercentIndicator(
-                  //leaner progress bar
-                  animation: true,
-                  animationDuration: 1000,
-                  lineHeight: 10.0,
-                  percent: dataModel.percentage! / 100,
-                  progressColor: dataModel.percentage! < 100
-                      ? const Color(0xffffb2a6)
-                      : Colors.green,
-                  barRadius: const Radius.circular(10),
-                  backgroundColor: Colors.grey[300],
-                ),
-                trailing: PopupSheet(
-                  onTapFirst: () {
-                    AppRoutes.pop();
-                    AppRoutes.go(AppRouteName.editTask, arguments: {
-                      'object': widget.controller.projectList.value[index]
-                    });
-                  },
-                  onTapSecond: () async {
-                    GetPrefs.remove('${dataModel.id}');
-                    widget.controller.projectList.value.removeWhere(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: widget.controller.projectList.value.length,
+        itemBuilder: (context, index) {
+          DataModel dataModel =
+              DataModel.fromJson(widget.controller.projectList.value[index]);
+          return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(
+                  left: 22, right: 22, bottom: 12, top: 6),
+              child: Container(
+                height: 70,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(12)),
+                child: ListTile(
+                    onTap: () => AppRoutes.go(AppRouteName.projectDetail, arguments: {
+                        'object': widget.controller.projectList.value[index]
+                      }),
+                    leading: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: dataModel.percentage! < 100
+                                  ? Colors.grey
+                                  : Colors.green),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Icon(
+                        CupertinoIcons.checkmark,
+                        color: dataModel.percentage! < 100
+                            ? Colors.grey
+                            : Colors.green,
+                      ),
+                    ),
+                    title: Text(dataModel.title!),
+                    subtitle: LinearPercentIndicator(
+                      //leaner progress bar
+                      animation: true,
+                      animationDuration: 1000,
+                      lineHeight: 10.0,
+                      percent: dataModel.percentage! / 100,
+                      progressColor: dataModel.percentage! < 100
+                          ? const Color(0xffffb2a6)
+                          : Colors.green,
+                      barRadius: const Radius.circular(10),
+                      backgroundColor: Colors.grey[300],
+                    ),
+                    trailing: PopupSheet(
+                      onTapFirst: () {
+                        AppRoutes.pop();
+                        AppRoutes.go(AppRouteName.editTask, arguments: {
+                          'object': widget.controller.projectList.value[index]
+                        });
+                      },
+                      onTapSecond: () async {
+                        GetPrefs.remove('${dataModel.id}');
+                        widget.controller.projectList.value.removeWhere(
                             (element) => element['id'] == dataModel.id);
-                    GetPrefs.setString(GetPrefs.projects,
-                        jsonEncode(widget.controller.projectList.value));
-                  },
-                )),
-          ));
-    },
-  );
+                        GetPrefs.setString(GetPrefs.projects,
+                            jsonEncode(widget.controller.projectList.value));
+                      },
+                    )),
+              ));
+        },
+      );
 }

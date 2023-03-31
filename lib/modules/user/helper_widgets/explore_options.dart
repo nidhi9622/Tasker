@@ -4,11 +4,16 @@ class ExploreOptions extends StatelessWidget {
   final VoidCallback onTap;
   final IconData iconData;
   final String text;
-  const ExploreOptions({Key? key, required this.onTap, required this.iconData, required this.text}) : super(key: key);
+
+  const ExploreOptions(
+      {Key? key,
+      required this.onTap,
+      required this.iconData,
+      required this.text})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
+  Widget build(BuildContext context) => InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 17),
@@ -30,5 +35,4 @@ class ExploreOptions extends StatelessWidget {
         ),
       ),
     );
-  }
 }

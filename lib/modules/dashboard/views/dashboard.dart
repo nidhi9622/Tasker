@@ -42,82 +42,81 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          SystemNavigator.pop();
-          return true;
-        },
-        child: Scaffold(
-          appBar: DefaultAppBar(
-            isLeading: false,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    showSearch(context: context, delegate: Search(text: '', totalProjectList: controller.projectList.value));
-                  },
-                  icon: Icon(CupertinoIcons.search,
-                      color: Theme.of(context).primaryColorDark)),
-              IconButton(
-                  onPressed: () async {
-                    await sortingBottomSheet(
-                        context: context,
-                        ascendingSort: ascendingSort,
-                        descendingSort: descendingSort);
-                  },
-                  icon: Icon(
-                    CupertinoIcons.sort_down,
-                    color: Theme.of(context).primaryColorDark,
-                  ))
-            ],
-            text: currentDate,
-          ),
-          body: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  NameAnimateWidget(username: controller.username.value),
-                  const ProcessWidgetContainer(),
-                  const AddProjectWidget(),
-                  Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.only(top: 10),
-                      child: controller.projectList.value == [] ||
-                          controller.projectList.value.isEmpty
-                          ? const NoTaskWidget()
-                          : ProjectItemList(
-                        controller: controller,
-                      ))
-                ],
-              ),
+  Widget build(BuildContext context) => WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return true;
+      },
+      child: Scaffold(
+        appBar: DefaultAppBar(
+          isLeading: false,
+          actions: [
+            IconButton(
+                onPressed: () => showSearch(
+                    context: context,
+                    delegate: Search(
+                        text: '',
+                        totalProjectList: controller.projectList.value)),
+                icon: Icon(CupertinoIcons.search,
+                    color: Theme.of(context).primaryColorDark)),
+            IconButton(
+                onPressed: () async => await sortingBottomSheet(
+                    context: context,
+                    ascendingSort: ascendingSort,
+                    descendingSort: descendingSort),
+                icon: Icon(
+                  CupertinoIcons.sort_down,
+                  color: Theme.of(context).primaryColorDark,
+                ))
+          ],
+          text: currentDate,
+        ),
+        body: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                NameAnimateWidget(username: controller.username.value),
+                const ProcessWidgetContainer(),
+                const AddProjectWidget(),
+                Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 10),
+                    child: controller.projectList.value == [] ||
+                            controller.projectList.value.isEmpty
+                        ? const NoTaskWidget()
+                        : ProjectItemList(
+                            controller: controller,
+                          ))
+              ],
             ),
           ),
-        ));
-  }
+        ),
+      ));
 
   ascendingSort() async {
     setState(() {
-    List list=controller.projectList.value;
+      List list = controller.projectList.value;
 
-        list.sort((a, b) => a["title"].toLowerCase().compareTo(b["title"].toLowerCase()));
-    controller.projectList.value=list;
-    // GetPrefs.setString(
-    //     GetPrefs.projects, jsonEncode(controller.projectList.value));
+      list.sort((a, b) =>
+          a["title"].toLowerCase().compareTo(b["title"].toLowerCase()));
+      controller.projectList.value = list;
+      // GetPrefs.setString(
+      //     GetPrefs.projects, jsonEncode(controller.projectList.value));
     });
   }
 
   descendingSort() async {
-     setState(() {
-    List list=
-    controller.projectList.value;
-    list.sort((a, b) => b["title"].toLowerCase().compareTo(a["title"].toLowerCase()));
-    controller.projectList.value=list;
-    // GetPrefs.setString(
-    //     GetPrefs.projects, jsonEncode(controller.projectList.value));
-     });
+    setState(() {
+      List list = controller.projectList.value;
+      list.sort((a, b) =>
+          b["title"].toLowerCase().compareTo(a["title"].toLowerCase()));
+      controller.projectList.value = list;
+      // GetPrefs.setString(
+      //     GetPrefs.projects, jsonEncode(controller.projectList.value));
+    });
   }
 }

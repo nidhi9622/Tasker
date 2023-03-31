@@ -24,35 +24,35 @@ class ProjectTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-      child: TextFormField(
-        controller: controller,
-        textInputAction: inputAction,
-        keyboardType: inputType,
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(maxLength),
-        ],
-        maxLines: maxLines,
-        validator: validator,
-        decoration: InputDecoration(
-          counterStyle:
-              TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          labelText: labelText,
-          labelStyle: const TextStyle(color: Colors.grey),
-          alignLabelWithHint: true,
-          focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xffffb2a6))),
-          focusedErrorBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).primaryColorLight)),
-          errorMaxLines: 2,
-          errorStyle: const TextStyle(height: 0),
-          border: const OutlineInputBorder(
-              borderSide: BorderSide(
-                  style: BorderStyle.solid, color: Color(0xffffb2a6))),
+        padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+        child: TextFormField(
+          controller: controller,
+          textInputAction: inputAction,
+          keyboardType: inputType,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(maxLength),
+          ],
+          maxLines: maxLines,
+          validator: validator,
+          decoration: InputDecoration(
+            counterStyle:
+                TextStyle(color: Theme.of(context).scaffoldBackgroundColor),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            labelText: labelText,
+            labelStyle: const TextStyle(color: Colors.grey),
+            alignLabelWithHint: true,
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xffffb2a6))),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Theme.of(context).primaryColorLight)),
+            errorMaxLines: 2,
+            errorStyle: const TextStyle(height: 0),
+            border: const OutlineInputBorder(
+                borderSide: BorderSide(
+                    style: BorderStyle.solid, color: Color(0xffffb2a6))),
+          ),
         ),
-      ),
-    );
+      );
 }

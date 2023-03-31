@@ -29,7 +29,7 @@ void deleteBottomSheet({
                     height: 10,
                   ),
                   InkWell(
-                      onTap:onTapDelete,
+                      onTap: onTapDelete,
                       child: ListTile(
                         title: const Text('Delete'),
                         trailing: const Icon(CupertinoIcons.delete),

@@ -32,37 +32,37 @@ class _NameAnimateWidgetState extends State<NameAnimateWidget>
 
   @override
   Widget build(BuildContext context) => widget.username.isNotEmpty
-        ? Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 25),
-            child: Text(
-              '${greetingMessage()},  ${widget.username}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ))
-        : Container(
-            width: double.infinity,
-            height: 90,
-            padding: const EdgeInsets.symmetric(horizontal: 15,),
-            child: InkWell(
-              onTap: () {
-                AppRoutes.go(AppRouteName.updateUserProfile);
-              },
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FadeTransition(
-                      opacity: controller,
-                      child: Text('addProfile'.tr,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold))),
-                  SizedBox(
-                      child: Text(
-                        textAlign: TextAlign.end,
-                        'tap'.tr,
-                        style:
-                            const TextStyle(color: Colors.grey, fontSize: 12),
-                      ))
-                ],
-              ),
+      ? Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+          child: Text(
+            '${greetingMessage()},  ${widget.username}',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ))
+      : Container(
+          width: double.infinity,
+          height: 90,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+          ),
+          child: InkWell(
+            onTap: () => AppRoutes.go(AppRouteName.updateUserProfile),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FadeTransition(
+                    opacity: controller,
+                    child: Text('addProfile'.tr,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold))),
+                SizedBox(
+                    child: Text(
+                  textAlign: TextAlign.end,
+                  'tap'.tr,
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                ))
+              ],
             ),
-          );
+          ),
+        );
 }

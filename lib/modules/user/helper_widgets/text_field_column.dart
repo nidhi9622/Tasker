@@ -2,16 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/modules/user/helper_widgets/profile_text_field.dart';
-
 import '../controller/user_controller.dart';
 
 class TextFieldColumn extends StatelessWidget {
   final UserController controller;
+
   const TextFieldColumn({Key? key, required this.controller}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: [
         ProfileTextField(
             context: context,
@@ -74,5 +73,4 @@ class TextFieldColumn extends StatelessWidget {
             isPassword: false),
       ],
     );
-  }
 }

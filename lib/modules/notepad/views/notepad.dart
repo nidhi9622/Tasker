@@ -39,8 +39,7 @@ class _NotePadState extends State<NotePad> {
           width: double.infinity,
           height: double.infinity,
           padding: const EdgeInsets.all(12),
-          child: Obx(() {
-            return TextField(
+          child: Obx(() => TextField(
               controller: controller.notesController.value,
               style: const TextStyle(fontSize: 20),
               onChanged: (value) async {
@@ -53,8 +52,7 @@ class _NotePadState extends State<NotePad> {
                   border: InputBorder.none,
                   hintText: 'addNotes'.tr,
                   hintStyle: const TextStyle(fontSize: 25)),
-            );
-          }),
+            )),
         ),
       );
 }

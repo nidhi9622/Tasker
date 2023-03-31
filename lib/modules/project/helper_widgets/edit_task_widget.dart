@@ -20,72 +20,73 @@ class EditTaskWidget extends StatefulWidget {
 
 class _EditTaskWidgetState extends State<EditTaskWidget> {
   @override
-  Widget build(BuildContext context) => Obx(() {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HeadingText(text: 'taskDetail'.tr),
-            ProjectTextField(
-                controller: widget.controller.titleController.value,
-                labelText: 'title'.tr,
-                inputType: TextInputType.name,
-                inputAction: TextInputAction.next,
-                maxLength: 30,
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'titleError'.tr;
-                  }
-                  return null;
-                },
-                maxLines: 1),
-            ProjectTextField(
-                controller: widget.controller.subTitleController.value,
-                labelText: 'subTitle'.tr,
-                inputType: TextInputType.name,
-                inputAction: TextInputAction.next,
-                maxLength: 30,
-                validator: (String? value) {
-                  if (value!.isEmpty) {
-                    return 'subTitleError'.tr;
-                  }
-                  return null;
-                },
-                maxLines: 1),
-            const SizedBox(height: 12),
-            HeadingText(text: 'startDate'.tr),
-            DateTimeWidget(
-              onTap: () async {
-                DateTime? datePicked = await selectDate(context);
-                if (datePicked != null &&
-                    datePicked != widget.controller.selectedDate.value) {
-                  widget.controller.stringDate.value = DateFormat("MMM dd, yyyy").format(datePicked);
+  Widget build(BuildContext context) => Obx(() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          HeadingText(text: 'taskDetail'.tr),
+          ProjectTextField(
+              controller: widget.controller.titleController.value,
+              labelText: 'title'.tr,
+              inputType: TextInputType.name,
+              inputAction: TextInputAction.next,
+              maxLength: 30,
+              validator: (String? value) {
+                if (value!.isEmpty) {
+                  return 'titleError'.tr;
                 }
+                return null;
               },
-              text: '${widget.controller.stringDate.value}',
-              isDate: true,
-            ),
-            HeadingText(text: 'startTime'.tr),
-            DateTimeWidget(
-              onTap: () async {
-                TimeOfDay? timePicked = await selectTime(context);
-                if (timePicked != null &&
-                    timePicked != widget.controller.selectedTime.value) {
-                  widget.controller.stringTime.value = timePicked.format(context);
+              maxLines: 1),
+          ProjectTextField(
+              controller: widget.controller.subTitleController.value,
+              labelText: 'subTitle'.tr,
+              inputType: TextInputType.name,
+              inputAction: TextInputAction.next,
+              maxLength: 30,
+              validator: (String? value) {
+                if (value!.isEmpty) {
+                  return 'subTitleError'.tr;
                 }
+                return null;
               },
-              text: '${widget.controller.stringTime.value}',
-              isDate: false,
-            ),
-            HeadingText(text: 'additional'.tr),
-            ProjectTextField(
-                controller: widget.controller.descriptionController.value,
-                labelText: 'description'.tr,
-                inputType: TextInputType.name,
-                inputAction: TextInputAction.next,
-                maxLength: 100,
-                validator: (String? value) => null,
-                maxLines: 5),
-          ],
-        );
-      });
+              maxLines: 1),
+          const SizedBox(height: 12),
+          HeadingText(text: 'startDate'.tr),
+          DateTimeWidget(
+            onTap: () async {
+              DateTime? datePicked = await selectDate(context);
+              if (datePicked != null &&
+                  datePicked != widget.controller.selectedDate.value) {
+                widget.controller.stringDate.value =
+                    DateFormat("MMM dd, yyyy").format(datePicked);
+              }
+            },
+            text: '${widget.controller.stringDate.value}',
+            isDate: true,
+          ),
+          HeadingText(text: 'startTime'.tr),
+          DateTimeWidget(
+            onTap: () async {
+              TimeOfDay? timePicked = await selectTime(context);
+              if (timePicked != null &&
+                  timePicked != widget.controller.selectedTime.value) {
+                widget.controller.stringTime.value =
+                    // ignore: use_build_context_synchronously
+                    timePicked.format(context);
+              }
+            },
+            text: '${widget.controller.stringTime.value}',
+            isDate: false,
+          ),
+          HeadingText(text: 'additional'.tr),
+          ProjectTextField(
+              controller: widget.controller.descriptionController.value,
+              labelText: 'description'.tr,
+              inputType: TextInputType.name,
+              inputAction: TextInputAction.next,
+              maxLength: 100,
+              validator: (String? value) => null,
+              maxLines: 5),
+        ],
+      ));
 }

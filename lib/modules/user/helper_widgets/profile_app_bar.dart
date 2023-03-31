@@ -18,11 +18,9 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   AppBar build(BuildContext context) => AppBar(
           actions: [
             IconButton(
-                onPressed: () {
-                  showSearch(
-                      context: context,
-                      delegate: Search(text: '', totalProjectList: searchList));
-                },
+                onPressed: () => showSearch(
+                    context: context,
+                    delegate: Search(text: '', totalProjectList: searchList)),
                 icon: Icon(
                   CupertinoIcons.search,
                   color: Theme.of(context).primaryColorDark,

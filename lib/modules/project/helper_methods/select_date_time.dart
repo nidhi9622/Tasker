@@ -11,6 +11,6 @@ Future<DateTime?> selectDate(BuildContext context) async {
 
 Future<TimeOfDay?> selectTime(BuildContext context) async {
   TimeOfDay? timePicked =
-  await showTimePicker(initialTime: TimeOfDay.now(), context: context);
+      await showTimePicker(initialTime: TimeOfDay.now(), context: context);
   return timePicked;
 }

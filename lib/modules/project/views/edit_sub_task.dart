@@ -12,9 +12,9 @@ import '../helper_methods/title_error_dialog.dart';
 import '../helper_widgets/edit_task_widget.dart';
 
 class EditSubTask extends StatefulWidget {
-  final Map<String,dynamic> object;
+  final Map<String, dynamic> object;
   final String title;
-  final Map<String,dynamic> homeObject;
+  final Map<String, dynamic> homeObject;
 
   const EditSubTask(
       {Key? key,
@@ -35,12 +35,13 @@ class _EditSubTaskState extends State<EditSubTask> {
   setTaskData() async {
     if (GetPrefs.containsKey(widget.title)) {
       String? subTask = GetPrefs.getString(widget.title);
-        controller.subTaskProjects.value = jsonDecode(subTask);
+      controller.subTaskProjects.value = jsonDecode(subTask);
     }
     if (controller.percentageController.value.text.isEmpty) {
-        controller.percentageController.value.text = '0';
+      controller.percentageController.value.text = '0';
     }
-    double newPercentage = double.parse(controller.percentageController.value.text);
+    double newPercentage =
+        double.parse(controller.percentageController.value.text);
     controller.map.value = {
       'title': controller.titleController.value.text,
       'subTitle': controller.subTitleController.value.text,
@@ -61,7 +62,8 @@ class _EditSubTaskState extends State<EditSubTask> {
               .indexWhere((element) => element['title'] == dataModel.title)] =
           controller.map.value;
     }
-    GetPrefs.setString(widget.title, jsonEncode(controller.subTaskProjects.value));
+    GetPrefs.setString(
+        widget.title, jsonEncode(controller.subTaskProjects.value));
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
       LocalNotificationService.showScheduleNotification(
@@ -98,7 +100,7 @@ class _EditSubTaskState extends State<EditSubTask> {
     controller.stringDate.value = dataModel.date;
     controller.stringTime.value = dataModel.time;
     //status = dataModel.status;
-    controller.reminder.value = dataModel.reminder??false;
+    controller.reminder.value = dataModel.reminder ?? false;
   }
 
   @override
@@ -109,21 +111,21 @@ class _EditSubTaskState extends State<EditSubTask> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: CommonAppBar(
-      text: 'editSubTask'.tr,
-      onTap: () async {
-        if (_formKey.currentState!.validate()) {
-          await setTaskData();
-        }
-      },
-      isLeading: true,
-      isAction: true,
-    ),
-    body: SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: EditTaskWidget(controller: controller),
-      ),
-    ),
-  );
+        appBar: CommonAppBar(
+          text: 'editSubTask'.tr,
+          onTap: () async {
+            if (_formKey.currentState!.validate()) {
+              await setTaskData();
+            }
+          },
+          isLeading: true,
+          isAction: true,
+        ),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: EditTaskWidget(controller: controller),
+          ),
+        ),
+      );
 }

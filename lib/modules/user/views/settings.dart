@@ -19,38 +19,38 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: CommonAppBar(
-        text: 'setting'.tr,
-        onTap: () {},
-        isLeading: true,
-        isAction: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(17),
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 18, bottom: 8, left: 20),
-                    child: Text(
-                      'customize'.tr,
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+        appBar: CommonAppBar(
+          text: 'setting'.tr,
+          onTap: () {},
+          isLeading: true,
+          isAction: false,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(17),
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 18, bottom: 8, left: 20),
+                      child: Text(
+                        'customize'.tr,
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
                     ),
-                  ),
-                  SettingListTile(
-                    title: 'Appearance'.tr,
-                    onTap: () async {
-                      await boxDialog(
+                    SettingListTile(
+                      title: 'Appearance'.tr,
+                      onTap: () async => await boxDialog(
                         context: context,
                         titleText: 'theme'.tr,
                         tileTextFirst: 'Dark',
@@ -65,15 +65,13 @@ class _SettingsState extends State<Settings> {
                           Get.changeThemeMode(ThemeMode.light);
                           AppRoutes.pop();
                         },
-                      );
-                    },
-                    leadingIcon: CupertinoIcons.paintbrush,
-                    subTitle: 'changeTheme'.tr,
-                  ),
-                  SettingListTile(
-                      title: 'Language'.tr,
-                      onTap: () async {
-                        await boxDialog(
+                      ),
+                      leadingIcon: CupertinoIcons.paintbrush,
+                      subTitle: 'changeTheme'.tr,
+                    ),
+                    SettingListTile(
+                        title: 'Language'.tr,
+                        onTap: () async => await boxDialog(
                             context: context,
                             titleText: 'appLanguage'.tr,
                             tileTextFirst: 'English',
@@ -87,56 +85,57 @@ class _SettingsState extends State<Settings> {
                               var locale = const Locale('hindi');
                               Get.updateLocale(locale);
                               AppRoutes.pop();
-                            });
-                      },
-                      leadingIcon: Icons.abc,
-                      subTitle: 'setLanguage'.tr),
-                  SettingListTile(
-                      title: 'reminderHn'.tr,
-                      onTap: () {
-                        AppSettings.openNotificationSettings();
-                      },
-                      leadingIcon: CupertinoIcons.calendar,
-                      subTitle: 'customizeReminder'.tr),
-                  const SizedBox(height: 12,)
-                ],
+                            }),
+                        leadingIcon: Icons.abc,
+                        subTitle: 'setLanguage'.tr),
+                    SettingListTile(
+                        title: 'reminderHn'.tr,
+                        onTap: () => AppSettings.openNotificationSettings(),
+                        leadingIcon: CupertinoIcons.calendar,
+                        subTitle: 'customizeReminder'.tr),
+                    const SizedBox(
+                      height: 12,
+                    )
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 25),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 14, bottom: 5, left: 20),
-                    child: Text('help'.tr,
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  SettingListTile(
-                    title: 'terms'.tr,
-                    onTap: customLaunchUrl,
-                    leadingIcon: Icons.privacy_tip_outlined,
-                    subTitle: '',
-                  ),
-                  SettingListTile(
-                    title: 'policy'.tr,
-                    onTap: customLaunchUrl,
-                    leadingIcon: Icons.security,
-                    subTitle: '',
-                  ),
-                  const SizedBox(height: 12,)
-                ],
-              ),
-            )
-          ],
+              const SizedBox(height: 25),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 14, bottom: 5, left: 20),
+                      child: Text('help'.tr,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    SettingListTile(
+                      title: 'terms'.tr,
+                      onTap: customLaunchUrl,
+                      leadingIcon: Icons.privacy_tip_outlined,
+                      subTitle: '',
+                    ),
+                    SettingListTile(
+                      title: 'policy'.tr,
+                      onTap: customLaunchUrl,
+                      leadingIcon: Icons.security,
+                      subTitle: '',
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
 }
