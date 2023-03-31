@@ -8,13 +8,11 @@ import 'shortcut_row.dart';
 
 class ProjectDetailContainer extends StatelessWidget {
   final Map object;
-  final double totalPercentage;
   final DataModel dataModel;
 
   const ProjectDetailContainer(
       {Key? key,
       required this.object,
-      required this.totalPercentage,
       required this.dataModel})
       : super(key: key);
 
@@ -67,13 +65,13 @@ class ProjectDetailContainer extends StatelessWidget {
                 child: CircularPercentIndicator(
                   radius: 44,
                   center: Text(
-                    '${totalPercentage.round()} %',
+                    '${dataModel.percentage?.round()} %',
                     style: const TextStyle(fontSize: 17),
                   ),
                   animation: true,
                   animationDuration: 1000,
                   percent:
-                      totalPercentage < 101 ? totalPercentage / 100 : 100 / 100,
+                  dataModel.percentage! < 101 ? dataModel.percentage! / 100 : 100 / 100,
                   progressColor: Colors.green,
                   backgroundColor: Colors.grey[300]!,
                 ),

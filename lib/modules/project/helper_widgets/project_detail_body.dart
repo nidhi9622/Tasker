@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,39 +29,6 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
       controller.notes.value =
           GetPrefs.getString('${widget.object['id']} notes');
     }
-
-    if (GetPrefs.containsKey('${widget.object['id']}')) {
-      String? subtask = GetPrefs.getString('${widget.object['id']}');
-      controller.subTaskList.value = jsonDecode(subtask);
-      for (int i = 0; i < controller.subTaskList.value.length; i++) {
-        controller.totalPercentage.value +=
-            controller.subTaskList.value[i]['percentage'];
-      }
-      // controller.totalPercentage.value = (controller.totalPercentage.value /
-      //         controller.subTaskList.value.length);
-      String? projectName = GetPrefs.getString(GetPrefs.projects);
-      controller.optionList.value = jsonDecode(projectName);
-      controller.map.value = {
-        'title': dataModel.title,
-        'subTitle': dataModel.subTitle,
-        'description': dataModel.description,
-        'percentage': controller.totalPercentage.value,
-        'date': dataModel.date,
-        'reminder': dataModel.reminder,
-        'time': dataModel.time,
-        'status': dataModel.status,
-        'projectStatus': dataModel.projectStatus,
-        'id': dataModel.id
-      };
-
-      controller.optionList.value[controller.optionList.value
-              .indexWhere((element) => element['id'] == dataModel.id)] =
-          controller.map.value;
-      GetPrefs.setString(
-          GetPrefs.projects, jsonEncode(controller.optionList.value));
-    } else {
-      controller.totalPercentage.value = widget.object['percentage'];
-    }
   }
 
   @override
@@ -78,7 +44,6 @@ class _ProjectDetailBodyState extends State<ProjectDetailBody> {
         children: [
           ProjectDetailContainer(
             object: widget.object,
-            totalPercentage: controller.totalPercentage.value,
             dataModel: dataModel,
           ),
           CustomTabBar(

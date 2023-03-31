@@ -31,8 +31,8 @@ class _AddSubTaskState extends State<AddSubTask> {
       var map = GetPrefs.getString(GetPrefs.projects);
       totalProjectList = jsonDecode(map);
     }
-    if (GetPrefs.containsKey(widget.object['id'])) {
-      var map = GetPrefs.getString(widget.object['id']);
+    if (GetPrefs.containsKey("${widget.object['id']}")) {
+      var map = GetPrefs.getString("${widget.object['id']}");
       subTask = jsonDecode(map);
     }
     super.initState();
