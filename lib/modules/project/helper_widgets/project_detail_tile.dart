@@ -39,12 +39,16 @@ class _ProjectDetailTileState extends State<ProjectDetailTile> {
             context: context,
             title: widget.dataModel.title ?? "",
             index: widget.index,
-            onTapEdit: () => AppRoutes.go(AppRouteName.editSubTask, arguments: {
+            onTapEdit: () {
+              AppRoutes.pop();
+              AppRoutes.go(AppRouteName.editSubTask, arguments: {
               'object': widget.subTaskProjects[widget.index],
               "title": widget.object['title'],
               "homeObject": widget.object,
-            }),
+            });
+            },
             onTapDelete: () async {
+              AppRoutes.pop();
               widget.subTaskProjects.removeWhere(
                   (element) => element['title'] == widget.dataModel.title);
               GetPrefs.setString('${widget.object['title']}',
