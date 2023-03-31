@@ -31,10 +31,6 @@ class _AddSubTaskState extends State<AddSubTask> {
   }
 
   setData() async {
-    if (GetPrefs.containsKey("${widget.object['id']}")) {
-      var map = GetPrefs.getString("${widget.object['id']}");
-      subTask = jsonDecode(map);
-    }
     if (controller.percentageController.value.text.isEmpty) {
       controller.percentageController.value.text = '0';
     }
