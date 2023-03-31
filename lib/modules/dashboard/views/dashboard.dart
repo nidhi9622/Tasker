@@ -62,8 +62,8 @@ class _DashboardState extends State<Dashboard> {
                   onPressed: () async {
                     await sortingBottomSheet(
                         context: context,
-                        ascendingSort: ascendingSort(),
-                        descendingSort: descendingSort());
+                        ascendingSort: ascendingSort,
+                        descendingSort: descendingSort);
                   },
                   icon: Icon(
                     CupertinoIcons.sort_down,
@@ -103,7 +103,7 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
     List list=controller.projectList.value;
 
-        list.sort((a, b) => a["title"].compareTo(b["title"]));
+        list.sort((a, b) => a["title"].toLowerCase().compareTo(b["title"].toLowerCase()));
     controller.projectList.value=list;
     // GetPrefs.setString(
     //     GetPrefs.projects, jsonEncode(controller.projectList.value));
@@ -114,7 +114,7 @@ class _DashboardState extends State<Dashboard> {
      setState(() {
     List list=
     controller.projectList.value;
-    list.sort((a, b) => b["title"].compareTo(a["title"]));
+    list.sort((a, b) => b["title"].toLowerCase().compareTo(a["title"].toLowerCase()));
     controller.projectList.value=list;
     // GetPrefs.setString(
     //     GetPrefs.projects, jsonEncode(controller.projectList.value));

@@ -104,11 +104,9 @@ class _ProjectsState extends State<Projects> {
   void ascendingSort() async {
     List list=
         controller.projectItem.value;
-    list.sort((a, b) => a["title"].compareTo(b["title"]));
+    list.sort((a, b) => a["title"].toLowerCase().compareTo(b["title"].toLowerCase()));
     controller.projectItem.value=list;
-    setState(() {
-
-    });
+    setState(() {});
     //var map = GetPrefs.getString(GetPrefs.projects);
     // controller.projectItem.value
     //     .sort((a, b) => a["title"].compareTo(b["title"]));
@@ -119,11 +117,9 @@ class _ProjectsState extends State<Projects> {
   void descendingSort() async {
     List list=
         controller.projectItem.value;
-    list.sort((a, b) => b["title"].compareTo(a["title"]));
+    list.sort((a, b) => b["title"].toLowerCase().compareTo(a["title"].toLowerCase()));
     controller.projectItem.value=list;
-    setState(() {
-
-    });
+    setState(() {});
     // controller.projectItem.value
     //     .sort((a, b) => b["title"].compareTo(a["title"]));
     // GetPrefs.setString(
