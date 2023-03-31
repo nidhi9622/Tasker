@@ -8,6 +8,7 @@ class ProjectDetailController extends GetxController {
   Rx<List> subTaskProjects = Rx([]);
   Rx<List> searchShortcut = Rx([]);
   Rx<Map> map = Rx({});
+  Rx<List> projectList=Rx([]);
   RxBool reminder = RxBool(false);
   RxBool isAdded = RxBool(false);
   RxInt displayIndex = RxInt(0);

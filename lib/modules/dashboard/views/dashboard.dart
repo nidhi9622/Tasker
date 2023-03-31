@@ -62,8 +62,8 @@ class _DashboardState extends State<Dashboard> {
                   onPressed: () async {
                     await sortingBottomSheet(
                         context: context,
-                        ascendingSort: ascendingSort,
-                        descendingSort: descendingSort);
+                        ascendingSort: ascendingSort(),
+                        descendingSort: descendingSort());
                   },
                   icon: Icon(
                     CupertinoIcons.sort_down,
@@ -76,50 +76,48 @@ class _DashboardState extends State<Dashboard> {
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
-              child: Obx(() {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NameAnimateWidget(username: controller.username.value),
-                    const ProcessWidgetContainer(),
-                    const AddProjectWidget(),
-                    Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.only(top: 10),
-                        child: controller.projectList.value == [] ||
-                            controller.projectList.value.isEmpty
-                            ? const NoTaskWidget()
-                            : ProjectItemList(
-                          controller: controller,
-                        ))
-                  ],
-                );
-              }),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  NameAnimateWidget(username: controller.username.value),
+                  const ProcessWidgetContainer(),
+                  const AddProjectWidget(),
+                  Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 10),
+                      child: controller.projectList.value == [] ||
+                          controller.projectList.value.isEmpty
+                          ? const NoTaskWidget()
+                          : ProjectItemList(
+                        controller: controller,
+                      ))
+                ],
+              ),
             ),
           ),
         ));
   }
 
   ascendingSort() async {
-    //setState(() {
+    setState(() {
     List list=controller.projectList.value;
 
         list.sort((a, b) => a["title"].compareTo(b["title"]));
     controller.projectList.value=list;
     // GetPrefs.setString(
     //     GetPrefs.projects, jsonEncode(controller.projectList.value));
-    //});
+    });
   }
 
   descendingSort() async {
-    // setState(() {
+     setState(() {
     List list=
     controller.projectList.value;
     list.sort((a, b) => b["title"].compareTo(a["title"]));
     controller.projectList.value=list;
     // GetPrefs.setString(
     //     GetPrefs.projects, jsonEncode(controller.projectList.value));
-    // });
+     });
   }
 }

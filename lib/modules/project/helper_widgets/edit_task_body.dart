@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../app_utils/common_app_bar.dart';
 import '../../../app_utils/helper_methods/project_text_field.dart';
+import '../../../app_utils/project_status.dart';
 import '../../../database/app_list.dart';
 import 'edit_task_widget.dart';
 import 'heading_text.dart';
@@ -81,6 +82,24 @@ class _EditTaskBodyState extends State<EditTaskBody> {
                                       onChanged: (int? value) {
                                         widget.controller.dropDownValue.value =
                                             value!;
+                                        switch (value) {
+                                          case 0:
+                                            widget.controller.dropdownText.value =
+                                            "${ProjectStatus.ongoing}";
+                                            break;
+                                          case 1:
+                                            widget.controller.dropdownText.value =
+                                            "${ProjectStatus.completed}";
+                                            break;
+                                          case 2:
+                                            widget.controller.dropdownText.value =
+                                            "${ProjectStatus.upcoming}";
+                                            break;
+                                          case 3:
+                                            widget.controller.dropdownText.value =
+                                            "${ProjectStatus.canceled}";
+                                            break;
+                                        }
                                       },
                                     );
                                   }),

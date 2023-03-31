@@ -106,7 +106,9 @@ class _ProjectsState extends State<Projects> {
         controller.projectItem.value;
     list.sort((a, b) => a["title"].compareTo(b["title"]));
     controller.projectItem.value=list;
-    print("tapped================");
+    setState(() {
+
+    });
     //var map = GetPrefs.getString(GetPrefs.projects);
     // controller.projectItem.value
     //     .sort((a, b) => a["title"].compareTo(b["title"]));
@@ -119,6 +121,9 @@ class _ProjectsState extends State<Projects> {
         controller.projectItem.value;
     list.sort((a, b) => b["title"].compareTo(a["title"]));
     controller.projectItem.value=list;
+    setState(() {
+
+    });
     // controller.projectItem.value
     //     .sort((a, b) => b["title"].compareTo(a["title"]));
     // GetPrefs.setString(

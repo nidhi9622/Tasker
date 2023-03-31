@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import '../modules/dashboard/views/home_page.dart';
 import '../modules/project/views/add_sub_task.dart';
 import '../modules/project/views/edit_sub_task.dart';
-import '../modules/project/views/edit_task.dart';
+import '../modules/project/views/edit_project.dart';
 import '../modules/project/views/process_detail.dart';
 import '../modules/project/views/project_detail.dart';
 import '../modules/project/views/projects.dart';
@@ -90,7 +90,7 @@ class AppRouteName {
             )),
     GetPage(
         name: editTask,
-        page: () => EditTask(
+        page: () => EditProject(
               object: Get.arguments["object"],
             )),
     GetPage(

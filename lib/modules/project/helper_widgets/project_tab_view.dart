@@ -16,22 +16,20 @@ class ProjectTabView extends StatefulWidget {
 
 class _ProjectTabViewState extends State<ProjectTabView> {
   @override
-  Widget build(BuildContext context) => Obx(() {
-        return Padding(
-          padding: const EdgeInsets.only(left: 14, right: 14),
-          child: widget.tabList.value.isNotEmpty
-              ? ListView.builder(
-                  itemCount: widget.tabList.value.length,
-                  itemBuilder: (context, index) {
-                    DataModel dataModel =
-                        DataModel.fromJson(widget.tabList.value[index]);
-                    return TaskDetailContainer(
-                      dataModel: dataModel,
-                      tabList: widget.tabList.value,
-                      index: index,
-                    );
-                  })
-              : const NoTaskWidget(),
-        );
-      });
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(left: 14, right: 14),
+    child: widget.tabList.value.isNotEmpty
+        ? ListView.builder(
+        itemCount: widget.tabList.value.length,
+        itemBuilder: (context, index) {
+          DataModel dataModel =
+          DataModel.fromJson(widget.tabList.value[index]);
+          return TaskDetailContainer(
+            dataModel: dataModel,
+            tabList: widget.tabList.value,
+            index: index,
+          );
+        })
+        : const NoTaskWidget(),
+  );
 }

@@ -4,23 +4,23 @@ import 'package:get/get.dart';
 import 'package:task_manager/app_utils/project_status.dart';
 import 'package:task_manager/app_utils/shared_prefs/get_prefs.dart';
 import '../../../app_utils/app_routes.dart';
-import '../../../app_utils/local_notification_service.dart';
+import '../../../services/local_notification_service.dart';
 import '../../../database/app_list.dart';
 import '../../../models/data_model.dart';
 import '../controller/edit_task_controller.dart';
 import '../helper_methods/title_error_dialog.dart';
 import '../helper_widgets/edit_task_body.dart';
 
-class EditTask extends StatefulWidget {
+class EditProject extends StatefulWidget {
   final Map<String,dynamic> object;
 
-  const EditTask({Key? key, required this.object}) : super(key: key);
+  const EditProject({Key? key, required this.object}) : super(key: key);
 
   @override
-  State<EditTask> createState() => _EditTaskState();
+  State<EditProject> createState() => _EditProjectState();
 }
 
-class _EditTaskState extends State<EditTask> {
+class _EditProjectState extends State<EditProject> {
   dynamic status;
   late DataModel dataModel;
   EditTaskController controller = Get.put(EditTaskController());

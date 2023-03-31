@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:task_manager/app_utils/common_app_bar.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
-import '../../../app_utils/local_notification_service.dart';
+import '../../../services/local_notification_service.dart';
 import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../../database/app_list.dart';
 import '../controller/add_st_controller.dart';
@@ -100,7 +100,7 @@ class _AddSubTaskState extends State<AddSubTask> {
                 await titleErrorDialog(
                     context: context, content: 'success'.tr, isTitle: true);
                 await setData();
-                AppRoutes.go(AppRouteName.projectDetail,
+                AppRoutes.pushAndRemoveUntil(AppRouteName.projectDetail,
                     arguments: {'object': widget.object});
               }
             }

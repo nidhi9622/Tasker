@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_manager/app_utils/global_data.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/shared_prefs/get_prefs.dart';
 import '../../dashboard/helper_methods/search.dart';
@@ -32,7 +33,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
-            AppRoutes.pop();
+            selectIndex.value=0;
+            AppRoutes.go(AppRouteName.homePage);
           },
           icon: Icon(
             Icons.arrow_back_ios,
