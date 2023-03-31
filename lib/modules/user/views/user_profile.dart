@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/app_utils/shared_prefs/get_prefs.dart';
 import '../../../app_utils/app_routes.dart';
 import '../../../app_utils/global_data.dart';
+import '../../../app_utils/project_status.dart';
 import '../../project/helper_widgets/upper_profile_body.dart';
 import '../helper_widgets/explore_options.dart';
 import '../helper_widgets/profile_app_bar.dart';
@@ -21,9 +21,25 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   List totalProjectList = [];
+  List ongoingProjects = [];
+
+  getProjectItem() async {
+    if (GetPrefs.containsKey(GetPrefs.projects)) {
+      var map = GetPrefs.getString(GetPrefs.projects);
+      totalProjectList = jsonDecode(map);
+      ongoingProjects.clear();
+      for (int i = 0; i < totalProjectList.length; i++) {
+        if (totalProjectList[i]["projectStatus"] ==
+            "${ProjectStatus.ongoing}") {
+          ongoingProjects.add(totalProjectList[i]);
+        }
+      }
+    }
+  }
 
   @override
   void initState() {
+    getProjectItem();
     if (GetPrefs.containsKey(GetPrefs.projects)) {
       var map = GetPrefs.getString(GetPrefs.projects);
       totalProjectList = jsonDecode(map);
@@ -41,7 +57,10 @@ class _UserProfileState extends State<UserProfile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.isOldUser
-                ? const UpperProfileBody()
+                ? UpperProfileBody(
+                    totalProjectList: totalProjectList,
+                    ongoingProjects: ongoingProjects,
+                  )
                 : const SizedBox.shrink(),
             widget.isOldUser
                 ? Padding(
