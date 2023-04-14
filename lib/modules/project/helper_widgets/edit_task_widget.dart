@@ -57,6 +57,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
               DateTime? datePicked = await selectDate(context);
               if (datePicked != null &&
                   datePicked != widget.controller.selectedDate.value) {
+                widget.controller.selectedDate.value = datePicked;
                 widget.controller.stringDate.value =
                     DateFormat("MMM dd, yyyy").format(datePicked);
               }
@@ -70,6 +71,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
               TimeOfDay? timePicked = await selectTime(context);
               if (timePicked != null &&
                   timePicked != widget.controller.selectedTime.value) {
+                widget.controller.selectedTime.value = timePicked;
                 widget.controller.stringTime.value =
                     // ignore: use_build_context_synchronously
                     timePicked.format(context);

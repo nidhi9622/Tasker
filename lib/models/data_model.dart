@@ -33,6 +33,9 @@ class DataModel {
   String? date;
   bool? reminder;
   String? time;
+  String? formattedTime;
+  int? selectedHour;
+  int? selectedMin;
   String? status;
   int? id;
   String? projectStatus;
@@ -43,6 +46,9 @@ class DataModel {
       this.description,
       this.id,
       this.percentage,
+      this.formattedTime,
+      this.selectedMin,
+      this.selectedHour,
       this.date,
       this.reminder,
       this.time,
@@ -54,8 +60,11 @@ class DataModel {
     subTitle = json['subTitle'];
     description = json['description'];
     percentage = json['percentage'];
+    selectedHour = json['selectedHour'];
+    selectedMin = json['selectedMin'];
     date = json['date'];
     reminder = json['reminder'];
+    formattedTime = json['formattedTime'];
     time = json['time'];
     status = json['status'];
     projectStatus = json['projectStatus'];
@@ -71,8 +80,11 @@ class DataModel {
     data['date'] = date;
     data['reminder'] = reminder;
     data['time'] = time;
+    data['selectedMin'] = selectedMin;
+    data['selectedHour'] = selectedHour;
     data['status'] = status;
     data['id'] = id;
+    data['formattedTime'] = formattedTime;
     data['projectStatus'] = projectStatus;
     return data;
   }

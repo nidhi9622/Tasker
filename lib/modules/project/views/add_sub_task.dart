@@ -49,7 +49,10 @@ class _AddSubTaskState extends State<AddSubTask> {
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
       'projectStatus': controller.dropdownText.value,
-      'id': subTask.length
+      'id': subTask.length,
+      "selectedHour":controller.selectedTime.value.hour,
+      "selectedMin":controller.selectedTime.value.minute,
+      "formattedTime":DateFormat("yyyy-dd-MM").format(controller.selectedDate.value)
     };
 
     if (controller.reminder.value == true) {

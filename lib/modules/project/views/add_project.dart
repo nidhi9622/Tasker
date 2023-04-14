@@ -63,7 +63,10 @@ class _AddProjectState extends State<AddProject> {
       'time': time,
       'status': dropdownOptions[controller.dropDownValue.value],
       'projectStatus': controller.dropdownText.value,
-      'id': newList.length
+      'id': newList.length,
+      "selectedHour":controller.selectedTime.value.hour,
+      "selectedMin":controller.selectedTime.value.minute,
+      "formattedTime":DateFormat("yyyy-dd-MM").format(controller.selectedDate.value)
     };
 
     String? mapString;

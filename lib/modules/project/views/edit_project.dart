@@ -58,7 +58,7 @@ class _EditProjectState extends State<EditProject> {
 
     if (controller.reminder.value == true) {
       int? id = GetPrefs.getInt(GetPrefs.userId);
-      LocalNotificationService.showScheduleNotification(
+        LocalNotificationService.showScheduleNotification(
           id: dataModel.id??id,
           title: 'Reminder',
           body: 'Start your ${controller.titleController.value.text} task now',
@@ -67,8 +67,8 @@ class _EditProjectState extends State<EditProject> {
               controller.selectedDate.value.year,
               controller.selectedDate.value.month,
               controller.selectedDate.value.day,
-              controller.selectedTime.value.hour,
-              controller.selectedTime.value.minute));
+              dataModel.selectedHour??controller.selectedDate.value.hour,
+              dataModel.selectedMin??controller.selectedDate.value.minute));
       GetPrefs.setInt(GetPrefs.userId, id + 1);
       LocalNotificationService.initialize(
           context: context, object: controller.map);
@@ -80,6 +80,7 @@ class _EditProjectState extends State<EditProject> {
   }
 
   void setData() {
+
     dataModel = DataModel.fromJson(widget.object);
     controller.titleController.value =
         TextEditingController(text: dataModel.title);
@@ -91,6 +92,7 @@ class _EditProjectState extends State<EditProject> {
         TextEditingController(text: dataModel.description);
     controller.stringDate.value = dataModel.date;
     controller.stringTime.value = dataModel.time;
+   // controller.selectedDate.value = dataModel.formattedTime;
     controller.dropdownText.value =
         dataModel.projectStatus ?? "${ProjectStatus.ongoing}";
     status = dataModel.status;

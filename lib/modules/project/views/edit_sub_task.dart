@@ -76,8 +76,8 @@ class _EditSubTaskState extends State<EditSubTask> {
               controller.selectedDate.value.year,
               controller.selectedDate.value.month,
               controller.selectedDate.value.day,
-              controller.selectedTime.value.hour,
-              controller.selectedTime.value.minute));
+              dataModel.selectedHour!,
+              dataModel.selectedHour!));
       GetPrefs.setInt(GetPrefs.userId, id + 1);
     }
     LocalNotificationService.initialize(
@@ -100,6 +100,7 @@ class _EditSubTaskState extends State<EditSubTask> {
         TextEditingController(text: dataModel.description);
     controller.stringDate.value = dataModel.date;
     controller.stringTime.value = dataModel.time;
+    controller.selectedDate.value = dataModel.formattedTime;
     //status = dataModel.status;
     controller.reminder.value = dataModel.reminder ?? false;
   }
